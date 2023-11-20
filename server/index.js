@@ -14,15 +14,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/CatAPI', CatAPIRouter);
-
+/*
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     next(createError(404));
 });
 
-app.get("/api/v1/hello", (_req, res) => {
-    res.json({ message: "Hello, world!" });
-  });
 
 // error handler
 app.use(function(err, req, res, next) {
@@ -34,7 +31,7 @@ app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-
+*/
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {

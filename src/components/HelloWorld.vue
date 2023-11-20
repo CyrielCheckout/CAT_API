@@ -1,16 +1,23 @@
 <script setup>
 import { ref } from 'vue'
+import axios from 'axios'
 
 defineProps({
   msg: String,
+  message: String
 })
 
 const count = ref(0)
+const serverHello = ref({})
+
+axios
+  .post('http://127.0.0.1:4000/CatAPI/test')
+  .then(response => (serverHello.value = response.data.message))
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
-
+  <h2>{{ serverHello }}</h2>
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
     <p>
@@ -21,9 +28,8 @@ const count = ref(0)
 
   <p>
     Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
+    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank">create-vue</a>, the official Vue + Vite
+    starter
   </p>
   <p>
     Install
