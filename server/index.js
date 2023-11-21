@@ -6,12 +6,16 @@ var createError = require('http-errors');
 var path = require('path');
 var CatAPIRouter = require('./routes/CATAPI_Router');
 var morgan = require('morgan');
+var cors = require('cors');
 
 app.use(morgan('dev'));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cors({ credentials: true, origin: '*' }));
+app.options('*', cors());
 
 app.use('/CatAPI', CatAPIRouter);
 /*
