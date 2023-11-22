@@ -8,7 +8,7 @@ import _ from 'lodash';
 
 <template>
   <div id="catAdminForm">
-    <h1>CAT Admin From</h1>
+    <h1>CAT Admin Form</h1>
 
     <span>CAT Bearer Token:</span>
     <p style="white-space: pre-line"></p>
@@ -16,11 +16,15 @@ import _ from 'lodash';
       v-model="Bearer" class="bearer"
       placeholder="Bearer eyJraWQiOiJnSEh6djlqc...."></textarea>
 
-    <p>Client ID:</p>
-    <input v-model="ClientId" class="clientId" placeholder="cli_xxx" />
-
-    <p>Delay:</p>
-    <input v-model="delay" placeholder="ex : 10000 ms" />
+      <div class="form-row">
+        <label for="ClientId">Client ID:</label>
+        <input v-model="ClientId" class="clientId" placeholder="cli_xxx" />
+      </div>
+      
+      <div class="form-row">
+        <label for="field2">Delay (in ms):</label>
+        <input v-model="delay" placeholder="ex : 10000 ms" />
+      </div>
 
     <br />
 
@@ -35,25 +39,21 @@ import _ from 'lodash';
           X
         </span>
       </h4>
-      <p>Entity: {{entity.EntityName}}</p>
-      <div class="employee-form">
+      <div class="form-row">
+      <label>Entity: </label>
         <input
           type="text"
           class="form-control mb-2"
           placeholder="Name"
           v-model="entity.EntityName" />
-      </div>
+        </div>
       
 
-      
-
-      <div class="card-body">
         <div
-          class="employee-form"
           v-for="(processingChannel, index) in entity.Processing_channel">
           <div class="processing">
-            <div>
-              <p>ProcessingChannel: {{processingChannel.ProcessingChannelName}}</p>
+            <div class="form-row">
+              <label>ProcessingChannel: </label>
               <input
                 type="text"
                 class="form-control mb-2"
@@ -77,7 +77,7 @@ import _ from 'lodash';
           </div>
           <hr class="small_hr"/>
         </div>
-      </div>
+
       <button
         class="btn btn-success mt-5 mb-5"
         @click="addNewProcessingChannel(index)">
@@ -95,6 +95,28 @@ import _ from 'lodash';
 </template>
 
 <style>
+
+.form-row {
+  display: flex;
+  align-items: center; /* Vertical alignment */
+  justify-content: space-between; /* Horizontal alignment */
+  margin-bottom: 10px; /* Optional: Add margin between rows */
+}
+
+label {
+  margin-right: 10px; /* Optional: Add space between label and input */
+  width: 30%;
+}
+
+input {
+  width:100%;
+}
+
+.card-title {
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
 .paymentMethods {
   display:flex;
   justify-content: space-between;
@@ -107,6 +129,7 @@ import _ from 'lodash';
 }
 .float-right {
   float:right;
+  font-weight: 600;
 }
 hr {
   margin-left: 2px;
@@ -117,7 +140,7 @@ margin-bottom: 10px;
 
 .bearer {
   width: 100%;
-    height: 18em;
+    height: 10em;
 }
 
 .clientId {
@@ -133,7 +156,7 @@ export default {
       Bearer:
         "Bearer eyJraWQiOiJnSEh6djlqcUxFZTc3dVV2Mkhld19BUEZabUdsaEhDZVVldXVQUjhMQUQwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmpLMHE1TmxsdFBOTWlQQ28ycURZWnlBTi1DTDR0ZkJqbkZiNDM3b0lBbWsiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzAwNTg2ODQxLCJleHAiOjE3MDA1OTA0NDEsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsIm9wZW5pZCIsImNsaWVudGFkbWluLXRvb2wiXSwiYXV0aF90aW1lIjoxNzAwNTg2ODM5LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.gSm5ml9Bktn8z_7OWN8EVSrA-mEpMR8pqImG1BWAWSRwqJ5LGeRA5bvAvHohxdrC88n1YezVVVcyADEA7OoxBshQoXVtZo8dKamzWONLh1bSST_OB_8z-kFLWw6EG89dZ6I3khsOjRp1Rvhrq1ByCiAYFlWNdA3zn2iokk9LuLen4cv6uoSbKkuPjUxMyYnGIxZO612b-h_WCXzlKNfO1JzLbXjap0OoGC-fHq23Ww9QbcTgosQrMNL9HD1Hw1ab-MQPOTq7qlIUdBvcXwvysk629qovQfvtJJBMVerBvTSh_p_G9aUayktzic_ClkIP417EO3pReGOwqV46QURfRg",
       ClientId: "cli_d2s6xmrsuezerh3uvt2utdui24",
-      delay: "1",
+      delay: "1000",
       Entity: [
         {
           EntityName: "",
