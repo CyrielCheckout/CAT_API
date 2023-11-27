@@ -26,6 +26,32 @@ async function GetAllProcessingChannels(bearer, EntityId) {
   return GetAllProcessingChannelsfunc;
 }
 
+async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
+  GetProcessingChannelConffunc = await axios({
+    method: 'get',
+    url: baseURL + 'api/processing-channels/'+ProcessingChannelId,
+    headers: {
+      'Authorization': bearer,
+      'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+      'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+      'sec-ch-ua-mobile': '?0',
+      'Content-Type': 'application/json',
+      'Accept': "*/*",
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+      'sec-ch-ua-platform': "macOS",
+      "Sec-Fetch-Site": 'same-origin',
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Dest": "empty",
+      "host": 'client-admin.cko-sbox.ckotech.co'
+    }
+  })
+    .then(function (response) {
+      return response
+    });
+  return GetProcessingChannelConffunc;
+}
+
+
 async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingChannelName, VaultID) {
   try {
     CreateProcessingChannelfunc = await axios({
@@ -1273,6 +1299,7 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCartes
 
 module.exports = {
   GetAllProcessingChannels,
+  GetProcessingChannelConf,
   CreateProcessingChannel,
   Create_Processing_profile_Bancontact,
   Create_Processing_profile_Ideal,

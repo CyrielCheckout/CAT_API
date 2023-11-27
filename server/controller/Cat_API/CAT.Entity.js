@@ -1,11 +1,11 @@
 const axios = require('axios');
 const baseURL = "https://client-admin.cko-sbox.ckotech.co/";
 
-async function GetAllEntity(bearer, ClientId) {
+async function GetAllEntity(bearer, ClientId, skip) {
   try {
     GetAllEntityfunc = await axios({
       method: 'get',
-      url: baseURL + 'api/clients/' + ClientId + '/entities',
+      url: baseURL + 'api/clients/' + ClientId + '/entities?limit=25&skip='+ skip,
       headers: {
         'Authorization': bearer,
         'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
@@ -22,9 +22,8 @@ async function GetAllEntity(bearer, ClientId) {
       }
     })
       .then(function (response) {
-        return { Status: response.status, body: response.data }
+        return { status: response.status, body: response.data }
       });
-
     return GetAllEntityfunc;
   } catch (err) { throw err }
 }
