@@ -154,7 +154,7 @@ export default {
   data() {
     return {
       Bearer:
-        "Bearer eyJraWQiOiJnSEh6djlqcUxFZTc3dVV2Mkhld19BUEZabUdsaEhDZVVldXVQUjhMQUQwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmpLMHE1TmxsdFBOTWlQQ28ycURZWnlBTi1DTDR0ZkJqbkZiNDM3b0lBbWsiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzAwNTg2ODQxLCJleHAiOjE3MDA1OTA0NDEsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsIm9wZW5pZCIsImNsaWVudGFkbWluLXRvb2wiXSwiYXV0aF90aW1lIjoxNzAwNTg2ODM5LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.gSm5ml9Bktn8z_7OWN8EVSrA-mEpMR8pqImG1BWAWSRwqJ5LGeRA5bvAvHohxdrC88n1YezVVVcyADEA7OoxBshQoXVtZo8dKamzWONLh1bSST_OB_8z-kFLWw6EG89dZ6I3khsOjRp1Rvhrq1ByCiAYFlWNdA3zn2iokk9LuLen4cv6uoSbKkuPjUxMyYnGIxZO612b-h_WCXzlKNfO1JzLbXjap0OoGC-fHq23Ww9QbcTgosQrMNL9HD1Hw1ab-MQPOTq7qlIUdBvcXwvysk629qovQfvtJJBMVerBvTSh_p_G9aUayktzic_ClkIP417EO3pReGOwqV46QURfRg",
+        "Bearer eyJraWQiOiJnSEh6djlqcUxFZTc3dVV2Mkhld19BUEZabUdsaEhDZVVldXVQUjhMQUQwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULk9nS0VpaWd1LWV5Z3hzSU11QUM1T3ZrQTV4UE4tajdhaHp4UGxoOHFOZXciLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzAwNjgyNTE5LCJleHAiOjE3MDA2ODYxMTksImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzAwNjgyNTE2LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.MVkAu2u-O4cfAvpyaFZhx7MW4aCckVxSYWaWJyF96k0Po0SIxSIqFnOPoBp89la3mdtRE8rbgJR3fwU0WBROxc_f71kYxJ-RJBjjVnpu9r1Az769kzNfJLxbTJ86T5h4jSYYGi81-3hqejZf4UGkGOr_jMLwzrB8tbTD3_POJ5xvq8ImEU7Fd632fK-ti746WkYmbbxSl4b89Rc3GwQB37aVwtoLUfFqqftHrnqeNZAg0hZ4Onmn5C1X_QBSbWLzd-kMgBdsYnRVLHFOCP-h1tMx5u7syCL8ESdIYXDjtwotJHOcsTSXjCMVtb_lL4HOUwUCCXvXuZFgTEu7MVrUvg",
       ClientId: "cli_d2s6xmrsuezerh3uvt2utdui24",
       delay: "1000",
       Entity: [
@@ -200,7 +200,10 @@ export default {
     addNewEntity() {
       this.Entity.push({
         EntityName: "",
-        Processing_channel: [{}],
+        Processing_channel: [{
+          ProcessingChannelName: "",
+          PaymentMethod: [],
+        }],
       });
     },
     addNewProcessingChannel(id) {
