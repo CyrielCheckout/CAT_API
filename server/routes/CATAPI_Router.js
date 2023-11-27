@@ -4,30 +4,38 @@ var router = express.Router();
 const CATCreateMerchant = require("../controller/Cat_API/CAT.CreationBatch")
 const CATGetMerchantConf = require("../controller/Cat_API/CAT.GetMerchantConf")
 const CATEntity = require("../controller/Cat_API/CAT.Entity")
+const CATMerchantConf = require("../controller/Cat_API/CAT.MerchantConfiguration")
 
 
 router.post('/CATCreateMerchant', async function (req, res, next) {
     console.log("Got body :", req.body)
-        CreateMerchantCAT = await CATCreateMerchant.Createconf(req.body)
-        res
-            .status(CreateMerchantCAT.status)
-            .json(CreateMerchantCAT);
+    CreateMerchantCAT = await CATCreateMerchant.Createconf(req.body)
+    res
+        .status(CreateMerchantCAT.status)
+        .json(CreateMerchantCAT);
 
 })
-
 router.get('/GetMerchantConf', async function (req, res, next) {
     console.log("Got body :", req.body)
-        GetMerchantConf = await CATGetMerchantConf.GetConf(req.body)
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        res.status(GetMerchantConf.status).json(GetMerchantConf);
-  })
+    GetMerchantConf = await CATGetMerchantConf.GetConf(req.body)
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.status(GetMerchantConf.status).json(GetMerchantConf);
+})
+
+router.post('/AddProcessingChannel', async function (req, res, next) {
+    console.log("Got body :", req.body)
+    AddProcessingChannel = await CATMerchantConf.AddProcessingChannel(req.body)
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.status(AddProcessingChannel.status).json(AddProcessingChannel);
+})
 
 router.get('/getAllEntlty', async function (req, res, next) {
     console.log("Got body :", req.body)
-        GetAllEntity = await CATEntity.GetAllEntity(req.body.Bearer,req.body.ClientId)
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-        res.status(GetAllEntity.status).json(GetAllEntity);
-  })
+    GetAllEntity = await CATEntity.GetAllEntity(req.body.Bearer, req.body.ClientId)
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.status(GetAllEntity.status).json(GetAllEntity);
+})
 module.exports = router;
