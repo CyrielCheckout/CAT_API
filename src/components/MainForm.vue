@@ -26,6 +26,10 @@ import _ from 'lodash';
         <input v-model="delay" placeholder="ex : 10000 ms" />
       </div>
 
+      <button class="btn btn-success mt-5 mb-5" @click="getClientId">
+        Find
+      </button>
+
     <br />
 
     <div class="card mb-3" v-for="(entity, index) in Entity">
@@ -69,7 +73,7 @@ import _ from 'lodash';
                   <input
                     type="checkbox"
                     v-model="processingChannel.PaymentMethod"
-                    :value="paymentMethod" />
+                    :value="paymentMethod.id" />
                     <label>{{ ' ' + paymentMethod.name }}</label>
                 </div>
               </div>
@@ -154,8 +158,9 @@ export default {
   data() {
     return {
       Bearer:
-        "Bearer eyJraWQiOiJnSEh6djlqcUxFZTc3dVV2Mkhld19BUEZabUdsaEhDZVVldXVQUjhMQUQwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULk9nS0VpaWd1LWV5Z3hzSU11QUM1T3ZrQTV4UE4tajdhaHp4UGxoOHFOZXciLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzAwNjgyNTE5LCJleHAiOjE3MDA2ODYxMTksImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzAwNjgyNTE2LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.MVkAu2u-O4cfAvpyaFZhx7MW4aCckVxSYWaWJyF96k0Po0SIxSIqFnOPoBp89la3mdtRE8rbgJR3fwU0WBROxc_f71kYxJ-RJBjjVnpu9r1Az769kzNfJLxbTJ86T5h4jSYYGi81-3hqejZf4UGkGOr_jMLwzrB8tbTD3_POJ5xvq8ImEU7Fd632fK-ti746WkYmbbxSl4b89Rc3GwQB37aVwtoLUfFqqftHrnqeNZAg0hZ4Onmn5C1X_QBSbWLzd-kMgBdsYnRVLHFOCP-h1tMx5u7syCL8ESdIYXDjtwotJHOcsTSXjCMVtb_lL4HOUwUCCXvXuZFgTEu7MVrUvg",
-      ClientId: "cli_d2s6xmrsuezerh3uvt2utdui24",
+        "Bearer eyJraWQiOiJnSEh6djlqcUxFZTc3dVV2Mkhld19BUEZabUdsaEhDZVVldXVQUjhMQUQwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjNFQkdabTFpSTBlNmpvRU9Xc1p3QmRfODdVX19IN0pXWURyZktpY0FvUVEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzAxMzMzNDQ1LCJleHAiOjE3MDEzMzcwNDUsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwiY2xpZW50YWRtaW4tdG9vbCIsInByb2ZpbGUiXSwiYXV0aF90aW1lIjoxNzAxMzMzNDQyLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.X6KhXIjQMqGebES3CGpKOxzpqoH12dAQrmxjDnf5OhhyHMMphgMV3LW1zL46KF6jSWKYVGWX3DZ_oqVX-X4R9S8wXQK9Gi3jMqiGZSM6Wibl0-TsN0W5fr5YScRHw7WT_gjG_YbutmNeTs0yFJhIlF7fEWZDnw6_jXP-Y61K1-cA2w-BnDPc5-kcloTe9bL0gDvx4sBPgrr-VBwZAxE3hvbEnK4Kq4UAlPWRIlREYhZdT1_7T72xuFcumW4b5wLtFepAKbDTUEpqxkZFJYTdmGyucyJ0vropjsY3bpST96RamTxyNz-EBgBpTjENfxF5QutACbHfOO8lAoY_Ql_0kw",
+      //ClientId: "cli_d2s6xmrsuezerh3uvt2utdui24",
+      ClientId: "cli_sexhljunxgqeregcwxrzku6qyy",
       delay: "1000",
       Entity: [
         {
@@ -223,9 +228,6 @@ export default {
 
       const Entity = transformPaymentMethodsToIds(this.Entity);
 
-console.log(Entity);
-
-
       await axios
         .request({
           method: "POST",
@@ -255,6 +257,48 @@ console.log(Entity);
         });
         
     },
+    async getClientId() {
+      await axios
+        .request({
+          method: 'POST',
+          maxBodyLength: Infinity,
+          url: "http://127.0.0.1:4000/CatAPI/GetMerchantConf",
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+          data: JSON.stringify({
+            Bearer: this.Bearer,
+            ClientId: this.ClientId
+          }),
+        })
+        .then((res) => {
+          //Perform Success Action
+          if (res && res.data && res.data.Entity) {
+            console.log("res", res.data.Entity);
+            let resultEntities = res.data.Entity;
+
+            //const modifiedArray = modifyKeys(resultEntities);
+            let modifiedArray = renameKey(resultEntities, {Processing_Channel_Name: 'ProcessingChannelName'});
+            modifiedArray = renameKey(modifiedArray,  {Processing_Channel: 'Processing_channel'});
+            modifiedArray = renameKey(modifiedArray,  {Entity_Name: 'EntityName'});
+
+            this.Entity = modifiedArray;
+            console.log(modifiedArray);
+          } else {
+            this.Entity = []
+          }
+
+
+        })
+        .catch((error) => {
+          this.Entity = []
+          console.log("error", error);
+        })
+        .finally(() => {
+          //Perform action in always
+        });
+    }
   },
 };
 
@@ -273,4 +317,12 @@ const transformPaymentMethodsToIds = (obj) => {
     return obj;
   }
 };
+
+
+    function renameKey(obj, keysMap) { 
+    return _.transform(obj, function(result, value, key) { 
+      const currentKey = keysMap[key] || key; 
+      result[currentKey] = _.isObject(value) ? renameKey(value, keysMap) : value; 
+    });
+  }
 </script>

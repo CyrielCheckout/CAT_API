@@ -15,7 +15,7 @@ router.post('/CATCreateMerchant', async function (req, res, next) {
         .json(CreateMerchantCAT);
 
 })
-router.get('/GetMerchantConf', async function (req, res, next) {
+router.post('/GetMerchantConf', async function (req, res, next) {
     console.log("Got body :", req.body)
     GetMerchantConf = await CATGetMerchantConf.GetConf(req.body)
     res.header("Access-Control-Allow-Origin", "*");
