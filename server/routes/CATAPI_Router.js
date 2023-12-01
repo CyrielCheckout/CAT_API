@@ -1,15 +1,15 @@
 var express = require('express');
 require('dotenv').config();
 var router = express.Router();
-const CATCreateMerchant = require("../controller/Cat_API/CAT.CreationBatch")
+const CATConfigureMerchant = require("../controller/Cat_API/CAT.CreationBatch")
 const CATGetMerchantConf = require("../controller/Cat_API/CAT.GetMerchantConf")
 const CATEntity = require("../controller/Cat_API/CAT.Entity")
 const CATMerchantConf = require("../controller/Cat_API/CAT.MerchantConfiguration")
 
 
-router.post('/CATCreateMerchant', async function (req, res, next) {
+router.post('/AddEntity', async function (req, res, next) {
     console.log("Got body :", req.body)
-    CreateMerchantCAT = await CATCreateMerchant.Createconf(req.body)
+    CreateMerchantCAT = await CATConfigureMerchant.Createconf(req.body)
     res
         .status(CreateMerchantCAT.status)
         .json(CreateMerchantCAT);
