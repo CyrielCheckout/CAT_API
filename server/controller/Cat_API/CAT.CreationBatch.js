@@ -10,7 +10,6 @@ async function Createconf(body) {
     console.log("Creating entity :", body.Entity[i].EntityName)
     try {
       EntityResult = await CATEntity.CreateEntity(body.Bearer, body.ClientId, body.Entity[i].EntityName);
-      console.log(EntityResult)
       waitfor.delay(body.delay);
       console.log("Entity creation status:", EntityResult.status);
       EntityID = EntityResult.data.id;
@@ -160,14 +159,14 @@ async function Createconf(body) {
           }
 
           //Configure Cartes_Bancaires
-          if (body.Entity[i].Processing_channel[e].PaymentMethod.includes('CB')) {
+          if (body.Entity[i].Processing_channel[e].PaymentMethod.includes('CARTES_BANCAIRES')) {
             console.log("Create CB")
             try {
               //Create Processing Profile
               console.log("Create Processing Profile CB")
               CreateProcessingProfile = await CATProcessingChannel.Create_Processing_profile_CB(body.Bearer, EntityID, body.Entity[i].Processing_channel[e].ProcessingChannelName)
               PPCb = CreateProcessingProfile.data.id
-              finalresult.Entity[i].Processing_Channel[e].Cartes_BancairesSetup = { "CB": "CONFIGURED", "Processing_Profile_ID": PPCb };
+              finalresult.Entity[i].Processing_Channel[e].Cartes_BancairesSetup = { "CARTES_BANCAIRES": "CONFIGURED", "Processing_Profile_ID": PPCb };
               waitfor.delay(body.delay);
               console.log("PPCB created:", PPCb)
               try {
