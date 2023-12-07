@@ -290,7 +290,7 @@ async function Createconf(body) {
       }
       else {
         finalresult = { "EntityID": "Connection Error", "status": 500, "Message": "Check you VPN connection" }
-          return finalresult
+        return finalresult
       }
     }
   }

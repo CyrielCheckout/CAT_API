@@ -314,7 +314,6 @@ async function Create_Processing_profile_CB(bearer, EntityId, ProcessingChannelN
     .then(function (response) {
       return response
     });
-
   return Create_Processing_profile_CB_func;}
   catch (err){throw err}
 }
