@@ -33,10 +33,10 @@ router.post('/AddProcessingChannel', async function (req, res, next) {
 
 router.post('/AddPaymentMethod', async function (req, res, next) {
   console.log("Got body :", req.body)
-  AddProcessingChannel = await CATMerchantConf.AddPaymentMethod(req.body)
+  AddPaymentMethodResult = await CATMerchantConf.AddPaymentMethod(req.body)
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.status(AddProcessingChannel.status).json(AddProcessingChannel);
+  res.status(AddPaymentMethodResult.status).json(AddPaymentMethodResult);
 })
 
 router.get('/getAllEntlty', async function (req, res, next) {

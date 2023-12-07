@@ -27,7 +27,7 @@ async function GetAllProcessingChannels(bearer, EntityId) {
 }
 
 async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
-  GetProcessingChannelConffunc = await axios({
+  try {GetProcessingChannelConffunc = await axios({
     method: 'get',
     url: baseURL + 'api/processing-channels/'+ProcessingChannelId,
     headers: {
@@ -48,7 +48,8 @@ async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
     .then(function (response) {
       return response
     });
-  return GetProcessingChannelConffunc;
+  return GetProcessingChannelConffunc;}
+  catch (err){throw err}
 }
 
 
