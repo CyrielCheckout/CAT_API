@@ -1,0 +1,13 @@
+{
+    "CKOLegalEntity": "cko-sas",
+    "street_number" : "11",
+    "address_line_1": "11 rue du test",
+    "address_line_2": "rue du test",
+    "city": "Paris",
+    "postal_code": "75000",
+    "country_code_iso3": "FRA",
+    "country_code_iso2": "FR",
+    "region_code": "Paris",
+    "phone": "0606060606",
+    "currency": "EUR"
+}
