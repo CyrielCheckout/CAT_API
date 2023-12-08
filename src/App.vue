@@ -5,7 +5,7 @@ import MainForm from './components/MainForm.vue'
 
 <template>
   <header>
-    <img alt="Checkout.com" class="logo" src="./assets/Black-CKOSymbol-RGB.svg" width="125" height="125" />
+    <img alt="Checkout.com" class="logo" src="./assets/Black-CKOSymbol-RGB.svg" width="90" height="90" />
 
     <div class="wrapper">
       <LeftPanel msg="Checkout.com" />
@@ -32,6 +32,7 @@ header {
     display: flex;
     place-items: center;
     padding-right: calc(var(--section-gap) / 2);
+    justify-content: center;
   }
 
   .logo {

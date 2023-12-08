@@ -3,18 +3,28 @@
 import axios from "axios";
 import EntityForm from "./EntityForm.vue";
 import _ from 'lodash';
+import AppAccordion from "./AppAccordion.vue";
+import { jwtDecode } from "jwt-decode";
+import { format } from 'date-fns';
 
 </script>
 
 <template>
   <div id="catAdminForm">
-    <h1>CAT Admin Form</h1>
+   
 
-    <span>CAT Bearer Token:</span>
-    <p style="white-space: pre-line"></p>
+    <app-accordion class="mb-2 mt-4">
+      <template v-slot:title>
+        <span class="font-semibold text-xl">CAT Bearer Token : </span>
+      </template>
+      <template v-slot:content>
+        <p style="white-space: pre-line"></p>
     <textarea
-      v-model="Bearer" class="bearer"
+      v-model="Bearer" class="bearer" @blur="decryptBearerToken"
       placeholder="Bearer eyJraWQiOiJnSEh6djlqc...."></textarea>
+      </template>
+    </app-accordion>
+    <div :style="{ color: `${messageColor}` }">Status: {{ status }} - Username: {{ username}} - Expiry Time: {{ expiryTime}}</div>
 
       <div class="form-row">
         <label for="ClientId">Client ID:</label>
@@ -73,7 +83,7 @@ import _ from 'lodash';
                   <input
                     type="checkbox"
                     v-model="processingChannel.PaymentMethod"
-                    :value="paymentMethod.id" />
+                    :value="paymentMethod" />
                     <label>{{ ' ' + paymentMethod.name }}</label>
                 </div>
               </div>
@@ -151,12 +161,20 @@ margin-bottom: 10px;
   width: 100%;
 }
 
+.accordion{
+  border: none;
+}
+
 </style>
 
 <script>
 export default {
   data() {
     return {
+      messageColor: "",
+      username: "",
+      expiryTime: "",
+      status: "",
       Bearer:
         "Bearer eyJraWQiOiJnSEh6djlqcUxFZTc3dVV2Mkhld19BUEZabUdsaEhDZVVldXVQUjhMQUQwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjNFQkdabTFpSTBlNmpvRU9Xc1p3QmRfODdVX19IN0pXWURyZktpY0FvUVEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzAxMzMzNDQ1LCJleHAiOjE3MDEzMzcwNDUsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwiY2xpZW50YWRtaW4tdG9vbCIsInByb2ZpbGUiXSwiYXV0aF90aW1lIjoxNzAxMzMzNDQyLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.X6KhXIjQMqGebES3CGpKOxzpqoH12dAQrmxjDnf5OhhyHMMphgMV3LW1zL46KF6jSWKYVGWX3DZ_oqVX-X4R9S8wXQK9Gi3jMqiGZSM6Wibl0-TsN0W5fr5YScRHw7WT_gjG_YbutmNeTs0yFJhIlF7fEWZDnw6_jXP-Y61K1-cA2w-BnDPc5-kcloTe9bL0gDvx4sBPgrr-VBwZAxE3hvbEnK4Kq4UAlPWRIlREYhZdT1_7T72xuFcumW4b5wLtFepAKbDTUEpqxkZFJYTdmGyucyJ0vropjsY3bpST96RamTxyNz-EBgBpTjENfxF5QutACbHfOO8lAoY_Ql_0kw",
       //ClientId: "cli_d2s6xmrsuezerh3uvt2utdui24",
@@ -201,7 +219,33 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.decryptBearerToken()
+  },
   methods: {
+    decryptBearerToken() {
+      try {
+        const decoded = jwtDecode(this.Bearer);
+        let now = new Date().getTime();
+        let expiryDate = decoded.exp * 1000;
+        this.username = decoded.full_name;
+        this.expiryTime = format(expiryDate, 'dd/MM/yyyy HH:mm:ss');
+
+        if(now < expiryDate) {
+          this.messageColor = 'green';
+          this.status = "OK"
+        } else {
+          this.messageColor = 'red';
+          this.status = "EXPIRED"
+        }
+      } catch (error) {
+        console.log(error);
+        this.messageColor = 'red';
+        this.username = "N/A"
+        this.expiryTime = "N/A"
+        this.status = "N/A"
+      }
+    },
     addNewEntity() {
       this.Entity.push({
         EntityName: "",
@@ -283,8 +327,10 @@ export default {
             modifiedArray = renameKey(modifiedArray,  {Processing_Channel: 'Processing_channel'});
             modifiedArray = renameKey(modifiedArray,  {Entity_Name: 'EntityName'});
 
+            //REBUILD PaymentMethod JSON Format
+
             this.Entity = modifiedArray;
-            console.log(modifiedArray);
+            console.log(JSON.stringify(modifiedArray));
           } else {
             this.Entity = []
           }
