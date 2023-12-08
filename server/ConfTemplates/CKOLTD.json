@@ -1,0 +1,13 @@
+{
+    "CKOLegalEntity": "cko-ltd",
+    "street_number" : "11",
+    "address_line_1": "11 street of test",
+    "address_line_2": "street of test",
+    "city": "London",
+    "postal_code": "SW1A 1AA",
+    "country_code_iso3": "GBP",
+    "country_code_iso2": "GB",
+    "region_code": "GB",
+    "phone": "4155552671",
+    "currency": "GBP"
+}

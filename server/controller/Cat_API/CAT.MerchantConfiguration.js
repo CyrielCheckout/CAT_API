@@ -443,15 +443,15 @@ async function AddPaymentMethod(body) {
                                 waitfor.delay(body.delay);
                             }
                             catch (err) {
-                                finalresult.Entity[Ent].Processing_Channel[e].Cartes_BancairesSetup.Session_Processing_Processor_ID = err.data;
+                                finalresult.Entity[Ent].Processing_Channel[e].Cartes_BancairesSetup.Session_Processing_Processor_ID ={ "CARTES_BANCAIRES": "NOT CONFIGURED", "Processing_Profile_ID": err.data };
                             }
                         }
                         catch (err) {
-                            finalresult.Entity[Ent].Processing_Channel[e].Cartes_BancairesSetup.Processing_Processor_ID = err.data;
+                            finalresult.Entity[Ent].Processing_Channel[e].Cartes_BancairesSetup.Processing_Processor_ID = { "CARTES_BANCAIRES": "NOT CONFIGURED", "Processing_Profile_ID": err.data };;
                         }
                     }
                     catch (err) {
-                        finalresult.Entity[Ent].Processing_Channel[e].Cartes_BancairesSetup = err.data;
+                        finalresult.Entity[Ent].Processing_Channel[e].Cartes_BancairesSetup = { "CARTES_BANCAIRES": "NOT CONFIGURED", "Processing_Profile_ID": err.data };;
                     }
                 }
 
