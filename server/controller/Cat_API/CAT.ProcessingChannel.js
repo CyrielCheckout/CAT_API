@@ -1,8 +1,9 @@
 const axios = require('axios');
 const baseURL = "https://client-admin.cko-sbox.ckotech.co/";
+
+//templates for creation
 const fs = require('fs/promises')
 const path = require('path');
-
 const ckosasTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOSAS.json'));
 const ckoltdTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOLTD.json'));
 
