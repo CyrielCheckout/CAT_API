@@ -335,8 +335,9 @@ async function AddPaymentMethod(body) {
                 }
 
                 //Configure Mastercard
-                console.log("Create Mastercard")
+                
                 if (body.Entity[Ent].Processing_channel[e].PaymentMethod.includes('MASTERCARD')) {
+                    console.log("Create Mastercard")
                     try {
                         //Create Manual processor
                         console.log("Create Manual processor Mastercard")
@@ -362,8 +363,9 @@ async function AddPaymentMethod(body) {
                 }
 
                 //Configure Bancontact
-                console.log("Create Bancontact")
+                
                 if (body.Entity[Ent].Processing_channel[e].PaymentMethod.includes('BANCONTACT')) {
+                    console.log("Create Bancontact")
                     try {
                         //Create Processing Profile
                         console.log("Create Processing Profile Bancontact")
@@ -406,10 +408,12 @@ async function AddPaymentMethod(body) {
                             waitfor.delay(body.delay);
                         }
                         catch (err) {
+                            console.log(err)
                             finalresult.Entity[Ent].Processing_Channel[e].Idealsetup.Processing_Processor_ID = err.data;
                         }
                     }
                     catch (err) {
+                        console.log(err)
                         finalresult.Entity[Ent].Processing_Channel[e].Idealsetup = { "IDEAL": "NOT CONFIGURED", "Processing_Profile_ID": err.data };
                     }
                 }
@@ -474,10 +478,12 @@ async function AddPaymentMethod(body) {
                             waitfor.delay(body.delay);
                         }
                         catch (err) {
+                            console.log(err)
                             finalresult.Entity[Ent].Processing_Channel[e].SepaSetup.Processing_Processor_ID = err.data;
                         }
                     }
                     catch (err) {
+                        console.log(err)
                         finalresult.Entity[Ent].Processing_Channel[e].SepaSetup = { "SEPA": "NOT CONFIGURED", "Processing_Profile_ID": err.data };
                     }
                 }

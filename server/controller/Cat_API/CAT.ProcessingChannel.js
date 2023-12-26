@@ -1,12 +1,6 @@
 const axios = require('axios');
 const baseURL = "https://client-admin.cko-sbox.ckotech.co/";
 
-//templates for creation
-const fs = require('fs/promises')
-const path = require('path');
-const ckosasTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOSAS.json'));
-const ckoltdTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOLTD.json'));
-
 
 async function GetAllProcessingChannels(bearer, EntityId) {
   GetAllProcessingChannelsfunc = await axios({
@@ -246,12 +240,7 @@ async function Create_Processing_profile_Sepa(bearer, EntityId, ProcessingChanne
   }
   catch (err) { throw err }
 }
-async function Create_Processing_profile_CB(TemplateName, bearer, EntityId, ProcessingChannelName) {
-  TemplateName = ckosasTemplate;
-  templateName = await fs.readFile(TemplateName,'utf8', function (err, content) {
-    if (err){ throw err}
-    return content;
-  });
+async function Create_Processing_profile_CB( bearer, EntityId, ProcessingChannelName) {
   try {Create_Processing_profile_CB_func = await axios({
     method: 'post',
     url: baseURL + 'api/entities/' + EntityId + '/processing-profiles/v2',
@@ -299,19 +288,19 @@ async function Create_Processing_profile_CB(TemplateName, bearer, EntityId, Proc
       "card_acceptor_trade_name": ProcessingChannelName,
       "card_acceptor_legal_name": ProcessingChannelName,
       "custom_settings": {
-        "card_acceptor_street_number": templateName.Address_line_1,
+        "card_acceptor_street_number": "11 rue du test",
         "is_highrisk": false,
         "siret": "12345678901234",
         "authorization_validity_period": "7"
       },
-      "card_acceptor_street": templateName.address_line_1,
-      "card_acceptor_city": templateName.city,
-      "card_acceptor_postal_code": templateName.postal_code,
-      "card_acceptor_country_code": templateName.country_code_iso3,
-      "card_acceptor_region_code": templateName.region_code,
+      "card_acceptor_street": "11 rue du test",
+      "card_acceptor_city": "Paris",
+      "card_acceptor_postal_code": "75000",
+      "card_acceptor_country_code": "FRA",
+      "card_acceptor_region_code": "Paris",
       "card_acceptor_url": "",
       "card_acceptor_email": "",
-      "card_acceptor_phone": templateName.phone,
+      "card_acceptor_phone": "0606060606",
       "is_dynamic_acceptor": false,
       "status": "Active",
       "sca_exemptions_settings": {
@@ -330,9 +319,7 @@ async function Create_Processing_profile_CB(TemplateName, bearer, EntityId, Proc
   return Create_Processing_profile_CB_func;}
   catch (err){throw err}
 }
-async function Create_Manual_processor_Visa(TemplateName, bearer, ProcessingChannelId, ProcessingChannelName) {
-  TemplateName = path.resolve(ckosasTemplate);
-  template = await fs.readFile(TemplateName,'utf8', function (err, content) {if (err){ throw err}else{return content;}});
+async function Create_Manual_processor_Visa( bearer, ProcessingChannelId, ProcessingChannelName) {
   try {Create_Manual_processor_Visa_func = await axios({
     method: 'post',
     url: baseURL + 'api/processing-channels/' + ProcessingChannelId + '/processors',
@@ -520,12 +507,12 @@ async function Create_Manual_processor_Visa(TemplateName, bearer, ProcessingChan
         "card_acceptor_id": "",
         "force_merchant_generation": false,
         "acceptor_name": ProcessingChannelName,
-        "acceptor_street_address": template.address_line_1,
-        "acceptor_city": template.city,
-        "acceptor_postcode": template.postal_code,
-        "acceptor_country_iso3_code": template.country_code_iso3,
+        "acceptor_street_address": "11 rue du test",
+        "acceptor_city": "Paris",
+        "acceptor_postcode": "75000",
+        "acceptor_country_iso3_code": "FRA",
         "acceptor_region": "",
-        "acceptor_phone": template.phone,
+        "acceptor_phone": "0606060606",
         "has_dynamic_descriptor": false,
         "dynamic_descriptor_prefix": ""
       },
