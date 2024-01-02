@@ -1,6 +1,7 @@
-const CATEntity = require('./CAT.Entity');
-const CATProcessingChannel = require('./CAT.ProcessingChannel');
+const CATEntity = require('./CAT.EntityConf');
+const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
 const waitfor = require('../IdempotencyKey');
+const CatConfigInt = require('../Cat_API/CAT.ConfigInt');
 
 async function AddProcessingChannel(body) {
     finalresult = { "Entity": [] };
@@ -10,7 +11,7 @@ async function AddProcessingChannel(body) {
         try {
             //GetVaultID
             console.log("Get Vault ID");
-            GetVaultId = await CATEntity.GetEntityDetails(body.Bearer, body.Entity[Ent].EntityID);
+            GetVaultId = await CatConfigInt.GetVaultID(body.Bearer, body.Entity[Ent].EntityID);
             VaultID = GetVaultId.data.services[1].key;
             finalresult.Entity[Ent].VaultID = VaultID;
             waitfor.delay(body.delay);

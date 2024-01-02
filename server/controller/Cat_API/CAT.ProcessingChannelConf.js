@@ -26,7 +26,6 @@ async function GetAllProcessingChannels(bearer, EntityId) {
     });
   return GetAllProcessingChannelsfunc;
 }
-
 async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
   try {GetProcessingChannelConffunc = await axios({
     method: 'get',
@@ -52,8 +51,6 @@ async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
   return GetProcessingChannelConffunc;}
   catch (err){throw err}
 }
-
-
 async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingChannelName, VaultID) {
   try {
     CreateProcessingChannelfunc = await axios({
@@ -1295,8 +1292,6 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCartes
   return Create_Session_processor_CB_func;}
   catch (err){throw err}
 }
-
-
 
 module.exports = {
   GetAllProcessingChannels,
