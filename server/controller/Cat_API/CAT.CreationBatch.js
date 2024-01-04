@@ -9,7 +9,7 @@ async function Createconf(body) {
     //Create Entity
     console.log("Creating entity :", body.Entity[i].EntityName)
     try {
-      EntityResult = await CATEntity.CreateEntity(body.Entity[i].EntityLegalEntity,body.Bearer, body.ClientId, body.Entity[i].EntityName);
+      EntityResult = await CATEntity.CreateEntity(body.Bearer, body.ClientId, body.Entity[i].EntityName);
       waitfor.delay(body.delay);
       console.log("Entity creation status:", EntityResult.status);
       EntityID = EntityResult.data.id;
