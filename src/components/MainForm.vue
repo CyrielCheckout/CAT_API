@@ -11,8 +11,6 @@ import { format } from 'date-fns';
 
 <template>
   <div id="catAdminForm">
-   
-
     <app-accordion class="mb-2 mt-4">
       <template v-slot:title>
         <span class="font-semibold text-xl">CAT Bearer Token : </span>
@@ -36,74 +34,86 @@ import { format } from 'date-fns';
         <input v-model="delay" placeholder="ex : 10000 ms" />
       </div>
 
-      <button class="btn btn-success mt-5 mb-5" @click="getClientId">
+      <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="getClientId()">
         Find
       </button>
 
     <br />
+    <ul v-if="isLoading">
+      <loading v-model:active="isLoading"
+                :color="'#186AFF'"
+                :loader="'bars'"
+                :height="50"
+                :width="50"
+                 :can-cancel="false"
+                 :is-full-page="false"/>
+    </ul>
+    <ul v-else-if="error">
+      <li :style="{ color: `red` }">Error: {{ error }}</li>
+    </ul>
+    <ul v-else>
+      <div class="card" v-for="(entity, index) in Entity">
+        <hr />
+        <h4 class="card-title">
+          Entity {{ index + 1 }}
+          <span
+            @click="deleteEntity(index)"
+            class="float-right"
+            style="cursor: pointer">
+            X
+          </span>
+        </h4>
+        <div class="form-row">
+        <label>Entity: </label>
+          <input
+            type="text"
+            class="form-control mb-2"
+            placeholder="Name"
+            v-model="entity.EntityName" />
+          </div>
+        
 
-    <div class="card mb-3" v-for="(entity, index) in Entity">
-      <hr />
-      <h4 class="card-title">
-        Entity {{ index + 1 }}
-        <span
-          @click="deleteEntity(index)"
-          class="float-right"
-          style="cursor: pointer">
-          X
-        </span>
-      </h4>
-      <div class="form-row">
-      <label>Entity: </label>
-        <input
-          type="text"
-          class="form-control mb-2"
-          placeholder="Name"
-          v-model="entity.EntityName" />
-        </div>
-      
-
-        <div
-          v-for="(processingChannel, index) in entity.Processing_channel">
-          <div class="processing">
-            <div class="form-row">
-              <label>ProcessingChannel: </label>
-              <input
-                type="text"
-                class="form-control mb-2"
-                placeholder="Name"
-                v-model="processingChannel.ProcessingChannelName" />
-            </div>
-            <div>
-              <p>Payment Method : </p>
-              <div class="paymentMethods">
-                <div
-                  v-for="paymentMethod in paymentMethods"
-                  :key="paymentMethod.id">
-                  <input
-                    type="checkbox"
-                    v-model="processingChannel.PaymentMethod"
-                    :value="paymentMethod" />
-                    <label>{{ ' ' + paymentMethod.name }}</label>
+          <div
+            v-for="(processingChannel, index) in entity.Processing_channel">
+            <div class="processing">
+              <div class="form-row">
+                <label>ProcessingChannel: </label>
+                <input
+                  type="text"
+                  class="form-control mb-2"
+                  placeholder="Name"
+                  v-model="processingChannel.ProcessingChannelName" />
+              </div>
+              <div>
+                <p>Payment Method : </p>
+                <div class="paymentMethods">
+                  <div
+                    v-for="paymentMethod in paymentMethods"
+                    :key="paymentMethod.id">
+                    <input
+                      type="checkbox"
+                      v-model="processingChannel.PaymentMethod"
+                      :value="paymentMethod.id" />
+                      <label>{{ ' ' + paymentMethod.name }}</label>
+                  </div>
                 </div>
               </div>
             </div>
+            <hr class="small_hr"/>
           </div>
-          <hr class="small_hr"/>
-        </div>
-
-      <button
-        class="btn btn-success mt-5 mb-5"
-        @click="addNewProcessingChannel(index)">
-        New processing channel
-      </button>
-    </div>
-    <button class="btn btn-success mt-5 mb-5" @click="addNewEntity">
+        <button
+          class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5"
+          @click="addNewProcessingChannel(index)">
+          New processing channel
+        </button>
+      </div>
+    </ul>
+    <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="addNewEntity">
       Add an entity
     </button>
 
     <br />
-    <button @click="createEntities">Submit</button>
+    <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="createEntities">Submit</button>
   </div>
 
 </template>
@@ -168,6 +178,9 @@ margin-bottom: 10px;
 </style>
 
 <script>
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+
 export default {
   data() {
     return {
@@ -176,24 +189,15 @@ export default {
       expiryTime: "",
       status: "",
       Bearer:
-        "Bearer eyJraWQiOiJnSEh6djlqcUxFZTc3dVV2Mkhld19BUEZabUdsaEhDZVVldXVQUjhMQUQwIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjNFQkdabTFpSTBlNmpvRU9Xc1p3QmRfODdVX19IN0pXWURyZktpY0FvUVEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzAxMzMzNDQ1LCJleHAiOjE3MDEzMzcwNDUsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwiY2xpZW50YWRtaW4tdG9vbCIsInByb2ZpbGUiXSwiYXV0aF90aW1lIjoxNzAxMzMzNDQyLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.X6KhXIjQMqGebES3CGpKOxzpqoH12dAQrmxjDnf5OhhyHMMphgMV3LW1zL46KF6jSWKYVGWX3DZ_oqVX-X4R9S8wXQK9Gi3jMqiGZSM6Wibl0-TsN0W5fr5YScRHw7WT_gjG_YbutmNeTs0yFJhIlF7fEWZDnw6_jXP-Y61K1-cA2w-BnDPc5-kcloTe9bL0gDvx4sBPgrr-VBwZAxE3hvbEnK4Kq4UAlPWRIlREYhZdT1_7T72xuFcumW4b5wLtFepAKbDTUEpqxkZFJYTdmGyucyJ0vropjsY3bpST96RamTxyNz-EBgBpTjENfxF5QutACbHfOO8lAoY_Ql_0kw",
-      //ClientId: "cli_d2s6xmrsuezerh3uvt2utdui24",
-      ClientId: "cli_sexhljunxgqeregcwxrzku6qyy",
+        "Bearer eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkduakxwRk5nTXNjUURGS3ZodXU2RDR5SjNMOVRSR2NfcE9oRG1uVExLNFEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA0MzczNDc2LCJleHAiOjE3MDQzNzcwNzYsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiXSwiYXV0aF90aW1lIjoxNzA0MzYyMjI5LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.gGXotoVwfnepDZKU9O6AkjmDtPukNwrYzw78WD4bJrUE6k84YsWZWlTmFsri3fpwE64T4Z6clVbw0d3SfWgCELK3VnpkyNHLhoc3NBUclBGOnXBfZnBOw_cNQm8GX0wP4-hOzku48CJteUQVjaSWF6k5CKxVCpAWCkLWLYDTDrKiMw5_y6hpAfbQWZS0SJw-GT-oOeScNFvNzuyt_haVmyP5r3zXLvlrkC1ReIHKlRostWazQwvi5O-R4ttfTwUvvGSHsFLPGxXlFP3vScKBwETzDiTlbo8iNJiY3HDdFqQuMg0b3sm3CsVRsAB_3UOE9GUPI6cZ8ND2bC5P3polYw",
+      ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
-      Entity: [
-        {
-          EntityName: "",
-          Processing_channel: [
-            {
-              ProcessingChannelName: "",
-              PaymentMethod: [],
-            },
-          ],
-        },
-      ],
+      Entity: [],
+      isLoading: false,
+      error: '',
       paymentMethods: [
         {
-          id: 'CB',
+          id: 'CARTES_BANCAIRES',
           name: "Cartes Bancaires",
         },
         {
@@ -270,13 +274,17 @@ export default {
       console.log(this.delay);
       console.log(JSON.stringify(this.Entity));
 
-      const Entity = transformPaymentMethodsToIds(this.Entity);
+      //const Entity = transformPaymentMethodsToIds(this.Entity);
+      //console.log(Entity);
+
+      this.isLoading = true;
+      this.error = '';
 
       await axios
         .request({
           method: "POST",
           maxBodyLength: Infinity,
-          url: "http://127.0.0.1:4000/CatAPI/CATCreateMerchant",
+          url: "http://127.0.0.1:4000/CatAPI/AddEntity",
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -285,7 +293,7 @@ export default {
             Bearer: this.Bearer,
             ClientId: this.ClientId,
             delay: this.delay,
-            Entity
+            Entity: this.Entity
           }),
         })
         .then((res) => {
@@ -293,15 +301,19 @@ export default {
           console.log("res", res.data);
         })
         .catch((error) => {
-          // error.response.status Check status code
           console.log("error", error);
+          this.error = error.message || 'Error occurred while fetching user info';
+          this.isLoading = false;
         })
         .finally(() => {
+          this.isLoading = false;
           //Perform action in always
         });
         
     },
     async getClientId() {
+      this.isLoading = true;
+      this.error = '';
       await axios
         .request({
           method: 'POST',
@@ -327,29 +339,28 @@ export default {
             modifiedArray = renameKey(modifiedArray,  {Processing_Channel: 'Processing_channel'});
             modifiedArray = renameKey(modifiedArray,  {Entity_Name: 'EntityName'});
 
-            //REBUILD PaymentMethod JSON Format
-
             this.Entity = modifiedArray;
             console.log(JSON.stringify(modifiedArray));
+            this.isLoading = false;
           } else {
-            this.Entity = []
+            this.error = `No merchant found in sandbox with this ${this.ClientId}`;
+            this.isLoading = false;
           }
-
-
         })
         .catch((error) => {
           this.Entity = []
-          console.log("error", error);
+          this.error = error.message || 'Error occurred while fetching user info';
+          this.isLoading = false;
         })
         .finally(() => {
-          //Perform action in always
+          this.isLoading = false;
         });
     }
   },
 };
 
 
-const transformPaymentMethodsToIds = (obj) => {
+/*const transformPaymentMethodsToIds = (obj) => {
   if (_.isArray(obj)) {
     return _.map(obj, (item) => {
       if (_.has(item, 'PaymentMethod')) {
@@ -362,7 +373,7 @@ const transformPaymentMethodsToIds = (obj) => {
   } else {
     return obj;
   }
-};
+};*/
 
 
     function renameKey(obj, keysMap) { 

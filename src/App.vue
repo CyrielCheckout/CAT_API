@@ -5,10 +5,12 @@ import MainForm from './components/MainForm.vue'
 
 <template>
   <header>
-    <img alt="Checkout.com" class="logo" src="./assets/Black-CKOSymbol-RGB.svg" width="90" height="90" />
+    <a href="/">
+      <img alt="Checkout.com" class="logo" src="./assets/Black-CKOSymbol-RGB.svg" width="90" height="90" />
+    </a>
 
     <div class="wrapper">
-      <LeftPanel msg="Checkout.com" />
+      <a href="/"><LeftPanel msg="Checkout.com" /></a>
     </div>
   </header>
 
