@@ -1,5 +1,5 @@
-const CATEntity = require('./CAT.Entity');
-const CATProcessingChannel = require('./CAT.ProcessingChannel');
+const CATEntity = require('./CAT.EntityConf');
+const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
 const waitfor = require('../IdempotencyKey');
 
 async function Createconf(body) {
@@ -9,7 +9,7 @@ async function Createconf(body) {
     //Create Entity
     console.log("Creating entity :", body.Entity[i].EntityName)
     try {
-      EntityResult = await CATEntity.CreateEntity(body.Bearer, body.ClientId, body.Entity[i].EntityName);
+      EntityResult = await CATEntity.CreateEntity(body.Entity[i].EntityLegalEntity,body.Bearer, body.ClientId, body.Entity[i].EntityName);
       waitfor.delay(body.delay);
       console.log("Entity creation status:", EntityResult.status);
       EntityID = EntityResult.data.id;
@@ -25,7 +25,7 @@ async function Createconf(body) {
       //Create Pricing Profile
       try {
         console.log("Create Pricing Profile")
-        GetPricingProfile = await CATEntity.Create_Pricing_Profile(body.Bearer, EntityID, body.Entity[i].EntityName);
+        GetPricingProfile = await CATEntity.Create_Pricing_Profile(body.Entity[i].EntityLegalEntity,body.Bearer, EntityID, body.Entity[i].EntityName);
         finalresult.Entity[i].Pricing_Profile_ID = GetPricingProfile.data.id;
       }
       catch (err) {
