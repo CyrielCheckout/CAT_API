@@ -8,8 +8,8 @@ async function CreateVisaPaymentMethod(Bearer, ProcessingChannelID, ProcessingCh
         PPVisa = CreateProcessingProfile.data.id
         try {
             //Create Session processor Profile
-            CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_Visa(body.Bearer, ProcessingChannelID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName, PPVisa);
-            return PPVisa, CreateSessionProcessor.data.id;
+            CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_Visa(Bearer, ProcessingChannelID, ProcessingChannelName, PPVisa);
+            return {"Processing_profile":PPVisa, "Session_Processor" : CreateSessionProcessor.data.id};
         }
         catch (err) {
             console.log(err)
@@ -29,7 +29,7 @@ async function CreateMastercardPaymentMethod(Bearer, ProcessingChannelID, Proces
             //Create Session processor Profile
             console.log("Create Session processor Profile Mastercard")
             CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_Mastercard(Bearer, ProcessingChannelID, ProcessingChannelName, PPMastercard)
-            return PPMastercard, CreateSessionProcessor.data.id;
+            return {"Processing_profile":PPMastercard, "Session_Processor" : CreateSessionProcessor.data.id};
         }
         catch (err) {
             console.log(err)
@@ -51,11 +51,11 @@ async function CreateBancontactPaymentMethod(Bearer, EntityID, ProcessingChannel
             console.log("Create processor Profile Bancontact")
             CreateProcessor = await CATProcessingChannel.Create_processing_processor_Bancontact(Bearer, ProcessingChannelID, PPBancontact)
             PrBancontact = CreateProcessor.data.id
-            return PPBancontact, PrBancontact
+            return {"Processing_Profile":PPBancontact, "Processor_Profile":PrBancontact}
         }
         catch (err) {
             console.log(err)
-            return PPBancontact
+            return {"Processing_Profile":PPBancontact, "Processor_Profile" : "Error while creating"}
         }
     }
     catch (err) {
@@ -73,11 +73,11 @@ async function CreateIdealPaymentMethod(Bearer, EntityID, ProcessingChannelName,
             console.log("Create processor Profile Ideal")
             CreateProcessor = await CATProcessingChannel.Create_processing_processor_Ideal(Bearer, ProcessingChannelID, PPIdeal)
             PrIdeal = CreateProcessor.data.id
-            return PPIdeal, PrIdeal
+            return {"Processing_Profile":PPIdeal, "Processor_Profile":PrIdeal}
         }
         catch (err) {
             console.log(err)
-            return PrIdeal
+            return {"Processing_Profile":PrIdeal, "Processor_Profile" : "Error while creating"}
         }
     }
     catch (err) {
@@ -103,14 +103,14 @@ async function CreateCartesBancairesPaymentMethod(Bearer, EntityID, ProcessingCh
                 console.log("wait 10 secondes")
                 waitfor.delay(10000);
                 CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_CB(Bearer, ProcessingChannelID, PPCb, PrCb)
-                return PPCb, PrCb, CreateSessionProcessor.data.id
+                return {"Processing_Profile":PPCb, "Processor_Profile":PrCb, "Session_Processor" : CreateSessionProcessor.data.id}
             }
             catch (err) {
-                return PPCb, PrCb
+                return {"Processing_Profile":PPCb, "Processor_Profile":PrCb, "Session_Processor" : "Error while creating"}
             }
         }
         catch (err) {
-            return PPCb
+            return {"Processing_Profile":PPCb,"Processor_Profile":"Error while creating", "Session_Processor" : "Error while creating"}
         }
     }
     catch (err) {
@@ -127,10 +127,10 @@ async function CreateSepaPaymentMethod(Bearer, EntityID, ProcessingChannelName, 
             console.log("Create processor Profile SEPA")
             CreateProcessor = await CATProcessingChannel.Create_processing_processor_Sepa(Bearer, ProcessingChannelID, PPSepa)
             PrSepa = CreateIdealProcessor.data.id
-            return PPSepa, PrSepa;
+            return {"Processing_Profile":PPSepa, "Processor_Profile":PrSepa}
         }
         catch (err) {
-            return PPSepa
+            return {"Processing_Profile":PPSepa,"Processor_Profile":"Error while creating"}
         }
     }
     catch (err) {
@@ -197,9 +197,9 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
         catch (err) { console.log(err); return err }
         ProcessingChannelResult = await CATProcessingChannel.CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingChannelName, VaultID)
         ProcessingChannelID = ProcessingChannelResult.data.id;
+        console.log("Processing channel ID Created :",ProcessingChannelID)
         try {
             CreateSessionProcessingChannelResult = await CATProcessingChannel.Create_Session_Processing_Channels(Bearer, EntityID, ProcessingChannelID, VaultID);
-            console.log(CreateSessionProcessingChannelResult)
             //return to be added
         }
         catch (err) {

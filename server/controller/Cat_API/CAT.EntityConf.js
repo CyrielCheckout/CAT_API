@@ -33,10 +33,7 @@ async function GetAllEntity(bearer, ClientId, skip) {
   } catch (err) { console.log(err); throw err }
 }
 
-async function CreateEntity(TemplateName,bearer, ClientId, EntityName) {
-  TemplateName = path.resolve(TemplateName);
-  template = await fs.readFile(TemplateName,'utf8', function (err, content) {if (err){ throw err}else{return content;}});
-  console.log(template)
+async function CreateEntity(bearer, ClientId, EntityName) {
   try {
     CreateEntityfunc = await axios({
       method: 'post',
@@ -59,12 +56,12 @@ async function CreateEntity(TemplateName,bearer, ClientId, EntityName) {
         "name": EntityName,
         "doing_business_as": EntityName,
         "registered_business_address": {
-          "line1": template.address_line_1,
-          "line2": template.address_line_2,
-          "city": template.city,
-          "postcode": template.postal_code,
-          "country_iso3_code": template.country_code_iso3,
-          "state": template.region_code
+          "line1": "11 rue du test",
+          "line2": "rue du test",
+          "city": "Paris",
+          "postcode": "75000",
+          "country_iso3_code": "FRA",
+          "state": "Paris"
         },
         "is_principal_same_as_registered": true,
         "is_regulated": false,
@@ -73,7 +70,7 @@ async function CreateEntity(TemplateName,bearer, ClientId, EntityName) {
         },
         "company_number": "99999999999999",
         "tax_number": "",
-        "cko_legal_entity": template.CKOLegalEntity,
+        "cko_legal_entity": "cko-sas",
         "service_provider": "None",
         "onboards_sub_entities": false,
         "referrer": false,
@@ -118,9 +115,9 @@ async function GetEntityDetails(bearer, EntityId) {
 }
 
 async function Create_Pricing_Profile(TemplateName,bearer, EntityId, EntityName) {
-  TemplateName = path.resolve(TemplateName);
+ /* TemplateName = path.resolve(TemplateName);
   template = await fs.readFile(TemplateName,'utf8', function (err, content) {if (err){ throw err}else{return content;}});
-  console.log(template)
+  console.log(template)*/
   try {
     Create_Pricing_Profile_func = await axios({
       method: 'post',
@@ -144,7 +141,7 @@ async function Create_Pricing_Profile(TemplateName,bearer, EntityId, EntityName)
         "pricing_profile": {
           "is_processing_channel_specific": false,
           "name": EntityName,
-          "billing_currency_code": template.currency,
+          "billing_currency_code": "EUR",
           "fees": {
             "visa": {
               "card_fee_pricing_type": "interchange_plus_plus",

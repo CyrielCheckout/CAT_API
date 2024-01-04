@@ -9,91 +9,42 @@ async function AddProcessingChannel(body) {
         finalresult.Entity.push({ "EntityID": body.Entity[Ent].EntityID });
         console.log("Number of Procecssing_Channel to create :", body.Entity[Ent].Processing_channel.length)
         try {
-            //GetVaultID
-            console.log("Get Vault ID");
-            GetVaultId = await CatConfigInt.GetVaultID(body.Bearer, body.Entity[Ent].EntityID);
-            VaultID = GetVaultId.data.services[1].key;
-            finalresult.Entity[Ent].VaultID = VaultID;
-            waitfor.delay(body.delay);
-            console.log("Vault ID", VaultID);
             //Create Processing channel
             finalresult.Entity[Ent].Processing_Channel = []
             for (let e = 0; e < body.Entity[Ent].Processing_channel.length; e++) {
                 console.log("Procecssing_Channel to create :", body.Entity[Ent].Processing_channel[e].ProcessingChannelName)
                 try {
-                    ProcessingChannelResult = await CATProcessingChannel.CreateProcessingChannel(body.Bearer, body.ClientId, body.Entity[Ent].EntityID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName, VaultID)
-                    ProcessingChannelID = ProcessingChannelResult.data.id;
+                    PROCESSINGCHANNELCONF = await CatConfigInt.CreateProcessingChannel(body.Bearer,body.ClientId, body.Entity[Ent].EntityID,body.Entity[Ent].Processing_channel[e].ProcessingChannelName)
+                    finalresult.Entity[Ent].VaultID = VaultID;
                     finalresult.Entity[Ent].Processing_Channel[e] = { "Processing_Channel_ID": ProcessingChannelID, "Processing_Channel_Name": body.Entity[Ent].Processing_channel[e].ProcessingChannelName };
-                    waitfor.delay(body.delay);
-                    //Create Session processing channel
-                    console.log("Create processing channel for Session")
-                    try {
-                        console.log(body.Entity[Ent].EntityID, ProcessingChannelID, VaultID)
-                        CreateSessionProcessingChannel = await CATProcessingChannel.Create_Session_Processing_Channels(body.Bearer, body.Entity[Ent].EntityID, ProcessingChannelID, VaultID);
-                        console.log("Create Session processing channel ")
-                        finalresult.Entity[Ent].Processing_Channel[e].Session_Processing_Channel = CreateSessionProcessingChannel.data.id;
-                        waitfor.delay(body.delay);
-                    }
-                    catch (err) {
-                        console.log(err)
-                        finalresult.Entity[Ent].Processing_Channel[e].Session_Processing_Channel = "ERROR";
-                    }
                     //Configure Visa
                     if (body.Entity[Ent].Processing_channel[e].PaymentMethod.includes('VISA')) {
                         console.log("Create VISA")
                         try {
-                            //Create Manual processor
-                            console.log("Manual processor VISA")
-                            CreateProcessingProfile = await CATProcessingChannel.Create_Manual_processor_Visa(body.Bearer, ProcessingChannelID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName)
-                            PPVisa = CreateProcessingProfile.data.id
-                            finalresult.Entity[Ent].Processing_Channel[e].VISASetup = { "VISA": "CONFIGURED", "Processing_Profile_ID": PPVisa };
-                            waitfor.delay(body.delay);
-                            try {
-                                //Create Session processor Profile
-                                console.log("Create Session processor VISA")
-                                CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_Visa(body.Bearer, ProcessingChannelID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName, PPVisa);
-                                finalresult.Entity[Ent].Processing_Channel[e].VISASetup.Session_Processor_ID = CreateSessionProcessor.data.id;
-                                waitfor.delay(body.delay);
-                            }
-                            catch (err) {
-                                finalresult.Entity[Ent].Processing_Channel[e].VISASetup.Session_Processor_ID = err.data;
-                            }
+                            VISACONF = await CatConfigInt.CreateVisaPaymentMethod(body.Bearer, ProcessingChannelID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName);
+                            finalresult.Entity[Ent].Processing_Channel[e].VISASetup = { "VISA": "CONFIGURED", "Processing_Profile_ID": VISACONF.Processing_profile, "Session_Processor": VISACONF.Session_Processor };
                         }
                         catch (err) {
+                            console.log(err)
                             finalresult.Entity[Ent].Processing_Channel[e].VISASetup = { "VISA": "NOT CONFIGURED", "Processing_Profile_ID": err.data };
                         }
                     }
-
                     //Configure Mastercard
-                    console.log("Create Mastercard")
                     if (body.Entity[Ent].Processing_channel[e].PaymentMethod.includes('MASTERCARD')) {
-                        try {
-                            //Create Manual processor
-                            console.log("Create Manual processor Mastercard")
-                            CreateProcessingProfile = await CATProcessingChannel.Create_Manual_processor_Mastercard(body.Bearer, ProcessingChannelID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName)
-                            PPMastercard = CreateProcessingProfile.data.id
-                            finalresult.Entity[Ent].Processing_Channel[e].MastercardSetup = { "MASTERCARD": "CONFIGURED", "Processing_Profile_ID": CreateProcessingProfile.data.id };
-                            waitfor.delay(body.delay);
+                        console.log("Create Mastercard")
                             try {
-                                //Create Session processor Profile
-                                console.log("Create Session processor Profile Mastercard")
-                                CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_Mastercard(body.Bearer, ProcessingChannelID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName, PPMastercard)
-                                finalresult.Entity[Ent].Processing_Channel[e].MastercardSetup.Session_Processor_ID = CreateSessionProcessor.data.id;
-                                waitfor.delay(body.delay);
+                                MASTERCARDCONF = await CatConfigInt.CreateMastercardPaymentMethod(body.Bearer, ProcessingChannelID, body.Entity[Ent].Processing_channel[e].ProcessingChannelName);
+                                finalresult.Entity[Ent].Processing_Channel[e].MASTERCARDSetup = { "MASTERCARD": "CONFIGURED", "Processing_Profile_ID": MASTERCARDCONF.Processing_profile, "Session_Processor": MASTERCARDCONF.Session_Processor };
                             }
                             catch (err) {
-                                finalresult.Entity[Ent].Processing_Channel[e].MastercardSetup.Session_Processor_ID = err.data;
+                                console.log(err)
+                                finalresult.Entity[Ent].Processing_Channel[e].MASTERCARDSetup = { "MASTERCARD": "NOT CONFIGURED", "Processing_Profile_ID": err.data };
                             }
-                        }
-                        catch (err) {
-                            finalresult.Entity[Ent].Processing_Channel[e].MastercardSetup = { "MASTERCARD": "NOT CONFIGURED", "Processing_Profile_ID": err.data };
-                        }
-
                     }
 
                     //Configure Bancontact
-                    console.log("Create Bancontact")
                     if (body.Entity[Ent].Processing_channel[e].PaymentMethod.includes('BANCONTACT')) {
+                        console.log("Create Bancontact")
                         try {
                             //Create Processing Profile
                             console.log("Create Processing Profile Bancontact")
@@ -118,8 +69,8 @@ async function AddProcessingChannel(body) {
                         }
                     }
                     //Configure Ideal
-                    console.log("Create Ideal")
                     if (body.Entity[Ent].Processing_channel[e].PaymentMethod.includes('IDEAL')) {
+                        console.log("Create Ideal")
                         try {
                             //Create Processing Profile
                             console.log("Create Processing Profile Ideal")
