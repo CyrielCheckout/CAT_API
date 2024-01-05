@@ -201,8 +201,7 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer:
-        "Bearer eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjgzTHN6SDhDc1dRNzlGU0d5dDhybFRHNDMwOEIydzRZdkF2NHY0cURuZFUiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA0NDQ4MjM3LCJleHAiOjE3MDQ0NTE4MzcsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA0NDQ0NjYyLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.ivTm8fglNUcaMO_nAj3UUN0pdgaPFwtLa3uUo7FitThz_-VWhd1qAuJiFy4xBF4eo2u87n0W_BpzVI-fILN73MDBLSaYpn6gwMmomyu9lu7Jl_TzBAi12hJ6aEJr4rKAJ4APzxzN3Dr8UnakKTElRsn1sckdYl5fpFe5BOFIG1RlK89jL1VBBlFLxD96kUGSKVYN9su5MUo_ma37X08U9RvBRTPZ7I1RRosCghbOL9K21G5zwvqtCsuieIQF6Pp5jdUPzNYpaOh0dTcvvNig4-jgthT_Kgw2NhzKocMSatSx8NIKO4hR9NRFt6F0NS-9RoPtSJCbp_GL_83kkTLgeQ",
+      Bearer:"",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
@@ -326,7 +325,7 @@ export default {
         .request({
           method: "POST",
           maxBodyLength: Infinity,
-          url: "http://127.0.0.1:4000/CatAPI/Createconf2",
+          url: "http://127.0.0.1:4000/CatAPI/ConfigureMerchant",
           headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
