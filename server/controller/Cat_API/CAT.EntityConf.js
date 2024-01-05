@@ -32,7 +32,6 @@ async function GetAllEntity(bearer, ClientId, skip) {
     return GetAllEntityfunc;
   } catch (err) { console.log(err); throw err }
 }
-
 async function CreateEntity(bearer, ClientId, EntityName) {
   try {
     CreateEntityfunc = await axios({
@@ -113,7 +112,34 @@ async function GetEntityDetails(bearer, EntityId) {
     throw err
   }
 }
-
+async function GetEntityData(bearer, EntityId) {
+  try {
+    GetEntityDetailsfunc = await axios({
+      method: 'get',
+      url: baseURL + 'api/entities/' + EntityId,
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+    })
+      .then(function (response) {
+        return response
+      });
+    return GetEntityDetailsfunc;
+  } catch (err) {
+    throw err
+  }
+}
 async function Create_Pricing_Profile(TemplateName,bearer, EntityId, EntityName) {
  /* TemplateName = path.resolve(TemplateName);
   template = await fs.readFile(TemplateName,'utf8', function (err, content) {if (err){ throw err}else{return content;}});
@@ -338,10 +364,68 @@ async function Create_Pricing_Profile(TemplateName,bearer, EntityId, EntityName)
     throw err
   }
 }
-
+async function GetPricingProfile(bearer, EntityId) {
+  try {
+    GetPricingProfilefunc = await axios({
+      method: 'get',
+      url: baseURL + 'api/entities/'+EntityId+'/payment-pricing-profiles?limit=25&skip=0',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+    })
+      .then(function (response) {
+        return response
+      });
+    return GetPricingProfilefunc;
+  } catch (err) {
+    throw err
+  }
+}
+async function GetVaultID(bearer, ClientID) {
+  try {
+    GetVaultIDfunc = await axios({
+      method: 'get',
+      url: baseURL + 'api/clients/'+ClientID+'/vault-account',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+    })
+      .then(function (response) {
+        return response
+      });
+    return GetVaultIDfunc;
+  } catch (err) {
+    throw err
+  }
+}
 module.exports = {
   GetAllEntity,
   CreateEntity,
+  GetEntityData,
   GetEntityDetails,
-  Create_Pricing_Profile
+  Create_Pricing_Profile,
+  GetPricingProfile,
+  GetVaultID
 }
