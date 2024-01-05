@@ -190,8 +190,8 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
         try {
             //GetVaultID
             console.log("Get Vault ID");
-            GetVaultId = await CATEntity.GetEntityDetails(Bearer, EntityID);
-            VaultID = GetVaultId.data.services[1].key;
+            GetVaultId = await CATEntity.GetVaultID(Bearer, ClientID);
+            VaultID = GetVaultId.data.id;
             console.log("Vault ID", VaultID);
         }
         catch (err) { console.log(err); return err }
@@ -208,7 +208,7 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
         }
     }
     catch (err) {
-        console.log(err);
+        console.log(err.response.data);
         return err
     }
 

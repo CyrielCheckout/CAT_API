@@ -4,6 +4,16 @@ var router = express.Router();
 const CATConfigureMerchant = require("../controller/Cat_API/CAT.CreationBatch")
 const CATGetMerchantConf = require("../controller/Cat_API/CAT.GetMerchantConf")
 const CATMerchantConf = require("../controller/Cat_API/CAT.MerchantConfiguration")
+const CATMerchantConf2 = require("../controller/Cat_API/CAT.MerchantCONF")
+
+router.post('/Createconf2', async function (req, res, next) {
+    console.log("Got body :", req.body)
+    CreateMerchantCAT = await CATMerchantConf2.Createconf2(req.body)
+    res
+        .status(CreateMerchantCAT.status)
+        .json(CreateMerchantCAT);
+
+})
 
 router.post('/AddEntity', async function (req, res, next) {
     console.log("Got body :", req.body)
