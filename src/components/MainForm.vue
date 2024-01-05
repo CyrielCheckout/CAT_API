@@ -6,6 +6,7 @@ import _ from 'lodash';
 import AppAccordion from "./AppAccordion.vue";
 import { jwtDecode } from "jwt-decode";
 import { format } from 'date-fns';
+import Modal from './Modal.vue';
 
 </script>
 
@@ -23,7 +24,12 @@ import { format } from 'date-fns';
       </template>
     </app-accordion>
     <div :style="{ color: `${messageColor}` }">Status: {{ status }} - Username: {{ username}} - Expiry Time: {{ expiryTime}}</div>
-    <p><i>(If your bearer is expired, click here to see how to get a new valid one)</i></p>
+    <p><i>(If your bearer is expired, <a href="#" @click="showModal"><u>click here to see how to get a new valid bearer token)</u></a></i></p>
+
+    <Modal
+      v-show="isModalVisible"
+      @close="closeModal"
+    />
 
     <hr class="mb-2 mt-2">
 
@@ -190,6 +196,7 @@ import 'vue-loading-overlay/dist/css/index.css';
 export default {
   data() {
     return {
+      isModalVisible: false,
       messageColor: "",
       username: "",
       expiryTime: "",
@@ -233,7 +240,16 @@ export default {
   mounted() {
     this.decryptBearerToken()
   },
+  components: {
+      Modal,
+    },
   methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
     decryptBearerToken() {
       try {
         const decoded = jwtDecode(this.Bearer);
