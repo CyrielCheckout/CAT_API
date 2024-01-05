@@ -4,7 +4,7 @@ const waitfor = require('../IdempotencyKey');
 const CatConfigInt = require('../Cat_API/CAT.ConfigInt');
 const CatPaymentMethodConfig = require('../Cat_API/CAT.PaymentMethodCONF')
 
-async function Createconf2(body) {
+async function Createconf(body) {
     console.log("Number of entity requested :", body.Entity.length)
     finalresult = { "Entity": [] };
     console.log(body);
@@ -175,5 +175,5 @@ async function Createconf2(body) {
 }
 
 module.exports = {
-    Createconf2
+    Createconf
 }
