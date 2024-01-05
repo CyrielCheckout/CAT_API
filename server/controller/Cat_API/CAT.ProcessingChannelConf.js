@@ -1101,7 +1101,7 @@ async function Create_Payout_Schedules(bearer, EntityId, ProcessingChannelName, 
 async function Get_Processing_channel_Session(bearer, EntityId) {
   try{Get_Processing_channel_Session_func = await axios({
     method: 'get',
-    url: baseURL + 'api/entities/' + EntityId + '/processing-channels?limit=25&skip=0&partialName=',
+    url: baseURL + 'api/sessions-processing-channels/clone-configuration?entityId='+EntityId,
     headers: {
       'Authorization': bearer,
       'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
@@ -1253,10 +1253,10 @@ async function Create_Session_processor_Mastercard(bearer, AvailableProcessingCh
   return Create_Session_processor_Mastercard_func;}
   catch (err){throw err}
 }
-async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCartes_Bancaires, PrCB) {
+async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, PrCb) {
   try{
-    console.log("PP receveid:", PPCartes_Bancaires)
-  console.log("PR receveid:", PrCB)
+    console.log("PP receveid:", PPCb)
+  console.log("PR receveid:", PrCb)
   Create_Session_processor_CB_func = await axios({
     method: 'post',
     url: baseURL + 'api/session-processing-channels/' + ProcessingChannelId + '/session-profile-processors',
@@ -1276,8 +1276,8 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCartes
     },
     data: {
       "createType": "existing",
-      "gateway_profile_processor_id": PrCB,
-      "processing_profile_id": PPCartes_Bancaires,
+      "gateway_profile_processor_id": PrCb,
+      "processing_profile_id": PPCb,
       "scheme": "CARTES_BANCAIRES",
       "merchant_category_code": "0742",
       "versions": [
