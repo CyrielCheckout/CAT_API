@@ -32,7 +32,7 @@ async function GetAllEntity(bearer, ClientId, skip) {
     return GetAllEntityfunc;
   } catch (err) { console.log(err); throw err }
 }
-async function CreateEntity(bearer, ClientId, EntityName) {
+async function CreateEntity(bearer, ClientId, EntityName,CKOTEMPLATE) {
   try {
     CreateEntityfunc = await axios({
       method: 'post',
@@ -55,12 +55,12 @@ async function CreateEntity(bearer, ClientId, EntityName) {
         "name": EntityName,
         "doing_business_as": EntityName,
         "registered_business_address": {
-          "line1": "11 rue du test",
-          "line2": "rue du test",
-          "city": "Paris",
-          "postcode": "75000",
-          "country_iso3_code": "FRA",
-          "state": "Paris"
+          "line1": CKOTEMPLATE.address_line_1,
+          "line2": CKOTEMPLATE.address_line_2,
+          "city": CKOTEMPLATE.city,
+          "postcode": CKOTEMPLATE.postal_code,
+          "country_iso3_code": CKOTEMPLATE.country_code_iso3,
+          "state": CKOTEMPLATE.region_code
         },
         "is_principal_same_as_registered": true,
         "is_regulated": false,
@@ -69,7 +69,7 @@ async function CreateEntity(bearer, ClientId, EntityName) {
         },
         "company_number": "99999999999999",
         "tax_number": "",
-        "cko_legal_entity": "cko-sas",
+        "cko_legal_entity": CKOTEMPLATE.CKOLegalEntity,
         "service_provider": "None",
         "onboards_sub_entities": false,
         "referrer": false,
@@ -140,10 +140,7 @@ async function GetEntityData(bearer, EntityId) {
     throw err
   }
 }
-async function Create_Pricing_Profile(TemplateName,bearer, EntityId, EntityName) {
- /* TemplateName = path.resolve(TemplateName);
-  template = await fs.readFile(TemplateName,'utf8', function (err, content) {if (err){ throw err}else{return content;}});
-  console.log(template)*/
+async function Create_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE) {
   try {
     Create_Pricing_Profile_func = await axios({
       method: 'post',
@@ -167,7 +164,7 @@ async function Create_Pricing_Profile(TemplateName,bearer, EntityId, EntityName)
         "pricing_profile": {
           "is_processing_channel_specific": false,
           "name": EntityName,
-          "billing_currency_code": "EUR",
+          "billing_currency_code": CKOTEMPLATE.currency,
           "fees": {
             "visa": {
               "card_fee_pricing_type": "interchange_plus_plus",

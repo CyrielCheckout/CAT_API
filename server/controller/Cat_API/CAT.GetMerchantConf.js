@@ -22,7 +22,7 @@ async function GetConf(body) {
       }
     }
     else {
-      GetAllEntity = await CATEntity.GetAllEntity(body.Bearer, body.ClientId,0);
+      GetAllEntity = await CATEntity.GetAllEntity(body.Bearer, body.ClientId, 0);
       for (let i = 0; i < GetAllEntity.body._embedded.entities.length; i++) {
         MerchantConfFinal.Entity.push({ "Entity_Name": GetAllEntity.body._embedded.entities[i].name, "EntityID": GetAllEntity.body._embedded.entities[i].id, "status": GetAllEntity.body._embedded.entities[i].status });
       }
@@ -35,10 +35,15 @@ async function GetConf(body) {
           proccessingchannel_list = await CATProcessingChannel.GetAllProcessingChannels(body.Bearer, MerchantConfFinal.Entity[entNumb].EntityID);
           for (let PCNumb = 0; PCNumb < proccessingchannel_list.data._embedded.processing_channels.length; PCNumb++) {
             MerchantConfFinal.Entity[entNumb].Processing_Channel.push({ "Processing_Channel_Name": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "Processing_Channel_Id": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id, "business_model": proccessingchannel_list.data._embedded.processing_channels[PCNumb].business_model });
-            MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod=[];
-            ProcessingChannelConf = await CATProcessingChannel.GetProcessingChannelConf(body.Bearer, proccessingchannel_list.data._embedded.processing_channels[PCNumb].id);
-            for (let ProcessorNumb = 0; ProcessorNumb < ProcessingChannelConf.data.processors.length; ProcessorNumb++) {
-              MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod.push(ProcessingChannelConf.data.processors[ProcessorNumb].scheme);
+            MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod = [];
+            try {
+              ProcessingChannelConf = await CATProcessingChannel.GetProcessingChannelConf(body.Bearer, proccessingchannel_list.data._embedded.processing_channels[PCNumb].id);
+              for (let ProcessorNumb = 0; ProcessorNumb < ProcessingChannelConf.data.processors.length; ProcessorNumb++) {
+                MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod.push(ProcessingChannelConf.data.processors[ProcessorNumb].scheme);
+              }
+            }
+            catch (err) {
+              MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod.push(err);
             }
           }
         }
