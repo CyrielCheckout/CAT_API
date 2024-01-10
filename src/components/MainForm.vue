@@ -56,21 +56,21 @@ import Modal from './Modal.vue';
     <ul v-else>
       <div class="card" v-for="(entity, eID) in Entity">
         <hr />
-        <app-accordion :is-open="false" class="mb-1 mt-4">
+        <app-accordion :is-open="!(entity.EntityID.length > 0)" class="mb-1 mt-4">
           <template v-slot:title>
-            <h4 class="card-title">
+            <h4 class="card-title pl-2 pr-2">
               Entity {{ entity.EntityName }} ({{ entity.EntityID }})
-              <!-- <span
+            </h4>
+            <span v-if="!(entity.EntityID.length > 0)"
               @click="deleteEntity(eID)"
               class="float-right"
               style="cursor: pointer">
               X
-            </span> -->
-            </h4>
+            </span>
           </template>
           <template v-slot:content>
 
-            <div class="form-row">
+            <div class="form-row pl-2">
               <label :hidden="(entity.EntityID?.length > 0)">Entity name: </label>
               <input type="text" class="form-control mb-2" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
                 v-model="entity.EntityName" />
@@ -90,16 +90,17 @@ import Modal from './Modal.vue';
                   <div class="paymentMethods ml-10">
                     <div v-for="paymentMethod in paymentMethods" :key="paymentMethod.id">
 
-                      <div v-if="isDisable(eID, pID, paymentMethod.id)">
-                        <input type="checkbox" :disabled="true" checked/>
+
+                        <input type="checkbox" v-model="processingChannel.PaymentMethod"
+                        :value="paymentMethod.id"/>
                         <label>{{ ' ' + paymentMethod.name }}</label>
-                      </div>
-                      <div v-else>
+
+                      <!--<div v-else>
                         <input type="checkbox" v-model="processingChannel.PaymentMethod2"
                           :value="paymentMethod.id"
                            />
-                        <label>{{ ' ' + paymentMethod.name }}</label>
-                      </div>
+                        <label>{{ ' ' + paymentMethod.name }}</label> 
+                      </div> -->
 
 
 
@@ -134,7 +135,8 @@ import Modal from './Modal.vue';
   /* Vertical alignment */
   justify-content: space-between;
   /* Horizontal alignment */
-  margin-bottom: 2px;
+  margin-bottom: 3px;
+  margin-top: 3px; 
   /* Optional: Add margin between rows */
 }
 
@@ -150,7 +152,9 @@ input {
 
 .card-title {
   font-weight: 600;
-  margin-bottom: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .paymentMethods {
@@ -203,7 +207,7 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjBnSzAxdmF3QVhHNGRXaV8xTEk3dFRzd1pUdnAzb1hJak1aVkE4TkZIakUiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA0ODg3NTY2LCJleHAiOjE3MDQ4OTExNjYsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA0ODczMjcyLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.MQ6UEWh5hbdcjVRM_orqdzjOFvySP_x73QYW1tyBaWz_zAs1K6pcXafvnjLwp8N4OtZjbkFJhBcm9qgDei_nq54NANJHgNkqsn5cDLdBxKSK5RPIuaDkZTbz5PQXLQmsKH2K7SvL8XWNtb3bUd_TJhxqE-KgOu4EBhumyoX0sVR0N9-tIkbKk5LcR8h-uXf5OwvnQugCOS_ALzRBnjDAQOdyIIFBy5WxWnlougfTobYgfGbb1zceWw_Dew8HDkXQMyhxWL1c5kdHHZvfmhl6DbldHcFySkyUmHN_N2bXv-0nk3D4LQumOLh13QVoixLt-SlqnTVLWyrM8X-byLjTNg",
+      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULktiWGRLZTc4X2l0NWxueWhoQllKYmdfcGNjNkU4RGJfTjJRMnMwTkd3R3ciLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA0ODk5NTEzLCJleHAiOjE3MDQ5MDMxMTMsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiXSwiYXV0aF90aW1lIjoxNzA0ODk5NTExLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.KYweDe1n0wS70AmqFp5XghmaclMzQ4IfOBZQQBrF-uC5snw9fqpyYLSOOmRBmJQltgiySbFLwc7Zr-aGo9OrZAsBPl6-g-l1DfwWAthSjeLFkCpGvOYoi9ZIZWtg_5GbjWYrbIegXJsjZ6b19GUrwxvVOexku5cup7ryTkDOEWZTDvNKPbuC0FlIm0vYeX4wyRH23Me3n779dW0Wswd6Ssc4jrmSeS1e29e64z7-4aME6xGuEklJmWKvpFUe2GqpCLqMvXHW_QpLuSS8G-oaRU7DorTaO75F1ybmMNA-CVBAht-McZw4PUd-KCYFjTosiYrqnadYkGibCJ8FlOr1qQ",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
@@ -343,6 +347,9 @@ export default {
         .then((res) => {
           //Perform Success Action
           console.log("res", res.data);
+          /*this.isLoading = false;
+          this.isLoading = true;
+          this.getClientId();*/
         })
         .catch((error) => {
           console.log("error", error);
