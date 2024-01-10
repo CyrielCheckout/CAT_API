@@ -16,7 +16,7 @@ async function GetConf(body) {
         GetAllEntity = await CATEntity.GetAllEntity(body.Bearer, body.ClientId, skip);
         console.log("getallentity lenth:", GetAllEntity.body._embedded.entities.length)
         for (let i = 0; i < GetAllEntity.body._embedded.entities.length; i++) {
-          MerchantConfFinal.Entity.push({ "Entity_Name": GetAllEntity.body._embedded.entities[i].name, "EntityID": GetAllEntity.body._embedded.entities[i].id, "status": GetAllEntity.body._embedded.entities[i].status });
+          MerchantConfFinal.Entity.push({ "EntityName": GetAllEntity.body._embedded.entities[i].name, "EntityID": GetAllEntity.body._embedded.entities[i].id, "status": GetAllEntity.body._embedded.entities[i].status });
         }
         skip = skip + 25;
       }
@@ -24,26 +24,26 @@ async function GetConf(body) {
     else {
       GetAllEntity = await CATEntity.GetAllEntity(body.Bearer, body.ClientId, 0);
       for (let i = 0; i < GetAllEntity.body._embedded.entities.length; i++) {
-        MerchantConfFinal.Entity.push({ "Entity_Name": GetAllEntity.body._embedded.entities[i].name, "EntityID": GetAllEntity.body._embedded.entities[i].id, "status": GetAllEntity.body._embedded.entities[i].status });
+        MerchantConfFinal.Entity.push({ "EntityName": GetAllEntity.body._embedded.entities[i].name, "EntityID": GetAllEntity.body._embedded.entities[i].id, "status": GetAllEntity.body._embedded.entities[i].status });
       }
     };
     if (MerchantConfFinal.Entity.length === GetAllEntity.body.total_count) {
       console.log("Count match go next step")
       for (let entNumb = 0; entNumb < MerchantConfFinal.Entity.length; entNumb++) {
         try {
-          MerchantConfFinal.Entity[entNumb].Processing_Channel = []
+          MerchantConfFinal.Entity[entNumb].Processing_channel = []
           proccessingchannel_list = await CATProcessingChannel.GetAllProcessingChannels(body.Bearer, MerchantConfFinal.Entity[entNumb].EntityID);
           for (let PCNumb = 0; PCNumb < proccessingchannel_list.data._embedded.processing_channels.length; PCNumb++) {
-            MerchantConfFinal.Entity[entNumb].Processing_Channel.push({ "Processing_Channel_Name": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "Processing_Channel_Id": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id, "business_model": proccessingchannel_list.data._embedded.processing_channels[PCNumb].business_model });
-            MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod = [];
+            MerchantConfFinal.Entity[entNumb].Processing_channel.push({ "ProcessingChannelName": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "ProcessingChannelID": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id, "business_model": proccessingchannel_list.data._embedded.processing_channels[PCNumb].business_model });
+            MerchantConfFinal.Entity[entNumb].Processing_channel[PCNumb].PaymentMethod = [];
             try {
               ProcessingChannelConf = await CATProcessingChannel.GetProcessingChannelConf(body.Bearer, proccessingchannel_list.data._embedded.processing_channels[PCNumb].id);
               for (let ProcessorNumb = 0; ProcessorNumb < ProcessingChannelConf.data.processors.length; ProcessorNumb++) {
-                MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod.push(ProcessingChannelConf.data.processors[ProcessorNumb].scheme);
+                MerchantConfFinal.Entity[entNumb].Processing_channel[PCNumb].PaymentMethod.push(ProcessingChannelConf.data.processors[ProcessorNumb].scheme);
               }
             }
             catch (err) {
-              MerchantConfFinal.Entity[entNumb].Processing_Channel[PCNumb].PaymentMethod.push(err);
+              MerchantConfFinal.Entity[entNumb].Processing_channel[PCNumb].PaymentMethod.push(err);
             }
           }
         }
