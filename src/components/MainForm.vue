@@ -12,113 +12,111 @@ import Modal from './Modal.vue';
 
 <template>
   <div id="catAdminForm">
-    <app-accordion class="mb-1 mt-4">
+    <app-accordion :is-open="true" class="mb-1 mt-4">
       <template v-slot:title>
         <span class="font-semibold text-xl">CAT Bearer Token : </span>
       </template>
       <template v-slot:content>
         <p style="white-space: pre-line"></p>
-    <textarea
-      v-model="Bearer" class="bearer" @blur="decryptBearerToken"
-      placeholder="Bearer eyJraWQiOiJnSEh6djlqc...."></textarea>
+        <textarea v-model="Bearer" class="bearer" v-on:input="decryptBearerToken"
+          placeholder="eyJraWQiOiJnSEh6djlqc....(Without Bearer)"></textarea>
       </template>
     </app-accordion>
-    <div :style="{ color: `${messageColor}` }">Status: {{ status }} - Username: {{ username}} - Expiry Time: {{ expiryTime}}</div>
-    <p><i>(If your bearer is expired, <a href="#" @click="showModal"><u>click here to see how to get a new valid bearer token)</u></a></i></p>
+    <div :style="{ color: `${messageColor}` }">Status: {{ status }} - Username: {{ username }} - Expiry Time: {{
+      expiryTime }}</div>
+    <p><i>(If your bearer is expired, <a href="#" @click="showModal"><u>click here to see how to get a new valid bearer
+            token)</u></a></i></p>
 
-    <Modal
-      v-show="isModalVisible"
-      @close="closeModal"
-    />
+    <Modal v-show="isModalVisible" @close="closeModal" />
 
     <hr class="mb-2 mt-2">
 
-      <div class="form-row">
-        <label for="ClientId">Client ID:</label>
-        <input v-model="ClientId" class="clientId" placeholder="cli_xxx" />
-      </div>
-      
-      <div class="form-row">
-        <label for="field2">Delay (in ms):</label>
-        <input v-model="delay" placeholder="ex : 10000 ms" />
-      </div>
+    <div class="form-row">
+      <label for="ClientId">Client ID:</label>
+      <input v-model="ClientId" class="clientId" placeholder="cli_xxx" />
+    </div>
 
-      <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="getClientId()">
-        Find
-      </button>
+    <div class="form-row">
+      <label for="field2">Delay (in ms):</label>
+      <input v-model="delay" placeholder="ex : 10000 ms" />
+    </div>
+
+    <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="getClientId()">
+      Find
+    </button>
 
     <br />
     <ul v-if="isLoading">
-      <loading v-model:active="isLoading"
-                :color="'#186AFF'"
-                :loader="'bars'"
-                :height="50"
-                :width="50"
-                 :can-cancel="false"
-                 :is-full-page="false"/>
+      <loading v-model:active="isLoading" :color="'#186AFF'" :loader="'bars'" :height="50" :width="50" :can-cancel="false"
+        :is-full-page="false" />
     </ul>
     <ul v-else-if="error">
       <li :style="{ color: `red` }">Error: {{ error }}</li>
     </ul>
     <ul v-else>
-      <div class="card" v-for="(entity, index) in Entity">
+      <div class="card" v-for="(entity, eID) in Entity">
         <hr />
-        <h4 class="card-title">
-          Entity {{ index + 1 }} ({{ entity.EntityID }})
-          <span
-            @click="deleteEntity(index)"
-            class="float-right"
-            style="cursor: pointer">
-            X
-          </span>
-        </h4>
-        <div class="form-row">
-        <label>Entity: </label>
-          <input
-            type="text"
-            class="form-control mb-2"
-            placeholder="Name"
-            :disabled="(entity.EntityID?.length > 0)" 
-            v-model="entity.EntityName" />
-          </div>
-        
+        <app-accordion :is-open="false" class="mb-1 mt-4">
+          <template v-slot:title>
+            <h4 class="card-title">
+              Entity {{ entity.EntityName }} ({{ entity.EntityID }})
+              <!-- <span
+              @click="deleteEntity(eID)"
+              class="float-right"
+              style="cursor: pointer">
+              X
+            </span> -->
+            </h4>
+          </template>
+          <template v-slot:content>
 
-          <div
-            v-for="(processingChannel, index) in entity.Processing_channel">
-            <div class="processing">
-              <div class="form-row">
-                <label>{{ index + 1 }} - ProcessingChannel: </label>
-                <input
-                  type="text"
-                  class="form-control mb-2"
-                  placeholder="Name"
-                  :disabled="(processingChannel.ProcessingChannelId?.length > 0)" 
-                  v-model="processingChannel.ProcessingChannelName" />
-              </div>
-              <div>
-                <p>Payment Method : </p>
-                <div class="paymentMethods">
-                  <div
-                    v-for="paymentMethod in paymentMethods"
-                    :key="paymentMethod.id">
-                    <input
-                      type="checkbox"
-                      :disabled="(processingChannel.ProcessingChannelId?.length > 0)" 
-                      v-model="processingChannel.PaymentMethod"
-                      :value="paymentMethod.id" />
-                      <label>{{ ' ' + paymentMethod.name }}</label>
+            <div class="form-row">
+              <label :hidden="(entity.EntityID?.length > 0)">Entity name: </label>
+              <input type="text" class="form-control mb-2" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
+                v-model="entity.EntityName" />
+            </div>
+
+
+            <div v-for="(processingChannel, pID) in entity.Processing_channel">
+              <div class="processing ml-10">
+                <div class="form-row">
+                  <label>{{ pID + 1 }} - ProcessingChannel ({{ processingChannel.ProcessingChannelId }}): </label>
+                  <input type="text" class="form-control mb-2" placeholder="Name"
+                    :disabled="(processingChannel.ProcessingChannelId?.length > 0)"
+                    v-model="processingChannel.ProcessingChannelName" />
+                </div>
+                <div class=" ml-10">
+                  <p>Payment Method : </p>
+                  <div class="paymentMethods ml-10">
+                    <div v-for="paymentMethod in paymentMethods" :key="paymentMethod.id">
+
+                      <div v-if="isDisable(eID, pID, paymentMethod.id)">
+                        <input type="checkbox" :disabled="true" checked/>
+                        <label>{{ ' ' + paymentMethod.name }}</label>
+                      </div>
+                      <div v-else>
+                        <input type="checkbox" v-model="processingChannel.PaymentMethod2"
+                          :value="paymentMethod.id"
+                           />
+                        <label>{{ ' ' + paymentMethod.name }}</label>
+                      </div>
+
+
+
+                    </div>
                   </div>
                 </div>
               </div>
+              <hr class="small_hr" />
             </div>
-            <hr class="small_hr"/>
-          </div>
-        <button
-          class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5"
-          @click="addNewProcessingChannel(index)">
-          Add processing channel
-        </button>
+
+            <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="addNewProcessingChannel(eID)">
+              Add processing channel
+            </button>
+          </template>
+        </app-accordion>
       </div>
+
     </ul>
     <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="addNewEntity">
       Add an entity
@@ -127,25 +125,27 @@ import Modal from './Modal.vue';
     <br />
     <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="createEntities">Submit</button>
   </div>
-
 </template>
 
 <style>
-
 .form-row {
   display: flex;
-  align-items: center; /* Vertical alignment */
-  justify-content: space-between; /* Horizontal alignment */
-  margin-bottom: 2px; /* Optional: Add margin between rows */
+  align-items: center;
+  /* Vertical alignment */
+  justify-content: space-between;
+  /* Horizontal alignment */
+  margin-bottom: 2px;
+  /* Optional: Add margin between rows */
 }
 
 label {
-  margin-right: 10px; /* Optional: Add space between label and input */
+  margin-right: 10px;
+  /* Optional: Add space between label and input */
   width: 40%;
 }
 
 input {
-  width:100%;
+  width: 100%;
 }
 
 .card-title {
@@ -154,39 +154,41 @@ input {
 }
 
 .paymentMethods {
-  display:flex;
+  display: flex;
   justify-content: space-between;
 }
+
 .small_hr {
-      margin-left: 120px;
-    margin-right: 120px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-left: 120px;
+  margin-right: 120px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+
 .float-right {
-  float:right;
+  float: right;
   font-weight: 600;
 }
+
 hr {
   margin-left: 2px;
-margin-right: 2px;
-margin-top: 10px;
-margin-bottom: 10px;
+  margin-right: 2px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .bearer {
   width: 100%;
-    height: 10em;
+  height: 10em;
 }
 
 .clientId {
   width: 100%;
 }
 
-.accordion{
+.accordion {
   border: none;
 }
-
 </style>
 
 <script>
@@ -201,7 +203,7 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer:"",
+      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjBnSzAxdmF3QVhHNGRXaV8xTEk3dFRzd1pUdnAzb1hJak1aVkE4TkZIakUiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA0ODg3NTY2LCJleHAiOjE3MDQ4OTExNjYsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA0ODczMjcyLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.MQ6UEWh5hbdcjVRM_orqdzjOFvySP_x73QYW1tyBaWz_zAs1K6pcXafvnjLwp8N4OtZjbkFJhBcm9qgDei_nq54NANJHgNkqsn5cDLdBxKSK5RPIuaDkZTbz5PQXLQmsKH2K7SvL8XWNtb3bUd_TJhxqE-KgOu4EBhumyoX0sVR0N9-tIkbKk5LcR8h-uXf5OwvnQugCOS_ALzRBnjDAQOdyIIFBy5WxWnlougfTobYgfGbb1zceWw_Dew8HDkXQMyhxWL1c5kdHHZvfmhl6DbldHcFySkyUmHN_N2bXv-0nk3D4LQumOLh13QVoixLt-SlqnTVLWyrM8X-byLjTNg",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
@@ -240,8 +242,8 @@ export default {
     this.decryptBearerToken()
   },
   components: {
-      Modal,
-    },
+    Modal,
+  },
   methods: {
     showModal() {
       this.isModalVisible = true;
@@ -251,13 +253,14 @@ export default {
     },
     decryptBearerToken() {
       try {
-        const decoded = jwtDecode(this.Bearer);
+        const bearer = (this.Bearer).toLowerCase().startsWith('bearer') ? (this.Bearer) : 'Bearer ' + (this.Bearer)
+        const decoded = jwtDecode(bearer);
         let now = new Date().getTime();
         let expiryDate = decoded.exp * 1000;
         this.username = decoded.full_name;
         this.expiryTime = format(expiryDate, 'dd/MM/yyyy HH:mm:ss');
 
-        if(now < expiryDate) {
+        if (now < expiryDate) {
           this.messageColor = 'green';
           this.status = "OK"
         } else {
@@ -277,7 +280,7 @@ export default {
         EntityID: "",
         EntityName: "",
         Processing_channel: [{
-          ProcessingChannelId:"",
+          ProcessingChannelId: "",
           ProcessingChannelName: "",
           PaymentMethod: [],
         }],
@@ -285,7 +288,7 @@ export default {
     },
     addNewProcessingChannel(id) {
       this.Entity[id].Processing_channel.push({
-        ProcessingChannelId:"",
+        ProcessingChannelId: "",
         ProcessingChannelName: "",
         PaymentMethod: [],
       });
@@ -304,15 +307,15 @@ export default {
 
       // Build a new JSON with the same structure
       const newJson = filteredJson.map(obj => {
-          const newObj = { ...obj };
-          if (!newObj.EntityID) delete newObj.EntityID;
-          newObj.Processing_channel = newObj.Processing_channel.map(channel => {
-              if (!channel.ProcessingChannelId) delete channel.ProcessingChannelId;
-              return channel;
-          });
-          return newObj;
+        const newObj = { ...obj };
+        if (!newObj.EntityID) delete newObj.EntityID;
+        newObj.Processing_channel = newObj.Processing_channel.map(channel => {
+          if (!channel.ProcessingChannelId) delete channel.ProcessingChannelId;
+          return channel;
+        });
+        return newObj;
       });
-      const newPayload = renameKey(newJson,  {ProcessingChannelId: 'ProcessingChannelID'});
+      const newPayload = renameKey(newJson, { ProcessingChannelId: 'ProcessingChannelID' });
 
       // Print the new JSON
       console.log(JSON.stringify(newPayload, null, 2));
@@ -331,7 +334,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
           data: JSON.stringify({
-            Bearer: this.Bearer,
+            Bearer: (this.Bearer).toLowerCase().startsWith('bearer') ? (this.Bearer) : 'Bearer ' + (this.Bearer),
             ClientId: this.ClientId,
             delay: this.delay,
             Entity: newPayload
@@ -350,7 +353,15 @@ export default {
           this.isLoading = false;
           //Perform action in always
         });
-        
+
+    },
+    isDisable(eID, pID, paymentMethodId) {
+      console.log("eID :",eID, "pID :",pID,"paymentMethodId :", paymentMethodId)
+      console.log("Test return :",this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod.includes(paymentMethodId))
+      console.log("PaymentMethod Array =",this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod)
+      console.log("PaymentMethod Array =",this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod2)
+      // Disable the checkbox if paymentMethodId is present in the PaymentMethod array
+      return this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod.includes(paymentMethodId)
     },
     async getClientId() {
       this.isLoading = true;
@@ -365,7 +376,7 @@ export default {
             "Access-Control-Allow-Origin": "*",
           },
           data: JSON.stringify({
-            Bearer: this.Bearer,
+            Bearer: (this.Bearer).toLowerCase().startsWith('bearer') ? (this.Bearer) : 'Bearer ' + (this.Bearer),
             ClientId: this.ClientId
           }),
         })
@@ -376,10 +387,10 @@ export default {
             let resultEntities = res.data.Entity;
 
             //const modifiedArray = modifyKeys(resultEntities);
-            let modifiedArray = renameKey(resultEntities, {Processing_Channel_Name: 'ProcessingChannelName'});
-            modifiedArray = renameKey(modifiedArray,  {Processing_Channel: 'Processing_channel'});
-            modifiedArray = renameKey(modifiedArray,  {Processing_Channel_Id: 'ProcessingChannelId'});
-            modifiedArray = renameKey(modifiedArray,  {Entity_Name: 'EntityName'});
+            let modifiedArray = renameKey(resultEntities, { Processing_Channel_Name: 'ProcessingChannelName' });
+            modifiedArray = renameKey(modifiedArray, { Processing_Channel: 'Processing_channel' });
+            modifiedArray = renameKey(modifiedArray, { Processing_Channel_Id: 'ProcessingChannelId' });
+            modifiedArray = renameKey(modifiedArray, { Entity_Name: 'EntityName' });
 
             this.Entity = modifiedArray;
             this.EntityBeforeChange = modifiedArray;
@@ -399,7 +410,7 @@ export default {
           this.isLoading = false;
         });
     }
-  },
+  }
 };
 
 
@@ -419,10 +430,10 @@ export default {
 };*/
 
 
-    function renameKey(obj, keysMap) { 
-    return _.transform(obj, function(result, value, key) { 
-      const currentKey = keysMap[key] || key; 
-      result[currentKey] = _.isObject(value) ? renameKey(value, keysMap) : value; 
-    });
-  }
+function renameKey(obj, keysMap) {
+  return _.transform(obj, function (result, value, key) {
+    const currentKey = keysMap[key] || key;
+    result[currentKey] = _.isObject(value) ? renameKey(value, keysMap) : value;
+  });
+}
 </script>

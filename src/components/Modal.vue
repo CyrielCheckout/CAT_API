@@ -44,7 +44,7 @@
             3 - Open the Network tab in your browser's developer tools.<br/>
             4 - Go to the Network Tab<br/>
             5 - Click on a request done by CAT and go to "header" tab<br/>
-            6 - Copy the bearer.<br/>
+            6 - Copy the bearer token (without Bearer).<br/>
             <br/>
             <img src="../assets/CATAdminToolNotice.png" width="500px" >
 
