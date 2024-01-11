@@ -13,7 +13,7 @@ async function Createconf(body) {
     for (let i = 0; i < body.Entity.length; i++) {
         //Entity check and creation
         try {
-            if (body.Entity[i].hasOwnProperty('EntityID')) {
+            if (body.Entity[i].hasOwnProperty('EntityID')|| body.Entity[i].EntityID > 0) {
                 console.log("Entity already created:", body.Entity[i].EntityID);
                 EntityResult = await CATEntity.GetEntityData(body.Bearer, body.Entity[i].EntityID);
                 console.log("CKO legal entity: ", EntityResult.data.cko_legal_entity);
@@ -69,7 +69,7 @@ async function Createconf(body) {
                 //Processing Channel configuration 
                 finalresult.Entity[i].Processing_Channel = []
                 for (let ProcessingChannelNumber = 0; ProcessingChannelNumber < body.Entity[i].Processing_channel.length; ProcessingChannelNumber++) {
-                    if (body.Entity[i].Processing_channel[ProcessingChannelNumber].hasOwnProperty('ProcessingChannelID')) {
+                    if (body.Entity[i].Processing_channel[ProcessingChannelNumber].hasOwnProperty('ProcessingChannelID')|| body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID > 0) {
                         //If processing channel exist, then get data
                         console.log("Processing Channel already created :", body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID);
                         try {

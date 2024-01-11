@@ -1,7 +1,7 @@
-const CATEntity = require('./CAT.EntityConf');
-const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
-const waitfor = require('../IdempotencyKey');
-const CatConfigInt = require('../Cat_API/CAT.ConfigInt');
+const CATEntity = require('../CAT.EntityConf');
+const CATProcessingChannel = require('../CAT.ProcessingChannelConf');
+const waitfor = require('../../IdempotencyKey');
+const CatConfigInt = require('../CAT.ConfigInt');
 
 async function AddProcessingChannel(body) {
     finalresult = { "Entity": [] };
