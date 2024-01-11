@@ -518,170 +518,170 @@ async function Create_AMP_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPL
         "host": 'client-admin.cko-sbox.ckotech.co'
       },
       data: {
-        "name": ""+EntityName+"_APM_Payment",
+        "name": "" + EntityName + "_APM_Payment",
         "payment_methods": [
-            {
-                "name": "bancontact",
-                "label": "Bancontact",
-                "logo": "IconPaymentMethodsBancontact",
-                "tooltip_description": "Bancontact is a redirection based online banking payment method. CKO offers collecting model only, and processing currency is EUR only. Entity must have a currency account in EUR.",
-                "is_collecting_enabled": false,
-                "is_collecting_default_value": true,
-                "supported_currencies": [
-                    {
-                        "label": "EUR",
-                        "value": "EUR"
-                    }
-                ],
-                "merchant_fees": [
-                    {
-                        "name": "capture_fixed_fee",
-                        "label": "Capture fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": true,
-                        "fee_category": "capture",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "fx_markup_fee",
-                        "label": "FX markup",
-                        "amount_type": "variable",
-                        "is_collecting": true,
-                        "fee_category": "capture",
-                        "is_fx_fee": true,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "gateway_services",
-                        "label": "Gateway services fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": false,
-                        "fee_category": "gateway",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "refund_fixed_fee",
-                        "label": "Refund fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": true,
-                        "fee_category": "refund",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    }
-                ],
-                "is_toggled": true,
-                "currency": "EUR",
-                "is_collecting": true
-            },
-            {
-                "name": "sepa",
-                "label": "SEPA",
-                "logo": "IconPaymentMethodsSepa",
-                "tooltip_description": "SEPA is a pan-European network in the eurozone",
-                "is_collecting_enabled": false,
-                "is_collecting_default_value": true,
-                "supported_currencies": [
-                    {
-                        "label": "EUR",
-                        "value": "EUR"
-                    }
-                ],
-                "merchant_fees": [
-                    {
-                        "name": "capture_fixed_fee",
-                        "label": "Capture fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": true,
-                        "fee_category": "capture",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "capture_variable_fee",
-                        "label": "Capture variable fee",
-                        "amount_type": "variable",
-                        "is_collecting": true,
-                        "fee_category": "capture",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "disputed_return_fixed_fee",
-                        "label": "Disputed return fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": true,
-                        "fee_category": "disputedreturn",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "gateway_services",
-                        "label": "Gateway services fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": false,
-                        "fee_category": "gateway",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "refund_fixed_fee",
-                        "label": "Refund fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": true,
-                        "fee_category": "refund",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    },
-                    {
-                        "name": "return_fixed_fee",
-                        "label": "Return fixed fee",
-                        "amount_type": "fixed",
-                        "is_collecting": true,
-                        "fee_category": "return",
-                        "is_fx_fee": false,
-                        "amount": "0.05"
-                    }
-                ],
-                "is_toggled": true,
-                "currency": "EUR",
-                "is_collecting": true
-            },
-            {
-                "name": "test",
-                "label": "iDeal",
-                "logo": "IconPaymentMethodsIdeal",
-                "tooltip_description": "Description of iDeal",
-                "is_collecting_enabled": true,
-                "is_collecting_default_value": true,
-                "supported_currencies": [
-                    {
-                        "label": "EUR",
-                        "value": "EUR"
-                    },
-                    {
-                        "label": "USD",
-                        "value": "USD"
-                    }
-                ],
-                "merchant_fees": [
-                    {
-                        "name": "sale_fixed_amount",
-                        "label": "Sales Fixed Fee",
-                        "amount_type": "fixed",
-                        "is_collecting": true,
-                        "fee_category": "capture",
-                        "is_fx_fee": true,
-                        "amount": "0.05"
-                    }
-                ],
-                "is_toggled": true,
-                "currency": "EUR",
-                "is_collecting": true
-            }
+          {
+            "name": "bancontact",
+            "label": "Bancontact",
+            "logo": "IconPaymentMethodsBancontact",
+            "tooltip_description": "Bancontact is a redirection based online banking payment method. CKO offers collecting model only, and processing currency is EUR only. Entity must have a currency account in EUR.",
+            "is_collecting_enabled": false,
+            "is_collecting_default_value": true,
+            "supported_currencies": [
+              {
+                "label": "EUR",
+                "value": "EUR"
+              }
+            ],
+            "merchant_fees": [
+              {
+                "name": "capture_fixed_fee",
+                "label": "Capture fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": true,
+                "fee_category": "capture",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              },
+              {
+                "name": "fx_markup_fee",
+                "label": "FX markup",
+                "amount_type": "variable",
+                "is_collecting": true,
+                "fee_category": "capture",
+                "is_fx_fee": true,
+                "amount": "0.05"
+              },
+              {
+                "name": "gateway_services",
+                "label": "Gateway services fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": false,
+                "fee_category": "gateway",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              },
+              {
+                "name": "refund_fixed_fee",
+                "label": "Refund fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": true,
+                "fee_category": "refund",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              }
+            ],
+            "is_toggled": true,
+            "currency": "EUR",
+            "is_collecting": true
+          },
+          {
+            "name": "sepa",
+            "label": "SEPA",
+            "logo": "IconPaymentMethodsSepa",
+            "tooltip_description": "SEPA is a pan-European network in the eurozone",
+            "is_collecting_enabled": false,
+            "is_collecting_default_value": true,
+            "supported_currencies": [
+              {
+                "label": "EUR",
+                "value": "EUR"
+              }
+            ],
+            "merchant_fees": [
+              {
+                "name": "capture_fixed_fee",
+                "label": "Capture fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": true,
+                "fee_category": "capture",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              },
+              {
+                "name": "capture_variable_fee",
+                "label": "Capture variable fee",
+                "amount_type": "variable",
+                "is_collecting": true,
+                "fee_category": "capture",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              },
+              {
+                "name": "disputed_return_fixed_fee",
+                "label": "Disputed return fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": true,
+                "fee_category": "disputedreturn",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              },
+              {
+                "name": "gateway_services",
+                "label": "Gateway services fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": false,
+                "fee_category": "gateway",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              },
+              {
+                "name": "refund_fixed_fee",
+                "label": "Refund fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": true,
+                "fee_category": "refund",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              },
+              {
+                "name": "return_fixed_fee",
+                "label": "Return fixed fee",
+                "amount_type": "fixed",
+                "is_collecting": true,
+                "fee_category": "return",
+                "is_fx_fee": false,
+                "amount": "0.05"
+              }
+            ],
+            "is_toggled": true,
+            "currency": "EUR",
+            "is_collecting": true
+          },
+          {
+            "name": "test",
+            "label": "iDeal",
+            "logo": "IconPaymentMethodsIdeal",
+            "tooltip_description": "Description of iDeal",
+            "is_collecting_enabled": true,
+            "is_collecting_default_value": true,
+            "supported_currencies": [
+              {
+                "label": "EUR",
+                "value": "EUR"
+              },
+              {
+                "label": "USD",
+                "value": "USD"
+              }
+            ],
+            "merchant_fees": [
+              {
+                "name": "sale_fixed_amount",
+                "label": "Sales Fixed Fee",
+                "amount_type": "fixed",
+                "is_collecting": true,
+                "fee_category": "capture",
+                "is_fx_fee": true,
+                "amount": "0.05"
+              }
+            ],
+            "is_toggled": true,
+            "currency": "EUR",
+            "is_collecting": true
+          }
         ]
-    }
+      }
     })
       .then(function (response) {
         return response
@@ -732,6 +732,10 @@ async function GetAPMPricingProfile(bearer, EntityId) {
     if (err?.response?.data) {
 
       throw err.response.data
+    }
+    else if (err?.response?.status) {
+      console.log("Status error :",err.response.status)
+      return err.response.status
     }
     else if (err.code === "ENOMEM") {
 

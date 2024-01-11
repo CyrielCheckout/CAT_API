@@ -39,7 +39,7 @@ async function Createconf(body) {
                     }
                 }
                 else if (PricingProfileResult.data.total_count === 1) {
-                    console.log("Processing Profile ID :", PricingProfileResult.data._embedded.pricing_profiles[0].id)
+                    console.log("Pricing Profile ID already exist:", PricingProfileResult.data._embedded.pricing_profiles[0].id)
                     //If Pricing Profile exist and there is one, then list it
                     finalresult.Entity[i].Pricing_Profile_ID = PricingProfileResult.data._embedded.pricing_profiles[0].id;
                 }
@@ -56,29 +56,18 @@ async function Createconf(body) {
                         finalresult.Entity[i].Pricing_Profile_ID = err.data;
                     }
                 };
-                try {
                 APMPricingProfileResult = await CATEntity.GetAPMPricingProfile(body.Bearer, body.Entity[i].EntityID);
-                console.log(APMPricingProfileResult)
-                }
-                catch (err){
-                    console.log(err)
-                    APMPricingProfileResult = "error"
-                }
-                if (APMPricingProfileResult?.data?.id) {
+                //console.log(APMPricingProfileResult.hasOwnProperty("data"))
+                if (APMPricingProfileResult.data?.id) {
                     //If Pricing Profile exist and there is one, then list it
                     finalresult.Entity[i].APM_Pricing_Profile_ID = PricingProfileResult.data._embedded.pricing_profiles[0].id;
-                    console.log("APM Pricing Profil already exist :", PricingProfileResult.data._embedded.pricing_profiles[0].id)
+                    console.log("APM Pricing Profil already exist :", PricingProfileResult.data._embedded.pricing_profiles[0].id);
                 }
                 else {
                     //If Pricing Profile dosen't exist, then create it
-                    try {
-                        console.log("Create APM Pricing Profile")
-                        GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile( body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
-                        finalresult.Entity[i].APM_Pricing_Profile_ID = GetAPMPricingProfile.data.id;
-                    }
-                    catch (err) {
-                        finalresult.Entity[i].APM_Pricing_Profile_ID = err.data;
-                    }
+                    console.log("Create APM Pricing Profile")
+                    CreateAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile(body.Bearer, body.Entity[i].EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                    finalresult.Entity[i].APM_Pricing_Profile_ID = CreateAPMPricingProfile.data.id;
                 };
 
                 //Processing Channel configuration 
@@ -173,7 +162,7 @@ async function Createconf(body) {
                     //Create Pricing Profile
                     try {
                         console.log("Create Pricing Profile")
-                        GetPricingProfile = await CATEntity.Create_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                        GetPricingProfile = await CATEntity.Create_Pricing_Profile(body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
                         finalresult.Entity[i].Pricing_Profile_ID = GetPricingProfile.data.id;
                     }
                     catch (err) {
@@ -181,7 +170,7 @@ async function Createconf(body) {
                     }
                     try {
                         console.log("Create APM Pricing Profile")
-                        GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                        GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile(body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
                         finalresult.Entity[i].APM_Pricing_Profile_ID = GetAPMPricingProfile.data.id;
                     }
                     catch (err) {
