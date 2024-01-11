@@ -13,11 +13,15 @@ async function Createconf(body) {
     for (let i = 0; i < body.Entity.length; i++) {
         //Entity check and creation
         try {
+            //check if entity entity ID is sent
             if (body?.Entity[i]?.EntityID?.length > 0) {
+                //if yes, then entity already exist! 
                 console.log("Entity already created:", body.Entity[i].EntityID);
                 EntityResult = await CATEntity.GetEntityData(body.Bearer, body.Entity[i].EntityID);
                 console.log("CKO legal entity: ", EntityResult.data.cko_legal_entity);
+                //get the entity data
                 finalresult.Entity.push({ "Entity_Name": EntityResult.data.name, "EntityID": EntityResult.data.id, "status": EntityResult.data.status });
+                //set the template for other creations
                 if (EntityResult.data.cko_legal_entity === "cko-sas") {
                     CKOTEMPLATE = CKOSASTEMPLATE;
                 }
