@@ -31,6 +31,7 @@ async function Createconf(body) {
                 //Check if one Pricing Profile exist
                 PricingProfileResult = await CATEntity.GetPricingProfile(body.Bearer, body.Entity[i].EntityID);
                 if (PricingProfileResult.data.total_count > 1) {
+                    console.log("NB of pricing profile :", PricingProfileResult.data.total_count.length)
                     //If Pricing Profile exist and there is more than one, then list them
                     finalresult.Entity[i].push({ "Pricing_Profile_ID": [] });
                     for (let ProcessingProfileNumber = 0; ProcessingProfileNumber < PricingProfileResult.data._embedded.pricing_profiles.length; ProcessingProfileNumber++) {
@@ -38,6 +39,7 @@ async function Createconf(body) {
                     }
                 }
                 else if (PricingProfileResult.data.total_count === 1) {
+                    console.log("Processing Profile ID :", PricingProfileResult.data._embedded.pricing_profiles[0].id)
                     //If Pricing Profile exist and there is one, then list it
                     finalresult.Entity[i].Pricing_Profile_ID = PricingProfileResult.data._embedded.pricing_profiles[0].id;
                 }
@@ -45,24 +47,33 @@ async function Createconf(body) {
                     //If Pricing Profile dosen't exist, then create it
                     try {
                         console.log("Create Pricing Profile")
-                        GetPricingProfile = await CATEntity.Create_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
-                        finalresult.Entity[i].Pricing_Profile_ID = GetPricingProfile.data.id;
+                        CreatePricingProfile = await CATEntity.Create_Pricing_Profile(body.Bearer, body.Entity[i].EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                        console.log(CreatePricingProfile)
+                        finalresult.Entity[i].Pricing_Profile_ID = CreatePricingProfile.data.id;
                     }
                     catch (err) {
+                        console.log(err)
                         finalresult.Entity[i].Pricing_Profile_ID = err.data;
                     }
                 };
-
+                try {
                 APMPricingProfileResult = await CATEntity.GetAPMPricingProfile(body.Bearer, body.Entity[i].EntityID);
+                console.log(APMPricingProfileResult)
+                }
+                catch (err){
+                    console.log(err)
+                    APMPricingProfileResult = "error"
+                }
                 if (APMPricingProfileResult?.data?.id) {
                     //If Pricing Profile exist and there is one, then list it
                     finalresult.Entity[i].APM_Pricing_Profile_ID = PricingProfileResult.data._embedded.pricing_profiles[0].id;
+                    console.log("APM Pricing Profil already exist :", PricingProfileResult.data._embedded.pricing_profiles[0].id)
                 }
                 else {
                     //If Pricing Profile dosen't exist, then create it
                     try {
                         console.log("Create APM Pricing Profile")
-                        GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                        GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile( body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
                         finalresult.Entity[i].APM_Pricing_Profile_ID = GetAPMPricingProfile.data.id;
                     }
                     catch (err) {
