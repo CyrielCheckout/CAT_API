@@ -1,6 +1,6 @@
-const CATEntity = require('./CAT.EntityConf');
-const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
-const waitfor = require('../IdempotencyKey');
+const CATEntity = require('../CAT.EntityConf');
+const CATProcessingChannel = require('../CAT.ProcessingChannelConf');
+const waitfor = require('../../IdempotencyKey');
 
 async function Createconf(body) {
   console.log("Entity to create :", body.Entity.length)

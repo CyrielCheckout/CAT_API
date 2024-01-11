@@ -48,6 +48,24 @@ async function Createconf(body) {
                         finalresult.Entity[i].Pricing_Profile_ID = err.data;
                     }
                 };
+
+                APMPricingProfileResult = await CATEntity.GetAPMPricingProfile(body.Bearer, body.Entity[i].EntityID);
+                if (APMPricingProfileResult?.data?.id) {
+                    //If Pricing Profile exist and there is one, then list it
+                    finalresult.Entity[i].APM_Pricing_Profile_ID = PricingProfileResult.data._embedded.pricing_profiles[0].id;
+                }
+                else {
+                    //If Pricing Profile dosen't exist, then create it
+                    try {
+                        console.log("Create APM Pricing Profile")
+                        GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                        finalresult.Entity[i].APM_Pricing_Profile_ID = GetAPMPricingProfile.data.id;
+                    }
+                    catch (err) {
+                        finalresult.Entity[i].APM_Pricing_Profile_ID = err.data;
+                    }
+                };
+
                 //Processing Channel configuration 
                 finalresult.Entity[i].Processing_Channel = []
                 for (let ProcessingChannelNumber = 0; ProcessingChannelNumber < body.Entity[i].Processing_channel.length; ProcessingChannelNumber++) {
@@ -87,7 +105,7 @@ async function Createconf(body) {
                             finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": err };
                         }
                         //Configure Payment Method
-                        PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID, GetProcessingChannelData.data.name,CKOTEMPLATE);
+                        PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID, GetProcessingChannelData.data.name, CKOTEMPLATE);
                         finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
                     }
                     else {
@@ -98,7 +116,7 @@ async function Createconf(body) {
                         finalresult.Entity[i].VaultID = VaultID;
                         finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": ProcessingChannelID, "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName };
                         // configure processing channel
-                        ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay,CKOTEMPLATE);
+                        ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay, CKOTEMPLATE);
                         if (ConfigureProcessingChannelFunc.hasOwnProperty("Currency_Account_ID")) {
                             finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CurrencyAccountSetup = { "CURRENCY_ACCOUNT": "CONFIGURED", "Currency_Account_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
                         };
@@ -112,7 +130,7 @@ async function Createconf(body) {
                             finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PayoutScheduleSetup = { "PAYOUT_SCHEDULE": "CONFIGURED", "Payout_Schedule_ID": ConfigureProcessingChannelFunc.Payout_Schedule_ID };
                         };
                         //Configure Payment Method
-                        PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, body.Entity[i].EntityID, ProcessingChannelID, GetProcessingChannelData.data.name,CKOTEMPLATE);
+                        PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, body.Entity[i].EntityID, ProcessingChannelID, GetProcessingChannelData.data.name, CKOTEMPLATE);
                         finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
                     }
                 }
@@ -140,11 +158,19 @@ async function Createconf(body) {
                     //Create Pricing Profile
                     try {
                         console.log("Create Pricing Profile")
-                        GetPricingProfile = await CATEntity.Create_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName,CKOTEMPLATE);
+                        GetPricingProfile = await CATEntity.Create_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
                         finalresult.Entity[i].Pricing_Profile_ID = GetPricingProfile.data.id;
                     }
                     catch (err) {
                         finalresult.Entity[i].Pricing_Profile_ID = err.data;
+                    }
+                    try {
+                        console.log("Create APM Pricing Profile")
+                        GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile(body.Entity[i].EntityLegalEntity, body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                        finalresult.Entity[i].APM_Pricing_Profile_ID = GetAPMPricingProfile.data.id;
+                    }
+                    catch (err) {
+                        finalresult.Entity[i].APM_Pricing_Profile_ID = err.data;
                     }
                     finalresult.Entity[i].Processing_Channel = []
                     for (let ProcessingChannelNumber = 0; ProcessingChannelNumber < body.Entity[i].Processing_channel.length; ProcessingChannelNumber++) {
@@ -154,7 +180,7 @@ async function Createconf(body) {
                         finalresult.Entity[i].VaultID = VaultID;
                         finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": PROCESSINGCHANNELCONF.Processing_Channel_ID, "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName };
                         // configure processing channel
-                        ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay,CKOTEMPLATE);
+                        ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay, CKOTEMPLATE);
                         if (ConfigureProcessingChannelFunc.hasOwnProperty("Currency_Account_ID")) {
                             finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CurrencyAccountSetup = { "CURRENCY_ACCOUNT": "CONFIGURED", "Currency_Account_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
                         };
@@ -168,7 +194,7 @@ async function Createconf(body) {
                             finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PayoutScheduleSetup = { "PAYOUT_SCHEDULE": "CONFIGURED", "Payout_Schedule_ID": ConfigureProcessingChannelFunc.Payout_Schedule_ID };
                         };
                         //Configure Payment Method
-                        PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, EntityID, PROCESSINGCHANNELCONF.Processing_Channel_ID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName,CKOTEMPLATE);
+                        PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, EntityID, PROCESSINGCHANNELCONF.Processing_Channel_ID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, CKOTEMPLATE);
                         finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
                     }
                 }
