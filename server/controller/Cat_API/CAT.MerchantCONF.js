@@ -33,7 +33,7 @@ async function Createconf(body) {
                 if (PricingProfileResult.data.total_count > 1) {
                     console.log("NB of pricing profile :", PricingProfileResult.data.total_count.length)
                     //If Pricing Profile exist and there is more than one, then list them
-                    finalresult.Entity[i].push({ "Pricing_Profile_ID": [] });
+                    finalresult.Entity[i].Pricing_Profile_ID= [] ;
                     for (let ProcessingProfileNumber = 0; ProcessingProfileNumber < PricingProfileResult.data._embedded.pricing_profiles.length; ProcessingProfileNumber++) {
                         finalresult.Entity[i].Pricing_Profile_ID.push(PricingProfileResult.data._embedded.pricing_profiles[ProcessingProfileNumber].id);
                     }
