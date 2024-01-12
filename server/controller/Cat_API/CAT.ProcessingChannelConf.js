@@ -54,10 +54,12 @@ async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -110,13 +112,17 @@ async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingCha
   }
   catch (err) {
     if (err?.response?.data) {
-      throw err.response.data
+
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
+
       throw err
     }
   }
@@ -174,10 +180,12 @@ async function Create_Processing_profile_Bancontact(bearer, EntityId, Processing
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -233,10 +241,12 @@ async function Create_Processing_profile_Ideal(bearer, EntityId, ProcessingChann
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -290,10 +300,12 @@ async function Create_Processing_profile_Sepa(bearer, EntityId, ProcessingChanne
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -384,10 +396,12 @@ async function Create_Processing_profile_CB(bearer, EntityId, ProcessingChannelN
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -611,13 +625,17 @@ async function Create_Manual_processor_Visa(bearer, ProcessingChannelId, Process
   }
   catch (err) {
     if (err?.response?.data) {
-      throw err.response.data
+
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
+
       throw err
     }
   }
@@ -836,13 +854,17 @@ async function Create_Manual_processor_Mastercard(bearer, ProcessingChannelId, P
   }
   catch (err) {
     if (err?.response?.data) {
-      throw err.response.data
+
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
+
       throw err
     }
   }
@@ -891,10 +913,12 @@ async function Create_processing_processor_Bancontact(bearer, ProcessingChannelI
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -946,13 +970,17 @@ async function Create_processing_processor_Ideal(bearer, ProcessingChannelId, PP
   }
   catch (err) {
     if (err?.response?.data) {
-      throw err.response.data
+
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
+
       throw err
     }
   }
@@ -1004,10 +1032,12 @@ async function Create_processing_processor_CB(bearer, ProcessingChannelId, PPCar
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1059,10 +1089,12 @@ async function Create_processing_processor_Sepa(bearer, ProcessingChannelId, PPS
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1104,10 +1136,12 @@ async function Create_Currency_Account(bearer, EntityId, ProcessingChannelName, 
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1157,10 +1191,12 @@ async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelI
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1202,10 +1238,12 @@ async function Create_Routing_Rules_Payout(bearer, EntityId, CurrencyAccountID) 
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1309,10 +1347,12 @@ async function Create_Payout_Schedules(bearer, EntityId, ProcessingChannelName, 
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1350,10 +1390,12 @@ async function Get_Processing_channel_Session(bearer, EntityId) {
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1400,10 +1442,12 @@ async function Create_Session_Processing_Channels(bearer, EntityId, AvailablePro
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1462,10 +1506,12 @@ async function Create_Session_processor_Visa(bearer, AvailableProcessingChannels
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1524,10 +1570,12 @@ async function Create_Session_processor_Mastercard(bearer, AvailableProcessingCh
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -1577,10 +1625,12 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, Pr
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {

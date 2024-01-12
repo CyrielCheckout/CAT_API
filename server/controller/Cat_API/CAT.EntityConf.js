@@ -33,10 +33,12 @@ async function GetAllEntity(bearer, ClientId, skip) {
   } catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -98,10 +100,12 @@ async function CreateEntity(bearer, ClientId, EntityName, CKOTEMPLATE) {
   } catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -137,10 +141,12 @@ async function GetEntityDetails(bearer, EntityId) {
   } catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -176,10 +182,12 @@ async function GetEntityData(bearer, EntityId) {
   } catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -408,10 +416,12 @@ async function Create_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE)
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -447,10 +457,12 @@ async function GetPricingProfile(bearer, EntityId) {
   } catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -486,10 +498,12 @@ async function GetVaultID(bearer, ClientID) {
   } catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {
@@ -692,10 +706,12 @@ async function Create_AMP_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPL
   catch (err) {
     if (err?.response?.data) {
 
-      throw err.response.data
+      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
+    }
+    else if (err?.response?.status) {
+      throw err.response.status
     }
     else if (err.code === "ENOMEM") {
-
       throw "Connection ERROR"
     }
     else {

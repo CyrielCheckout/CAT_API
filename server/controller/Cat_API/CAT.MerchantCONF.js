@@ -171,9 +171,11 @@ async function Createconf(body) {
                     try {
                         console.log("Create APM Pricing Profile")
                         GetAPMPricingProfile = await CATEntity.Create_AMP_Pricing_Profile(body.Bearer, EntityID, body.Entity[i].EntityName, CKOTEMPLATE);
+                        console.log("APM Pricing profile created :",GetAPMPricingProfile.data.id)
                         finalresult.Entity[i].APM_Pricing_Profile_ID = GetAPMPricingProfile.data.id;
                     }
                     catch (err) {
+                        console.log("APM Pricing  NOT created :",err.response.data)
                         finalresult.Entity[i].APM_Pricing_Profile_ID = err.data;
                     }
                     finalresult.Entity[i].Processing_Channel = []
