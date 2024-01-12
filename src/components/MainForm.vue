@@ -1,7 +1,6 @@
 <script setup>
 
 import axios from "axios";
-import EntityForm from "./EntityForm.vue";
 import _ from 'lodash';
 import AppAccordion from "./AppAccordion.vue";
 import { jwtDecode } from "jwt-decode";
@@ -61,9 +60,7 @@ import Modal from './Modal.vue';
             <h4 class="card-title pl-2 pr-2">
               Entity {{ entity.EntityName }} ({{ entity.EntityID }})
             </h4>
-            <span v-if="!(entity.EntityID.length > 0)"
-              @click="deleteEntity(eID)"
-              class="float-right"
+            <span v-if="!(entity.EntityID.length > 0)" @click="deleteEntity(eID)" class="float-right"
               style="cursor: pointer">
               X
             </span>
@@ -77,33 +74,22 @@ import Modal from './Modal.vue';
             </div>
 
 
-            <div v-for="(processingChannel, pID) in entity.Processing_channel">
+            <!-- <div v-for="(processingChannel, pID) in entity.Processing_channel"> -->
+            <div v-for="(channel, pID) in entity.Processing_channel" :key="channel.ProcessingChannelID">
               <div class="processing ml-10">
                 <div class="form-row">
-                  <label>{{ pID + 1 }} - ProcessingChannel ({{ processingChannel.ProcessingChannelId }}): </label>
+                  <label>{{ pID + 1 }} - ProcessingChannel ({{ channel.ProcessingChannelID }}): </label>
                   <input type="text" class="form-control mb-2" placeholder="Name"
-                    :disabled="(processingChannel.ProcessingChannelId?.length > 0)"
-                    v-model="processingChannel.ProcessingChannelName" />
+                    :disabled="(channel.ProcessingChannelID?.length > 0)" v-model="channel.ProcessingChannelName" />
                 </div>
                 <div class=" ml-10">
                   <p>Payment Method : </p>
                   <div class="paymentMethods ml-10">
-                    <div v-for="paymentMethod in paymentMethods" :key="paymentMethod.id">
-
-
-                        <input type="checkbox" v-model="processingChannel.PaymentMethod"
-                        :value="paymentMethod.id"/>
-                        <label>{{ ' ' + paymentMethod.name }}</label>
-
-                      <!--<div v-else>
-                        <input type="checkbox" v-model="processingChannel.PaymentMethod2"
-                          :value="paymentMethod.id"
-                           />
-                        <label>{{ ' ' + paymentMethod.name }}</label> 
-                      </div> -->
-
-
-
+                    <div v-for="method in paymentMethods" :key="method.id">
+                      <input type="checkbox" :checked="isChecked(method.id, channel.ProcessingChannelID)"
+                        :disabled="isDisabled(method.id, channel.ProcessingChannelID)"
+                        @change="toggleCheckbox(method.id, channel.ProcessingChannelID)" :value="method.id" />
+                      <label>{{ ' ' + method.name }}</label>
                     </div>
                   </div>
                 </div>
@@ -136,7 +122,7 @@ import Modal from './Modal.vue';
   justify-content: space-between;
   /* Horizontal alignment */
   margin-bottom: 3px;
-  margin-top: 3px; 
+  margin-top: 3px;
   /* Optional: Add margin between rows */
 }
 
@@ -207,11 +193,12 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULktiWGRLZTc4X2l0NWxueWhoQllKYmdfcGNjNkU4RGJfTjJRMnMwTkd3R3ciLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA0ODk5NTEzLCJleHAiOjE3MDQ5MDMxMTMsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiXSwiYXV0aF90aW1lIjoxNzA0ODk5NTExLCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.KYweDe1n0wS70AmqFp5XghmaclMzQ4IfOBZQQBrF-uC5snw9fqpyYLSOOmRBmJQltgiySbFLwc7Zr-aGo9OrZAsBPl6-g-l1DfwWAthSjeLFkCpGvOYoi9ZIZWtg_5GbjWYrbIegXJsjZ6b19GUrwxvVOexku5cup7ryTkDOEWZTDvNKPbuC0FlIm0vYeX4wyRH23Me3n779dW0Wswd6Ssc4jrmSeS1e29e64z7-4aME6xGuEklJmWKvpFUe2GqpCLqMvXHW_QpLuSS8G-oaRU7DorTaO75F1ybmMNA-CVBAht-McZw4PUd-KCYFjTosiYrqnadYkGibCJ8FlOr1qQ",
+      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmZKeUFINFZwdkxoWDUzVDNSbzA2X2p6OG5lb0VKVEtIU1h0Nmw3Zm5EcVEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA1MDAzNDQxLCJleHAiOjE3MDUwMDcwNDEsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA0OTYyOTQ4LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.vlHXFNkATHWj4av9DBruQ3sSnSjUDWq9Exq2RMa5OGNaneh3bhMzkaymLqFEVi7ZSVVj7xcXh9lDd89yXQgj3XcWGx3fJYP9jR0w-52fzD7sCo11AFtchKevQRIKX_Ug0XuOdnTKu2EjBZ6OAZorj0QXULTOakVB7owLqG04m2Lv7eZJr9Iibd6JsdI64dupNwN-FIEPfcaYVY4ippNIu0xpgsYUV-F3dmtcu0Bbeao484F1U0BHX0ozkqeW-g1NB0Eg09OFydFAwe73MT5_dYV_oWvFaeU7gKOAfihkp_34p45aUlBOV7rSZYOfAfIcj6iiIl67UQ-1vX6pX6VN7A",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
-      EntityBeforeChange: [],
+      InitalEntity: [],
+      newEntity: [],
       isLoading: false,
       error: '',
       paymentMethods: [
@@ -284,7 +271,16 @@ export default {
         EntityID: "",
         EntityName: "",
         Processing_channel: [{
-          ProcessingChannelId: "",
+          ProcessingChannelID: "",
+          ProcessingChannelName: "",
+          PaymentMethod: [],
+        }],
+      });
+      this.newEntity.push({
+        EntityID: "",
+        EntityName: "",
+        Processing_channel: [{
+          ProcessingChannelID: "",
           ProcessingChannelName: "",
           PaymentMethod: [],
         }],
@@ -292,38 +288,53 @@ export default {
     },
     addNewProcessingChannel(id) {
       this.Entity[id].Processing_channel.push({
-        ProcessingChannelId: "",
+        ProcessingChannelID: "",
+        ProcessingChannelName: "",
+        PaymentMethod: [],
+      });
+      this.newEntity[id].Processing_channel.push({
+        ProcessingChannelID: "",
         ProcessingChannelName: "",
         PaymentMethod: [],
       });
     },
     deleteEntity(counter) {
       this.Entity.splice(counter, 1);
+      this.newEntity.splice(counter, 1);
     },
     async createEntities() {
-      console.log(this.Bearer);
-      console.log(this.ClientId);
-      console.log(this.delay);
-      console.log(JSON.stringify(this.Entity));
 
-      // Filter objects with empty EntityID or empty ProcessingChannelId
-      const filteredJson = this.EntityBeforeChange.filter(obj => !obj.EntityID || obj.Processing_channel.some(channel => !channel.ProcessingChannelId));
+      // Copy the entities to update / create in newPayload
+      let newPayload = this.Entity;
 
-      // Build a new JSON with the same structure
-      const newJson = filteredJson.map(obj => {
-        const newObj = { ...obj };
-        if (!newObj.EntityID) delete newObj.EntityID;
-        newObj.Processing_channel = newObj.Processing_channel.map(channel => {
-          if (!channel.ProcessingChannelId) delete channel.ProcessingChannelId;
-          return channel;
-        });
-        return newObj;
+      // Copy all PaymentMethod from newEntity to newPayload for each entities and processing Channel 
+      // newEntity is containing all other PaymentMethod (new to create) that are not originally provided by the original entity.
+      for (let i = 0; i < newPayload.length; i++) {
+        if (this.newEntity[i] && this.newEntity[i].Processing_channel) {
+          newPayload[i].Processing_channel.forEach((channel, index) => {
+            if (this.newEntity[i].Processing_channel[index] && this.newEntity[i].Processing_channel[index].PaymentMethod) {
+              newPayload[i].Processing_channel[index].PaymentMethod = this.newEntity[i].Processing_channel[index].PaymentMethod;
+            }
+          });
+        }
+      }
+
+      console.log(JSON.stringify(newPayload, null, 2));
+
+      // We remove all ProcessingChannel where PaymentMethod Array is empty
+      newPayload.forEach(entity => {
+        entity.Processing_channel = entity.Processing_channel.filter(
+          channel => channel.PaymentMethod.length > 0
+        );
       });
-      const newPayload = renameKey(newJson, { ProcessingChannelId: 'ProcessingChannelID' });
+
+      // We remove all entities  where Processing_channel Array is empty
+      newPayload = newPayload.filter(
+        entity => entity.Processing_channel.length > 0
+      );
 
       // Print the new JSON
       console.log(JSON.stringify(newPayload, null, 2));
-
 
       this.isLoading = true;
       this.error = '';
@@ -362,13 +373,50 @@ export default {
         });
 
     },
-    isDisable(eID, pID, paymentMethodId) {
-      console.log("eID :",eID, "pID :",pID,"paymentMethodId :", paymentMethodId)
-      console.log("Test return :",this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod.includes(paymentMethodId))
-      console.log("PaymentMethod Array =",this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod)
-      console.log("PaymentMethod Array =",this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod2)
-      // Disable the checkbox if paymentMethodId is present in the PaymentMethod array
-      return this.EntityBeforeChange[eID].Processing_channel[pID].PaymentMethod.includes(paymentMethodId)
+    isDisabled(methodId, channelID) {
+      // Check if the data is available before trying to access it
+      if (!this.InitalEntity || !this.InitalEntity.length) {
+        return false;
+      }
+
+      // Check if the methodId matches the original PaymentMethod for the given ProcessingChannelID
+      return this.InitalEntity.some(entity =>
+        entity.Processing_channel.some(channel =>
+          channel.ProcessingChannelID === channelID &&
+          channel.PaymentMethod.includes(methodId)
+        )
+      );
+    },
+    isChecked(methodId, channelID) {
+      if (!this.InitalEntity || !this.InitalEntity.length) {
+        return false;
+      }
+
+      return this.InitalEntity.some(entity =>
+        entity.Processing_channel.some(channel =>
+          channel.ProcessingChannelID === channelID &&
+          channel.PaymentMethod.includes(methodId)
+        )
+      );
+    },
+    toggleCheckbox(methodId, channelID) {
+      if (!this.newEntity || !this.newEntity.length) {
+        return;
+      }
+
+      this.newEntity.forEach(entity => {
+        entity.Processing_channel.forEach(channel => {
+          if (channel.ProcessingChannelID === channelID) {
+            const index = channel.PaymentMethod.indexOf(methodId);
+            if (index === -1) {
+              channel.PaymentMethod.push(methodId);
+            } else {
+              channel.PaymentMethod.splice(index, 1);
+            }
+          }
+          console.log(entity.Processing_channel)
+        });
+      });
     },
     async getClientId() {
       this.isLoading = true;
@@ -393,15 +441,23 @@ export default {
             console.log("res", res.data.Entity);
             let resultEntities = res.data.Entity;
 
-            //const modifiedArray = modifyKeys(resultEntities);
-            let modifiedArray = renameKey(resultEntities, { Processing_Channel_Name: 'ProcessingChannelName' });
-            modifiedArray = renameKey(modifiedArray, { Processing_Channel: 'Processing_channel' });
-            modifiedArray = renameKey(modifiedArray, { Processing_Channel_Id: 'ProcessingChannelId' });
-            modifiedArray = renameKey(modifiedArray, { Entity_Name: 'EntityName' });
+            // The BIND entity
+            this.Entity = resultEntities;
+            // make a copy of the initial given entities from ClientID. it will never change
+            this.InitalEntity = _.cloneDeep(this.Entity);
+            // make a copy of the initial given entities from ClientID. It is used to store all new paymentMethod (not containing in the original one)
+            // PaymentMethod are not binding
+            this.newEntity = _.cloneDeep(this.Entity);
 
-            this.Entity = modifiedArray;
-            this.EntityBeforeChange = modifiedArray;
-            console.log(JSON.stringify(modifiedArray));
+
+            // Here we empty all paymentMethod in newEntity Object
+            this.newEntity.forEach(entity => {
+              // Set the PaymentMethod array to an empty arra
+              entity.Processing_channel.forEach(channel => {
+                channel.PaymentMethod = [];
+              });
+            });
+
             this.isLoading = false;
           } else {
             this.error = `No merchant found in sandbox with this ${this.ClientId}`;
@@ -417,30 +473,7 @@ export default {
           this.isLoading = false;
         });
     }
-  }
+  },
 };
 
-
-/*const transformPaymentMethodsToIds = (obj) => {
-  if (_.isArray(obj)) {
-    return _.map(obj, (item) => {
-      if (_.has(item, 'PaymentMethod')) {
-        item.PaymentMethod = _.map(item.PaymentMethod, 'id');
-      }
-      return transformPaymentMethodsToIds(item);
-    });
-  } else if (_.isObject(obj) && !_.isFunction(obj)) {
-    return _.mapValues(obj, (value) => transformPaymentMethodsToIds(value));
-  } else {
-    return obj;
-  }
-};*/
-
-
-function renameKey(obj, keysMap) {
-  return _.transform(obj, function (result, value, key) {
-    const currentKey = keysMap[key] || key;
-    result[currentKey] = _.isObject(value) ? renameKey(value, keysMap) : value;
-  });
-}
 </script>
