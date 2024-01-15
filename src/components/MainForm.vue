@@ -72,6 +72,16 @@ import Modal from './Modal.vue';
               <input type="text" class="form-control mb-2" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
                 v-model="entity.EntityName" />
             </div>
+            <div class="form-row pl-2" :hidden="(entity.EntityID?.length > 0)">
+              <label>Legal entity: </label>
+              <select v-model="entity.LegalEntity">
+                <option v-for="(item, index) in legalEntityList" 
+                  :value="item" 
+                  :key="index">
+                    {{item}}
+                </option>
+            </select>
+            </div>
 
 
             <!-- <div v-for="(processingChannel, pID) in entity.Processing_channel"> -->
@@ -130,6 +140,10 @@ label {
   margin-right: 10px;
   /* Optional: Add space between label and input */
   width: 40%;
+}
+
+select {
+  width: 100%;
 }
 
 input {
@@ -193,7 +207,7 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmZKeUFINFZwdkxoWDUzVDNSbzA2X2p6OG5lb0VKVEtIU1h0Nmw3Zm5EcVEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA1MDAzNDQxLCJleHAiOjE3MDUwMDcwNDEsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA0OTYyOTQ4LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.vlHXFNkATHWj4av9DBruQ3sSnSjUDWq9Exq2RMa5OGNaneh3bhMzkaymLqFEVi7ZSVVj7xcXh9lDd89yXQgj3XcWGx3fJYP9jR0w-52fzD7sCo11AFtchKevQRIKX_Ug0XuOdnTKu2EjBZ6OAZorj0QXULTOakVB7owLqG04m2Lv7eZJr9Iibd6JsdI64dupNwN-FIEPfcaYVY4ippNIu0xpgsYUV-F3dmtcu0Bbeao484F1U0BHX0ozkqeW-g1NB0Eg09OFydFAwe73MT5_dYV_oWvFaeU7gKOAfihkp_34p45aUlBOV7rSZYOfAfIcj6iiIl67UQ-1vX6pX6VN7A",
+      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkNkYUxjZS1KdEJCdzBQVHpCREF2NXdiUzRLWHdIN19kRFAtX2lrZ2dMdEUiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA1MzIzMzc5LCJleHAiOjE3MDUzMjY5NzksImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA1MzIzMzc3LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.jsCRoXSGIKZiHTSGFYErA6DuoNu5bqEHJyp9CCm5Dh0JxYkAVL051YI8gxwoat4imKfkgSrNIdkBt10TWE_dELrN9vICI5VaTBXtFtyDmnrNl-jwT5zEqj1Kf-JzXOtUDVitJj__dPKnFmqsZN8tDKo96wkAUuELfciHtiQrCS-tgiLYNlChNcnz1sFdJvgRuxvh3EjcGjlJYxmZ5ozJ6A3eYcVkwVJfWpVLGxtunvZAEDecp_Z1y_L4m3WmdlFyLs01rXTVuEn2DLEXeHKY5-q3N9CzflTlrbQ_0Wjs0lKF5JXN2TPMM2KCf9aYPR79nDBQHd0o9eY56L-eVIRNgQ",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
@@ -201,6 +215,7 @@ export default {
       newEntity: [],
       isLoading: false,
       error: '',
+      legalEntityList: ['cko-ltd-uk', 'cko-sas'],
       paymentMethods: [
         {
           id: 'CARTES_BANCAIRES',
@@ -270,6 +285,7 @@ export default {
       this.Entity.push({
         EntityID: "",
         EntityName: "",
+        LegalEntity: "cko-ltd-uk",
         Processing_channel: [{
           ProcessingChannelID: "",
           ProcessingChannelName: "",
@@ -279,6 +295,7 @@ export default {
       this.newEntity.push({
         EntityID: "",
         EntityName: "",
+        LegalEntity: "cko-ltd-uk",
         Processing_channel: [{
           ProcessingChannelID: "",
           ProcessingChannelName: "",
