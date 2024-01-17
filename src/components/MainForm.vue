@@ -32,15 +32,15 @@ import Modal from './Modal.vue';
 
     <div class="form-row">
       <label for="ClientId">Client ID:</label>
-      <input v-model="ClientId" class="clientId" placeholder="cli_xxx" />
+      <input v-model="ClientId" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="cli_xxx" />
     </div>
 
     <div class="form-row">
       <label for="field2">Delay (in ms):</label>
-      <input v-model="delay" placeholder="ex : 10000 ms" />
+      <input v-model="delay" placeholder="ex : 10000 ms" type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
     </div>
 
-    <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="getClientId()">
+    <button class="bg-blue-500 text-white active:bg-black-600 font-bold text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" @click="getClientId()">
       Find
     </button>
 
@@ -50,7 +50,18 @@ import Modal from './Modal.vue';
         :is-full-page="false" />
     </ul>
     <ul v-else-if="error">
-      <li :style="{ color: `red` }">Error: {{ error }}</li>
+      <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-blue-500">
+        <span class="text-xl inline-block mr-5 align-middle">
+          <i class="fas fa-bell"></i>
+        </span>
+        <span class="inline-block align-middle mr-8">
+          <b class="capitalize">Error : </b>{{ error }}  
+        </span>
+        <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" @click="closeAlert()">
+          <span>×</span>
+        </button>
+      </div>
+      <!-- <li :style="{ color: `red` }">Error: {{ error }}</li> -->
     </ul>
     <ul v-else>
       <div class="card" v-for="(entity, eID) in Entity">
@@ -69,12 +80,12 @@ import Modal from './Modal.vue';
 
             <div class="form-row pl-2">
               <label :hidden="(entity.EntityID?.length > 0)">Entity name: </label>
-              <input type="text" class="form-control mb-2" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
+              <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
                 v-model="entity.EntityName" />
             </div>
             <div class="form-row pl-2" :hidden="(entity.EntityID?.length > 0)">
               <label>Legal entity: </label>
-              <select v-model="entity.LegalEntity">
+              <select v-model="entity.LegalEntity" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full">
                 <option v-for="(item, index) in legalEntityList" 
                   :value="item" 
                   :key="index">
@@ -89,7 +100,7 @@ import Modal from './Modal.vue';
               <div class="processing ml-10">
                 <div class="form-row">
                   <label>{{ pID + 1 }} - ProcessingChannel ({{ channel.ProcessingChannelID }}): </label>
-                  <input type="text" class="form-control mb-2" placeholder="Name"
+                  <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name"
                     :disabled="(channel.ProcessingChannelID?.length > 0)" v-model="channel.ProcessingChannelName" />
                 </div>
                 <div class=" ml-10">
@@ -107,7 +118,7 @@ import Modal from './Modal.vue';
               <hr class="small_hr" />
             </div>
 
-            <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="addNewProcessingChannel(eID)">
+            <button class="bg-blue-500 text-white active:bg-black-600 font-bold text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" @click="addNewProcessingChannel(eID)">
               Add processing channel
             </button>
           </template>
@@ -115,12 +126,12 @@ import Modal from './Modal.vue';
       </div>
 
     </ul>
-    <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="addNewEntity">
+    <button class="bg-blue-500 text-white active:bg-black-600 font-bold text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" @click="addNewEntity">
       Add an entity
     </button>
 
     <br />
-    <button class="btn btn-success mt-1 mb-1 pt-1 pb-1 pl-5 pr-5" @click="createEntities">Submit</button>
+    <button class="bg-blue-500 text-white active:bg-black-600 font-bold text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" @click="createEntities">Submit</button>
   </div>
 </template>
 
@@ -207,7 +218,7 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkNkYUxjZS1KdEJCdzBQVHpCREF2NXdiUzRLWHdIN19kRFAtX2lrZ2dMdEUiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA1MzIzMzc5LCJleHAiOjE3MDUzMjY5NzksImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiLCJvcGVuaWQiXSwiYXV0aF90aW1lIjoxNzA1MzIzMzc3LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.jsCRoXSGIKZiHTSGFYErA6DuoNu5bqEHJyp9CCm5Dh0JxYkAVL051YI8gxwoat4imKfkgSrNIdkBt10TWE_dELrN9vICI5VaTBXtFtyDmnrNl-jwT5zEqj1Kf-JzXOtUDVitJj__dPKnFmqsZN8tDKo96wkAUuELfciHtiQrCS-tgiLYNlChNcnz1sFdJvgRuxvh3EjcGjlJYxmZ5ozJ6A3eYcVkwVJfWpVLGxtunvZAEDecp_Z1y_L4m3WmdlFyLs01rXTVuEn2DLEXeHKY5-q3N9CzflTlrbQ_0Wjs0lKF5JXN2TPMM2KCf9aYPR79nDBQHd0o9eY56L-eVIRNgQ",
+      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjQ2V3A2OEd4MWl4Z1BPUGpPbG44dG1obEZLWTI0MnZHNnRsZ0FMZWc4cnciLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA1NDc1NzQ5LCJleHAiOjE3MDU0NzkzNDksImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiXSwiYXV0aF90aW1lIjoxNzA1NDc1NzQ3LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.EP5NoCnZ_JdG7QmFQTjQTmBLCcjoR59xK9psvHtGzqPxfM2DnulFzDcdQjRm0fI6ybAoGk7pfLk7wbTFYrVkBxKLoruxLLAtWhkjiXONha0OzI4KEW91htryapMwNsQBQqB0r8GjKcHo9zmzM57mhKXLiwPqh5pZekoLwLJ-ZX8amOg4LnPrK25h3gWCswba7ec9gfephcavRWI9bVNphBmFKclDRtCxKUBaeSxwOeOeyte31t9OgUcHioCCCCexzgX1-vwgWqN0pmP5TBmzKuYuJEPBlVCBkGSLp-Ptq5fJz2hOTw-QsEW1tzZNPRDEtk15susOaRb9A7tj4-uYBg",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
@@ -251,6 +262,9 @@ export default {
     Modal,
   },
   methods: {
+    closeAlert() {
+      this.error = '';
+    },
     showModal() {
       this.isModalVisible = true;
     },
@@ -282,6 +296,7 @@ export default {
       }
     },
     addNewEntity() {
+      this.error = '';
       this.Entity.push({
         EntityID: "",
         EntityName: "",
@@ -338,6 +353,8 @@ export default {
 
       console.log(JSON.stringify(newPayload, null, 2));
 
+      const errors = await validatePayload(newPayload);
+
       // We remove all ProcessingChannel where PaymentMethod Array is empty
       newPayload.forEach(entity => {
         entity.Processing_channel = entity.Processing_channel.filter(
@@ -353,42 +370,48 @@ export default {
       // Print the new JSON
       console.log(JSON.stringify(newPayload, null, 2));
 
-      this.isLoading = true;
-      this.error = '';
 
-      await axios
-        .request({
-          method: "POST",
-          maxBodyLength: Infinity,
-          url: "http://127.0.0.1:4000/CatAPI/ConfigureMerchant",
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-          data: JSON.stringify({
-            Bearer: (this.Bearer).toLowerCase().startsWith('bearer') ? (this.Bearer) : 'Bearer ' + (this.Bearer),
-            ClientId: this.ClientId,
-            delay: this.delay,
-            Entity: newPayload
-          }),
-        })
-        .then((res) => {
-          //Perform Success Action
-          console.log("res", res.data);
-          /*this.isLoading = false;
-          this.isLoading = true;
-          this.getClientId();*/
-        })
-        .catch((error) => {
-          console.log("error", error);
-          this.error = error.message || 'Error occurred while fetching user info';
-          this.isLoading = false;
-        })
-        .finally(() => {
-          this.isLoading = false;
-          //Perform action in always
-        });
+      if (errors?.length >  0) {
+        this.error = errors
+      } else {
 
+        // Payload is correct, we can send the data
+        this.isLoading = true;
+        this.error = '';
+
+        await axios
+          .request({
+            method: "POST",
+            maxBodyLength: Infinity,
+            url: "http://127.0.0.1:4000/CatAPI/ConfigureMerchant",
+            headers: {
+              "Content-Type": "application/json",
+              "Access-Control-Allow-Origin": "*",
+            },
+            data: JSON.stringify({
+              Bearer: (this.Bearer).toLowerCase().startsWith('bearer') ? (this.Bearer) : 'Bearer ' + (this.Bearer),
+              ClientId: this.ClientId,
+              delay: this.delay,
+              Entity: newPayload
+            }),
+          })
+          .then((res) => {
+            //Perform Success Action
+            console.log("res", res.data);
+            /*this.isLoading = false;
+            this.isLoading = true;
+            this.getClientId();*/
+          })
+          .catch((error) => {
+            console.log("error", error);
+            this.error = error.message || 'Error occurred while fetching user info';
+            this.isLoading = false;
+          })
+          .finally(() => {
+            this.isLoading = false;
+            //Perform action in always
+          });
+        }
     },
     isDisabled(methodId, channelID) {
       // Check if the data is available before trying to access it
@@ -492,5 +515,40 @@ export default {
     }
   },
 };
+
+async function validatePayload(data) {
+
+  let errors = [];
+  console.log(data);
+
+  if (!Array.isArray(data)) {
+    errors.push("Invalid data format. Expecting an array of entities.");
+  }
+
+  if (data?.length === 0)
+    errors.push('You cannot send empty data');
+  
+  for (let i = 0; i < data.length; i++) {
+    const entity = data[i];
+
+    // Check if "EntityName" is empty
+    if (!entity.EntityName.trim()) {
+      errors.push(`Entity at index ${i} has an empty EntityName.`);
+    }
+
+    // Check each processing channel
+    const processingChannels = entity.Processing_channel;
+    for (let j = 0; j < processingChannels.length; j++) {
+      const processingChannel = processingChannels[j];
+
+      // Check if "ProcessingChannelName" is empty
+      if (!processingChannel.ProcessingChannelName.trim()) {
+        errors.push(`Processing channel at index ${j} for entity at index ${i} has an empty ProcessingChannelName.`);
+      }
+    }
+  }
+
+  return errors;
+}
 
 </script>
