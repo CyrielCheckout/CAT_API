@@ -12,14 +12,14 @@ import Modal from './Modal.vue';
 <template>
   <div id="catAdminForm">
     <ul v-if="error">
-      <div class="text-white px-6 py-4 border-0 rounded mb-2 mt-4 bg-blue-500">
+      <div class="relative text-white px-6 py-4 border-0 rounded mb-2 mt-4 bg-blue-500">
         <span class="text-xl inline-block mr-5 align-middle">
           <i class="fas fa-bell"></i>
         </span>
         <span class="inline-block align-middle mr-8">
           <b class="capitalize">Error : </b>{{ error }}  
         </span>
-        <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" @click="closeAlert()">
+        <button class="absolute bg-transparent text-2xl font-semibold leading-none top-50 end-0  mr-6 outline-none focus:outline-none" @click="closeAlert()">
           <span>×</span>
         </button>
       </div>
