@@ -3,28 +3,33 @@ const baseURL = "https://client-admin.cko-sbox.ckotech.co/";
 const ErrorHandling = require('../../controller/Error');
 
 async function GetAllProcessingChannels(bearer, EntityId) {
-  GetAllProcessingChannelsfunc = await axios({
-    method: 'get',
-    url: baseURL + 'api/entities/' + EntityId + '/processing-channels?limit=25&skip=0&partialName=',
-    headers: {
-      'Authorization': bearer,
-      'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
-      'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
-      'sec-ch-ua-mobile': '?0',
-      'Content-Type': 'application/json',
-      'Accept': "*/*",
-      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-      'sec-ch-ua-platform': "macOS",
-      "Sec-Fetch-Site": 'same-origin',
-      "Sec-Fetch-Mode": "cors",
-      "Sec-Fetch-Dest": "empty",
-      "host": 'client-admin.cko-sbox.ckotech.co'
-    }
-  })
-    .then(function (response) {
-      return response
-    });
-  return GetAllProcessingChannelsfunc;
+  try {
+    GetAllProcessingChannelsfunc = await axios({
+      method: 'get',
+      url: baseURL + 'api/entities/' + EntityId + '/processing-channels?limit=25&skip=0&partialName=',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+    return GetAllProcessingChannelsfunc;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
 }
 async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
   try {
@@ -101,7 +106,7 @@ async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingCha
     throw ErrorHandling.ErrorHandling(err);
   }
 }
-async function Create_Processing_profile_Bancontact(bearer, EntityId, ProcessingChannelName,CKOTEMPLATE) {
+async function Create_Processing_profile_Bancontact(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
   try {
     Create_Processing_profile_Bancontact_func = await axios({
       method: 'post',
@@ -155,7 +160,7 @@ async function Create_Processing_profile_Bancontact(bearer, EntityId, Processing
     throw ErrorHandling.ErrorHandling(err);
   }
 }
-async function Create_Processing_profile_Ideal(bearer, EntityId, ProcessingChannelName,CKOTEMPLATE) {
+async function Create_Processing_profile_Ideal(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
   try {
     Create_Processing_profile_Ideal_func = await axios({
       method: 'post',
@@ -765,7 +770,7 @@ async function Create_Manual_processor_Mastercard(bearer, ProcessingChannelId, P
     throw ErrorHandling.ErrorHandling(err);
   }
 }
-async function Create_processing_processor_Bancontact(bearer, ProcessingChannelId, PPBancontact,CKOTEMPLATE) {
+async function Create_processing_processor_Bancontact(bearer, ProcessingChannelId, PPBancontact, CKOTEMPLATE) {
   try {
     Create_processing_processor_Bancontact_func = await axios({
       method: 'post',
@@ -810,7 +815,7 @@ async function Create_processing_processor_Bancontact(bearer, ProcessingChannelI
     throw ErrorHandling.ErrorHandling(err);
   }
 }
-async function Create_processing_processor_Ideal(bearer, ProcessingChannelId, PPIdeal,CKOTEMPLATE) {
+async function Create_processing_processor_Ideal(bearer, ProcessingChannelId, PPIdeal, CKOTEMPLATE) {
   try {
     Create_processing_processor_Ideal_func = await axios({
       method: 'post',

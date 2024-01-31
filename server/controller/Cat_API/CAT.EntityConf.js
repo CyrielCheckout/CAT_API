@@ -25,7 +25,7 @@ async function GetAllEntity(bearer, ClientId, skip) {
         "Sec-Fetch-Mode": "cors",
         "Sec-Fetch-Dest": "empty",
         "host": 'client-admin.cko-sbox.ckotech.co'
-      }
+      },timeout: 10000
     })
       .then(function (response) {
         return { status: response.status, body: response.data }
@@ -78,7 +78,7 @@ async function CreateEntity(bearer, ClientId, EntityName, CKOTEMPLATE) {
         "referrer": false,
         "processing_urls": [],
         "status": "pending"
-      }
+      },timeout: 10000
     })
       .then(function (response) {
         return response

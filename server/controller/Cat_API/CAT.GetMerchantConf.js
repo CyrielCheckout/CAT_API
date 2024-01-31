@@ -37,7 +37,7 @@ async function GetConf(body) {
           MerchantConfFinal.Entity[entNumb].Processing_channel = []
           proccessingchannel_list = await CATProcessingChannel.GetAllProcessingChannels(body.Bearer, MerchantConfFinal.Entity[entNumb].EntityID);
           for (let PCNumb = 0; PCNumb < proccessingchannel_list.data._embedded.processing_channels.length; PCNumb++) {
-            console.log({ "ProcessingChannelName": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "ProcessingChannelID": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id})
+            console.log({ "ProcessingChannelName": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "ProcessingChannelID": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id })
             MerchantConfFinal.Entity[entNumb].Processing_channel.push({ "ProcessingChannelName": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "ProcessingChannelID": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id, "business_model": proccessingchannel_list.data._embedded.processing_channels[PCNumb].business_model });
             MerchantConfFinal.Entity[entNumb].Processing_channel[PCNumb].PaymentMethod = [];
             try {
@@ -52,7 +52,7 @@ async function GetConf(body) {
           }
         }
         catch (err) {
-          console.log(err)
+          //console.log(err)
           finalresult = { "status": 500, "Message": err }
         }
       };
@@ -68,27 +68,8 @@ async function GetConf(body) {
   }
   catch (err) {
     console.log(err)
-    if (err?.response?.status) {
-        if (err.response.status === 401) {
-            return { "status": 401, "Message": "please renew the Bearer Token" }
-        }
-        if (err.response.status === 422) {
-            finalresult.Entity.push({ "EntityName": body.Entity[i].EntityName, "status": 422, "Message": err.response.data })
-            finalresult['status'] = 422
-            return finalresult
-        }
-    }
-    else if (err?.HTTP_Code){
-        if(err.HTTP_Code === 401){
-            return { "status": 401, "Message": "please renew the Bearer Token" }
-        }
-    }
-    else {
-        console.log(err)
-        finalresult = { "EntityID": "Connection Error", "status": 500, "Message": "Check you VPN connection" }
-        return finalresult
-    }
-}
+    return err
+  }
 }
 module.exports = {
   GetConf
