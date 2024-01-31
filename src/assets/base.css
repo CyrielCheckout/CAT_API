@@ -101,6 +101,7 @@ button {
 button:hover {
   border-color: #186AFF;
   background-color: rgb(238, 238, 238);
+  color: black;
 }
 button:focus,
 button:focus-visible {

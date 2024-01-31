@@ -12,7 +12,7 @@ import Modal from './Modal.vue';
 <template>
   <div id="catAdminForm">
     <ul v-if="error">
-      <div class="text-white px-6 py-4 border-0 rounded relative mb-2 mt-4 bg-blue-500">
+      <div class="text-white px-6 py-4 border-0 rounded mb-2 mt-4 bg-blue-500">
         <span class="text-xl inline-block mr-5 align-middle">
           <i class="fas fa-bell"></i>
         </span>
@@ -46,12 +46,12 @@ import Modal from './Modal.vue';
 
     <div class="form-row">
       <label for="ClientId">Client ID:</label>
-      <input v-model="ClientId" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="cli_xxx" />
+      <input v-model="ClientId" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="cli_xxx" />
     </div>
 
     <div class="form-row">
       <label for="field2">Delay (in ms):</label>
-      <input v-model="delay" placeholder="ex : 10000 ms" type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
+      <input v-model="delay" placeholder="ex : 10000 ms" type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full"/>
     </div>
 
     <button class="bg-blue-500 text-white active:bg-black-600 font-bold text-sm px-4 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" @click="getClientId()">
@@ -80,12 +80,12 @@ import Modal from './Modal.vue';
 
             <div class="form-row pl-2">
               <label :hidden="(entity.EntityID?.length > 0)">Entity name: </label>
-              <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
+              <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
                 v-model="entity.EntityName" />
             </div>
             <div class="form-row pl-2" :hidden="(entity.EntityID?.length > 0)">
               <label>Legal entity: </label>
-              <select v-model="entity.LegalEntity" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full">
+              <select v-model="entity.LegalEntity" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full">
                 <option v-for="(item, index) in legalEntityList" 
                   :value="item" 
                   :key="index">
@@ -100,7 +100,7 @@ import Modal from './Modal.vue';
               <div class="processing ml-10">
                 <div class="form-row">
                   <label>{{ pID + 1 }} - ProcessingChannel ({{ channel.ProcessingChannelID }}): </label>
-                  <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 relative bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name"
+                  <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name"
                     :disabled="(channel.ProcessingChannelID?.length > 0)" v-model="channel.ProcessingChannelName" />
                 </div>
                 <div class=" ml-10">
@@ -336,6 +336,17 @@ export default {
     },
     async createEntities() {
 
+      this.error='';
+
+      if (!(this.status === 'OK')) {
+        this.error = 'Please use a valid token';
+        return;
+      }
+      if (!this.ClientId?.length > 0 ) {
+        this.error = 'Please indicate a Client ID';
+        return;
+      }
+
       // Copy the entities to update / create in newPayload
       let newPayload = this.Entity;
 
@@ -459,8 +470,20 @@ export default {
       });
     },
     async getClientId() {
-      this.isLoading = true;
+      
       this.error = '';
+
+      if (!(this.status === 'OK')) {
+        this.error = 'Please use a valid token';
+        return;
+      }
+
+      if (!this.ClientId?.length > 0 ) {
+        this.error = 'Please indicate a Client ID';
+        return;
+      }
+
+      this.isLoading = true;
       await axios
         .request({
           method: 'POST',
