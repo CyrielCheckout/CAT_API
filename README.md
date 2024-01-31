@@ -1,4 +1,4 @@
-# CAT API TOOl
+# CAT API TOOL
 CAT API Tool is a tool for configuring sandbox merchants.
 The tool is not intended to replace CAT.
 Default configurations are therefore applied. If you need to make a specific configuration, you will have to use CAT.

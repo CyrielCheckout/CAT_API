@@ -1,6 +1,6 @@
 const axios = require('axios');
 const baseURL = "https://client-admin.cko-sbox.ckotech.co/";
-
+const ErrorHandling = require('../../controller/Error');
 
 async function GetAllProcessingChannels(bearer, EntityId) {
   GetAllProcessingChannelsfunc = await axios({
@@ -52,20 +52,7 @@ async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
     return GetProcessingChannelConffunc;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingChannelName, VaultID) {
@@ -111,20 +98,7 @@ async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingCha
     return CreateProcessingChannelfunc;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Processing_profile_Bancontact(bearer, EntityId, ProcessingChannelName,CKOTEMPLATE) {
@@ -178,20 +152,7 @@ async function Create_Processing_profile_Bancontact(bearer, EntityId, Processing
     return Create_Processing_profile_Bancontact_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Processing_profile_Ideal(bearer, EntityId, ProcessingChannelName,CKOTEMPLATE) {
@@ -239,20 +200,7 @@ async function Create_Processing_profile_Ideal(bearer, EntityId, ProcessingChann
     return Create_Processing_profile_Ideal_func
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Processing_profile_Sepa(bearer, EntityId, ProcessingChannelName) {
@@ -298,20 +246,7 @@ async function Create_Processing_profile_Sepa(bearer, EntityId, ProcessingChanne
     return Create_Processing_profile_Sepa_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Processing_profile_CB(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -394,20 +329,7 @@ async function Create_Processing_profile_CB(bearer, EntityId, ProcessingChannelN
     return Create_Processing_profile_CB_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 
 }
@@ -624,20 +546,7 @@ async function Create_Manual_processor_Visa(bearer, ProcessingChannelId, Process
     return Create_Manual_processor_Visa_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Manual_processor_Mastercard(bearer, ProcessingChannelId, ProcessingChannelName, CKOTEMPLATE) {
@@ -853,20 +762,7 @@ async function Create_Manual_processor_Mastercard(bearer, ProcessingChannelId, P
     return Create_Manual_processor_Mastercard_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_processing_processor_Bancontact(bearer, ProcessingChannelId, PPBancontact,CKOTEMPLATE) {
@@ -911,20 +807,7 @@ async function Create_processing_processor_Bancontact(bearer, ProcessingChannelI
     return Create_processing_processor_Bancontact_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_processing_processor_Ideal(bearer, ProcessingChannelId, PPIdeal,CKOTEMPLATE) {
@@ -969,20 +852,7 @@ async function Create_processing_processor_Ideal(bearer, ProcessingChannelId, PP
     return Create_processing_processor_Ideal_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_processing_processor_CB(bearer, ProcessingChannelId, PPCartes_Bancaires, CKOTEMPLATE) {
@@ -1030,20 +900,7 @@ async function Create_processing_processor_CB(bearer, ProcessingChannelId, PPCar
     return Create_processing_processor_CB_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_processing_processor_Sepa(bearer, ProcessingChannelId, PPSepa) {
@@ -1087,20 +944,7 @@ async function Create_processing_processor_Sepa(bearer, ProcessingChannelId, PPS
     return Create_processing_processor_Sepa_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Currency_Account(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -1134,20 +978,7 @@ async function Create_Currency_Account(bearer, EntityId, ProcessingChannelName, 
     return Create_Currency_Account_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelId, CurrencyAccountID) {
@@ -1189,20 +1020,7 @@ async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelI
     return Create_Routing_Rules_Payment_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Routing_Rules_Payout(bearer, EntityId, CurrencyAccountID) {
@@ -1236,20 +1054,7 @@ async function Create_Routing_Rules_Payout(bearer, EntityId, CurrencyAccountID) 
     return Create_Routing_Rules_Payout_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Payout_Schedules(bearer, EntityId, ProcessingChannelName, CurrencyAccountID, CKOTEMPLATE) {
@@ -1345,20 +1150,7 @@ async function Create_Payout_Schedules(bearer, EntityId, ProcessingChannelName, 
     return Create_Payout_Schedules_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Get_Processing_channel_Session(bearer, EntityId) {
@@ -1388,20 +1180,7 @@ async function Get_Processing_channel_Session(bearer, EntityId) {
     return Get_Processing_channel_Session_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Session_Processing_Channels(bearer, EntityId, AvailableProcessingChannels, vaultID) {
@@ -1440,20 +1219,7 @@ async function Create_Session_Processing_Channels(bearer, EntityId, AvailablePro
     return Create_Session_Processing_Channels_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Session_processor_Visa(bearer, AvailableProcessingChannels, ProcessingChannelName, PrVisa, CKOTEMPLATE) {
@@ -1504,20 +1270,7 @@ async function Create_Session_processor_Visa(bearer, AvailableProcessingChannels
     return Create_Session_processor_Visa_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Session_processor_Mastercard(bearer, AvailableProcessingChannels, ProcessingChannelName, PrMC, CKOTEMPLATE) {
@@ -1568,20 +1321,7 @@ async function Create_Session_processor_Mastercard(bearer, AvailableProcessingCh
     return Create_Session_processor_Mastercard_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, PrCb) {
@@ -1623,20 +1363,7 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, Pr
     return Create_Session_processor_CB_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 

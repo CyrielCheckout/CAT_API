@@ -3,6 +3,7 @@ const baseURL = "https://client-admin.cko-sbox.ckotech.co/";
 //templates for creation
 const fs = require('fs/promises')
 const path = require('path');
+const ErrorHandling = require('../../controller/Error');
 const ckosasTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOSAS.json'));
 const ckoltdTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOLTD.json'));
 
@@ -31,20 +32,7 @@ async function GetAllEntity(bearer, ClientId, skip) {
       });
     return GetAllEntityfunc;
   } catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function CreateEntity(bearer, ClientId, EntityName, CKOTEMPLATE) {
@@ -98,20 +86,7 @@ async function CreateEntity(bearer, ClientId, EntityName, CKOTEMPLATE) {
 
     return CreateEntityfunc;
   } catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function GetEntityDetails(bearer, EntityId) {
@@ -139,20 +114,7 @@ async function GetEntityDetails(bearer, EntityId) {
       });
     return GetEntityDetailsfunc;
   } catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function GetEntityData(bearer, EntityId) {
@@ -180,20 +142,7 @@ async function GetEntityData(bearer, EntityId) {
       });
     return GetEntityDetailsfunc;
   } catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE) {
@@ -414,20 +363,7 @@ async function Create_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE)
     return Create_Pricing_Profile_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function GetPricingProfile(bearer, EntityId) {
@@ -455,20 +391,7 @@ async function GetPricingProfile(bearer, EntityId) {
       });
     return GetPricingProfilefunc;
   } catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function GetVaultID(bearer, ClientID) {
@@ -496,20 +419,7 @@ async function GetVaultID(bearer, ClientID) {
       });
     return GetVaultIDfunc;
   } catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function Create_AMP_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE) {
@@ -704,20 +614,7 @@ async function Create_AMP_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPL
     return Create_AMP_Pricing_Profile_func;
   }
   catch (err) {
-    if (err?.response?.data) {
-
-      throw {"HTTP_Code":err.response.status, "Error_Message":err.response.data}
-    }
-    else if (err?.response?.status) {
-      throw err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 async function GetAPMPricingProfile(bearer, EntityId) {
@@ -745,22 +642,7 @@ async function GetAPMPricingProfile(bearer, EntityId) {
       });
     return GetAPMPricingProfilefunc;
   } catch (err) {
-    if (err?.response?.data) {
-
-      throw err.response.data
-    }
-    else if (err?.response?.status) {
-      console.log("Status error :",err.response.status)
-      return err.response.status
-    }
-    else if (err.code === "ENOMEM") {
-
-      throw "Connection ERROR"
-    }
-    else {
-
-      throw err
-    }
+    throw ErrorHandling.ErrorHandling(err);
   }
 }
 module.exports = {

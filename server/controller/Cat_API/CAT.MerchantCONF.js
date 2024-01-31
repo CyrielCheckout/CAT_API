@@ -9,7 +9,6 @@ const CKOLTDTEMPLATE = require('../../ConfTemplates/CKOLTD.json');
 async function Createconf(body) {
     console.log("Number of entity requested :", body.Entity.length)
     finalresult = { "Entity": [] };
-    console.log(body);
     for (let i = 0; i < body.Entity.length; i++) {
         //Entity check and creation
         try {
@@ -205,21 +204,25 @@ async function Createconf(body) {
                     }
                 }
                 catch (err) {
-                    if (err.response.status === 422) {
-                        finalresult.Entity.push({ "EntityName": body.Entity[i].EntityName, "status": 422, "Message": err.response.data })
-                        finalresult['status'] = 422
-                    }
+                   throw err
                 }
             }
         }
         catch (err) {
+            console.log(err)
             if (err?.response?.status) {
                 if (err.response.status === 401) {
                     return { "status": 401, "Message": "please renew the Bearer Token" }
                 }
                 if (err.response.status === 422) {
-                    finalresult = { "EntityID": "Error 422", "status": 422, "Message": err.response.data }
+                    finalresult.Entity.push({ "EntityName": body.Entity[i].EntityName, "status": 422, "Message": err.response.data })
+                    finalresult['status'] = 422
                     return finalresult
+                }
+            }
+            else if (err?.HTTP_Code){
+                if(err.HTTP_Code === 401){
+                    return { "status": 401, "Message": "please renew the Bearer Token" }
                 }
             }
             else {
