@@ -12,6 +12,10 @@ Adding a new processing channel will automatically add un currency account par p
 
 Adding a new payment method will automatically create the processing profile and the processing processor (if need the authentication processor too).
 
+Supported Legal entities : 
+- Checkout LTD
+- Checkout SAS
+
 Supported Payment methods : 
 - Visa
 - Mastercard
