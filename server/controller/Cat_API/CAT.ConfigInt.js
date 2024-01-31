@@ -77,7 +77,7 @@ async function CreateIdealPaymentMethod(Bearer, EntityID, ProcessingChannelID, P
             return {"Status": "CONFIGURED", "Processing_Profile": PPIdeal, "Processor_Profile": PrIdeal }
         }
         catch (err) {
-            console.log(err)
+            console.log("ERROR while creating Processing Processor :",err)
             return { "Status": "PARTIALLY CONFIGURED", "Processing_Profile": PrIdeal, "Processor_Profile": err }
         }
     }

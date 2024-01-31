@@ -109,13 +109,13 @@ async function Createconf(body) {
                                                 SESSIONPRocessingChannelCreat = await CATProcessingChannel.Create_Session_Processing_Channels(body.Bearer, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID, VaultID);
                                             }
                                             catch (err) {
-                                                console.log("ERROR whlite creating Session processing channel :",err)
+                                                console.log("ERROR whlite creating Session processing channel :", err)
                                             }
                                         }
                                     }
                                 }
                                 catch (err) {
-                                    console.log("ERROR while get processing channel session :",err)
+                                    console.log("ERROR while get processing channel session :", err)
                                 }
                             }
                             catch (err) {
@@ -130,26 +130,32 @@ async function Createconf(body) {
                             //If not, then Create Processing channel
                             console.log("Creating processing channel :", body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName);
                             //create processing channel
-                            PROCESSINGCHANNELCONF = await CatConfigInt.CreateProcessingChannel(body.Bearer, body.ClientId, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName);
-                            finalresult.Entity[i].VaultID = VaultID;
-                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": ProcessingChannelID, "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName };
-                            // configure processing channel
-                            ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay, CKOTEMPLATE);
-                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Currency_Account_ID")) {
-                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CurrencyAccountSetup = { "CURRENCY_ACCOUNT": "CONFIGURED", "Currency_Account_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
-                            };
-                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Payment_Routing_Rules_ID")) {
-                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PaymentRoutingRulesSetup = { "PAYMENT_ROUTING_RULES": "CONFIGURED", "Payment_Routing_Rules_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
-                            };
-                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
-                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CreateRoutingPayoutRules = { "PAYOUT_ROUTING_RULES": "CONFIGURED", "Payout_Routing_Rules_ID": ConfigureProcessingChannelFunc.Payout_Routing_Rules_ID };
-                            };
-                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
-                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PayoutScheduleSetup = { "PAYOUT_SCHEDULE": "CONFIGURED", "Payout_Schedule_ID": ConfigureProcessingChannelFunc.Payout_Schedule_ID };
-                            };
-                            //Configure Payment Method
-                            PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, body.Entity[i].EntityID, ProcessingChannelID, GetProcessingChannelData.data.name, CKOTEMPLATE);
-                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
+                            try {
+                                PROCESSINGCHANNELCONF = await CatConfigInt.CreateProcessingChannel(body.Bearer, body.ClientId, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName);
+                                finalresult.Entity[i].VaultID = VaultID;
+                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": ProcessingChannelID, "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName };
+                                // configure processing channel
+                                ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, body.Entity[i].EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay, CKOTEMPLATE);
+                                if (ConfigureProcessingChannelFunc.hasOwnProperty("Currency_Account_ID")) {
+                                    finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CurrencyAccountSetup = { "CURRENCY_ACCOUNT": "CONFIGURED", "Currency_Account_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
+                                };
+                                if (ConfigureProcessingChannelFunc.hasOwnProperty("Payment_Routing_Rules_ID")) {
+                                    finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PaymentRoutingRulesSetup = { "PAYMENT_ROUTING_RULES": "CONFIGURED", "Payment_Routing_Rules_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
+                                };
+                                if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
+                                    finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CreateRoutingPayoutRules = { "PAYOUT_ROUTING_RULES": "CONFIGURED", "Payout_Routing_Rules_ID": ConfigureProcessingChannelFunc.Payout_Routing_Rules_ID };
+                                };
+                                if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
+                                    finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PayoutScheduleSetup = { "PAYOUT_SCHEDULE": "CONFIGURED", "Payout_Schedule_ID": ConfigureProcessingChannelFunc.Payout_Schedule_ID };
+                                };
+                                //Configure Payment Method
+                                PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, body.Entity[i].EntityID, ProcessingChannelID, GetProcessingChannelData.data.name, CKOTEMPLATE);
+                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
+                            }
+                            catch (err) {
+                                console.log("ERROR while creating processing channel :", err);
+                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": "ERROR", "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, "status": err };
+                            }
                         }
                     }
                 } catch (err) {
@@ -200,27 +206,33 @@ async function Createconf(body) {
                     for (let ProcessingChannelNumber = 0; ProcessingChannelNumber < body.Entity[i].Processing_channel.length; ProcessingChannelNumber++) {
                         console.log("Creating processing channel :", body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName);
                         //Create processing channel
-                        PROCESSINGCHANNELCONF = await CatConfigInt.CreateProcessingChannel(body.Bearer, body.ClientId, EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName);
-                        finalresult.Entity[i].VaultID = VaultID;
-                        finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": PROCESSINGCHANNELCONF.Processing_Channel_ID, "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName };
-                        // configure processing channel
-                        ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay, CKOTEMPLATE);
-                        if (ConfigureProcessingChannelFunc.hasOwnProperty("Currency_Account_ID")) {
-                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CurrencyAccountSetup = { "CURRENCY_ACCOUNT": "CONFIGURED", "Currency_Account_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
-                        };
-                        if (ConfigureProcessingChannelFunc.hasOwnProperty("Payment_Routing_Rules_ID")) {
-                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PaymentRoutingRulesSetup = { "PAYMENT_ROUTING_RULES": "CONFIGURED", "Payment_Routing_Rules_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
-                        };
-                        if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
-                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CreateRoutingPayoutRules = { "PAYOUT_ROUTING_RULES": "CONFIGURED", "Payout_Routing_Rules_ID": ConfigureProcessingChannelFunc.Payout_Routing_Rules_ID };
-                        };
-                        if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
-                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PayoutScheduleSetup = { "PAYOUT_SCHEDULE": "CONFIGURED", "Payout_Schedule_ID": ConfigureProcessingChannelFunc.Payout_Schedule_ID };
-                        };
-                        //Configure Payment Method
-                        PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, EntityID, PROCESSINGCHANNELCONF.Processing_Channel_ID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, CKOTEMPLATE);
-                        finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
-                    }
+                        try {
+                            PROCESSINGCHANNELCONF = await CatConfigInt.CreateProcessingChannel(body.Bearer, body.ClientId, EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName);
+                            finalresult.Entity[i].VaultID = VaultID;
+                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": PROCESSINGCHANNELCONF.Processing_Channel_ID, "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName };
+                            // configure processing channel
+                            ConfigureProcessingChannelFunc = await CatConfigInt.ConfigureProcessingChannel(body.Bearer, EntityID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, body.delay, CKOTEMPLATE);
+                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Currency_Account_ID")) {
+                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CurrencyAccountSetup = { "CURRENCY_ACCOUNT": "CONFIGURED", "Currency_Account_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
+                            };
+                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Payment_Routing_Rules_ID")) {
+                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PaymentRoutingRulesSetup = { "PAYMENT_ROUTING_RULES": "CONFIGURED", "Payment_Routing_Rules_ID": ConfigureProcessingChannelFunc.Currency_Account_ID };
+                            };
+                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
+                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].CreateRoutingPayoutRules = { "PAYOUT_ROUTING_RULES": "CONFIGURED", "Payout_Routing_Rules_ID": ConfigureProcessingChannelFunc.Payout_Routing_Rules_ID };
+                            };
+                            if (ConfigureProcessingChannelFunc.hasOwnProperty("Payout_Routing_Rules_ID")) {
+                                finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].PayoutScheduleSetup = { "PAYOUT_SCHEDULE": "CONFIGURED", "Payout_Schedule_ID": ConfigureProcessingChannelFunc.Payout_Schedule_ID };
+                            };
+                            //Configure Payment Method
+                            PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, EntityID, PROCESSINGCHANNELCONF.Processing_Channel_ID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, CKOTEMPLATE);
+                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
+                        }
+                        catch (err){
+                            console.log("ERROR while creating processing channel :",err);
+                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": "ERROR", "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, "status":err};
+                        }
+                }
                 }
                 catch (err) {
                     finalresult.Entity.push({ "Entity_Name": body.Entity[i].EntityName, "EntityID": "ERROR", "status": err });
