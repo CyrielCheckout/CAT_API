@@ -11,6 +11,20 @@ import Modal from './Modal.vue';
 
 <template>
   <div id="catAdminForm">
+    <ul v-if="error">
+      <div class="text-white px-6 py-4 border-0 rounded relative mb-2 mt-4 bg-blue-500">
+        <span class="text-xl inline-block mr-5 align-middle">
+          <i class="fas fa-bell"></i>
+        </span>
+        <span class="inline-block align-middle mr-8">
+          <b class="capitalize">Error : </b>{{ error }}  
+        </span>
+        <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" @click="closeAlert()">
+          <span>×</span>
+        </button>
+      </div>
+      <!-- <li :style="{ color: `red` }">Error: {{ error }}</li> -->
+    </ul>
     <app-accordion :is-open="true" class="mb-1 mt-4">
       <template v-slot:title>
         <span class="font-semibold text-xl">CAT Bearer Token : </span>
@@ -48,20 +62,6 @@ import Modal from './Modal.vue';
     <ul v-if="isLoading">
       <loading v-model:active="isLoading" :color="'#186AFF'" :loader="'bars'" :height="50" :width="50" :can-cancel="false"
         :is-full-page="false" />
-    </ul>
-    <ul v-else-if="error">
-      <div class="text-white px-6 py-4 border-0 rounded relative mb-4 bg-blue-500">
-        <span class="text-xl inline-block mr-5 align-middle">
-          <i class="fas fa-bell"></i>
-        </span>
-        <span class="inline-block align-middle mr-8">
-          <b class="capitalize">Error : </b>{{ error }}  
-        </span>
-        <button class="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none" @click="closeAlert()">
-          <span>×</span>
-        </button>
-      </div>
-      <!-- <li :style="{ color: `red` }">Error: {{ error }}</li> -->
     </ul>
     <ul v-else>
       <div class="card" v-for="(entity, eID) in Entity">
