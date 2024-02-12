@@ -10,6 +10,15 @@ import Modal from './Modal.vue';
 </script>
 
 <template>
+  <div class="mt-3">
+    <div class="font-semibold text-xl">Prerequisite</div>
+    <p>Before starting, please make sure : </p>
+    <ul>
+      <li class="pl-3">1 - To be connected to VPN Checkout</li>
+      <li class="pl-3">2 - To use a valid token</li>
+    </ul>
+  </div>
+  <hr class="mb-2 mt-2">
   <div id="catAdminForm">
     <ul v-if="error">
       <div class="relative text-white px-6 py-4 border-0 rounded mb-2 mt-4" :class="color">
@@ -576,7 +585,7 @@ export default {
           this.Entity = []
           this.errorType = 'ERROR';
           this.color = 'bg-red-500';
-          this.error = error.message || 'Error occurred while fetching user info';
+          this.error = error?.response?.data?.Message || 'Error occurred while fetching user info';
           this.isLoading = false;
         })
         .finally(() => {
