@@ -4,7 +4,7 @@
       @click="toggleAccordion"
       class="flex items-center space-x-3 accordion"
       :aria-expanded="internalIsOpen"
-      :aria-controls="`collapse${_uid}`"
+      :aria-controls="`collapse${uid}`"
     >
       <slot name="title" />
       <svg
@@ -28,7 +28,7 @@
       </svg>
     </button>
 
-    <div v-show="internalIsOpen" :id="`collapse${_uid}`">
+    <div v-show="internalIsOpen" :id="`collapse${uid}`">
       <slot name="content" />
     </div>
   </div>
@@ -52,8 +52,12 @@ export default {
   },
   data() {
     return {
+      uid: undefined,
       internalIsOpen: this.isOpen,
     };
+  },
+  mounted() {
+    this.uid = this._uid;
   },
   methods: {
     toggleAccordion() {

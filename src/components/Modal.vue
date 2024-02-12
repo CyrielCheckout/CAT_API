@@ -40,7 +40,7 @@
         >
           <slot name="body">
             1 - Authenticate yourself on WARP/CloudFlare<br/>
-            2 - Open your browser and connect to Sandbox <a href="https://client-admin.cko-sbox.ckotech.co/web/nas/" target="_blank">Client Admin Tools (Cmd + Opt + I)</a><br/>
+            2 - Open your browser and connect to Sandbox <a href="https://client-admin.cko-sbox.ckotech.co/web/nas/" target="_blank">Client Admin Tools</a><br/>
             3 - Open the Network tab in your browser's developer tools.<br/>
             4 - Go to the Network Tab<br/>
             5 - Click on a request done by CAT and go to "header" tab<br/>
