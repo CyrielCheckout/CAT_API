@@ -15,7 +15,7 @@ import Modal from './Modal.vue';
     <p>Before starting, please make sure : </p>
     <ul>
       <li class="pl-3">1 - To be connected to VPN Checkout</li>
-      <li class="pl-3">2 - To use a valid token</li>
+      <li class="pl-3">2 - To use a valid bearer token</li>
     </ul>
   </div>
   <hr class="mb-2 mt-2">
