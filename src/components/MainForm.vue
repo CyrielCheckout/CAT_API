@@ -12,12 +12,12 @@ import Modal from './Modal.vue';
 <template>
   <div id="catAdminForm">
     <ul v-if="error">
-      <div class="relative text-white px-6 py-4 border-0 rounded mb-2 mt-4 bg-blue-500">
+      <div class="relative text-white px-6 py-4 border-0 rounded mb-2 mt-4" :class="color">
         <span class="text-xl inline-block mr-5 align-middle">
           <i class="fas fa-bell"></i>
         </span>
         <span class="inline-block align-middle mr-8">
-          <b class="capitalize">Error : </b>{{ error }}  
+          <b class="capitalize">{{errorType}} : </b>{{ error }}  
         </span>
         <button class="absolute bg-transparent text-2xl font-semibold leading-none top-50 end-0  mr-6 outline-none focus:outline-none" @click="closeAlert()">
           <span>×</span>
@@ -81,7 +81,7 @@ import Modal from './Modal.vue';
             <div class="form-row pl-2">
               <label :hidden="(entity.EntityID?.length > 0)">Entity name: </label>
               <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name" :hidden="(entity.EntityID?.length > 0)"
-                v-model="entity.EntityName" />
+                v-model="entity.EntityName" required/>
             </div>
             <div class="form-row pl-2" :hidden="(entity.EntityID?.length > 0)">
               <label>Legal entity: </label>
@@ -101,7 +101,7 @@ import Modal from './Modal.vue';
                 <div class="form-row">
                   <label>{{ pID + 1 }} - ProcessingChannel ({{ channel.ProcessingChannelID }}): </label>
                   <input type="text" class="px-2 py-1 placeholder-blueGray-300 text-blueGray-600 bg-white bg-white rounded text-sm border-0 shadow outline-none focus:outline-none focus:ring w-full" placeholder="Name"
-                    :disabled="(channel.ProcessingChannelID?.length > 0)" v-model="channel.ProcessingChannelName" />
+                    :disabled="(channel.ProcessingChannelID?.length > 0)" v-model="channel.ProcessingChannelName" required/>
                 </div>
                 <div class=" ml-10">
                   <p>Payment Method : </p>
@@ -109,7 +109,7 @@ import Modal from './Modal.vue';
                     <div v-for="method in paymentMethods" :key="method.id">
                       <input type="checkbox" :checked="isChecked(method.id, channel.ProcessingChannelID)"
                         :disabled="isDisabled(method.id, channel.ProcessingChannelID)"
-                        @change="toggleCheckbox(method.id, channel.ProcessingChannelID)" :value="method.id" />
+                        @change="toggleCheckbox(method.id, eID, pID)" :value="method.id" />
                       <label>{{ ' ' + method.name }}</label>
                     </div>
                   </div>
@@ -204,6 +204,20 @@ hr {
 .accordion {
   border: none;
 }
+
+input:invalid {
+  background-color: #ffdddd;
+}
+
+
+input:required:invalid {
+  border: 1px solid #c00000;
+}
+
+input:required:valid {
+  border: 1px solid #ccc;
+  background-color: #fff;
+}
 </style>
 
 <script>
@@ -218,7 +232,7 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULjQ2V3A2OEd4MWl4Z1BPUGpPbG44dG1obEZLWTI0MnZHNnRsZ0FMZWc4cnciLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA1NDc1NzQ5LCJleHAiOjE3MDU0NzkzNDksImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwicHJvZmlsZSIsImNsaWVudGFkbWluLXRvb2wiXSwiYXV0aF90aW1lIjoxNzA1NDc1NzQ3LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.EP5NoCnZ_JdG7QmFQTjQTmBLCcjoR59xK9psvHtGzqPxfM2DnulFzDcdQjRm0fI6ybAoGk7pfLk7wbTFYrVkBxKLoruxLLAtWhkjiXONha0OzI4KEW91htryapMwNsQBQqB0r8GjKcHo9zmzM57mhKXLiwPqh5pZekoLwLJ-ZX8amOg4LnPrK25h3gWCswba7ec9gfephcavRWI9bVNphBmFKclDRtCxKUBaeSxwOeOeyte31t9OgUcHioCCCCexzgX1-vwgWqN0pmP5TBmzKuYuJEPBlVCBkGSLp-Ptq5fJz2hOTw-QsEW1tzZNPRDEtk15susOaRb9A7tj4-uYBg",
+      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmpGaXYtbHpWOEtpc1ZxMnlSSWZTM21SajlkcmxtV2dOUTBaZFRUUmtPblEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA3Mzg4ODIwLCJleHAiOjE3MDczOTI0MjAsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwiY2xpZW50YWRtaW4tdG9vbCIsInByb2ZpbGUiXSwiYXV0aF90aW1lIjoxNzA3Mzg4ODE3LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.dWekjJcQ8uk420Q3j6Ih3nZZJFDdc4XH5zSpyMrI1WjTq5FtfYslC-SKWxns7UuF9j9d2ERX7G81uqLlKlSONkV0QRZkIPxdF3Bgq_kJP1dEt_ma5rA6SbDoBU67WiqhRjv0OQ47BSbp12sOhJKWN-pbToAt9D_46RsFUoJba6gvnF4h8pJfarBicC9QyHo9FbpC87GAQNJoMjIrzeDKL9xMU7lGJ4DHoIwOIMT0TbFvPRzbFqUnh-NcpMslZ620xBY3yuaordpDFzXfczdQ2tbh96ZxxfehD9lMf2ZVb2gCYOahzHCBOjaRn-4VE3IFsrTB1-v06keoCUarpoxJ0A",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
@@ -226,6 +240,8 @@ export default {
       newEntity: [],
       isLoading: false,
       error: '',
+      errorType: '',
+      color:'bg-blue-500',
       legalEntityList: ['cko-ltd-uk', 'cko-sas'],
       paymentMethods: [
         {
@@ -264,6 +280,7 @@ export default {
   methods: {
     closeAlert() {
       this.error = '';
+      this.errorType = '';
     },
     showModal() {
       this.isModalVisible = true;
@@ -297,6 +314,7 @@ export default {
     },
     addNewEntity() {
       this.error = '';
+      this.errorType = '';
       this.Entity.push({
         EntityID: "",
         EntityName: "",
@@ -337,12 +355,17 @@ export default {
     async createEntities() {
 
       this.error='';
+      this.errorType = '';
 
       if (!(this.status === 'OK')) {
+        this.errorType = 'WARNING';
+        this.color = 'bg-blue-500';
         this.error = 'Please use a valid token';
         return;
       }
       if (!this.ClientId?.length > 0 ) {
+        this.errorType = 'WARNING';
+        this.color = 'bg-blue-500';
         this.error = 'Please indicate a Client ID';
         return;
       }
@@ -383,12 +406,14 @@ export default {
 
 
       if (errors?.length >  0) {
+        this.errorType = 'WARNING'
         this.error = errors
       } else {
 
         // Payload is correct, we can send the data
         this.isLoading = true;
         this.error = '';
+        this.errorType = ''
 
         await axios
           .request({
@@ -408,18 +433,34 @@ export default {
           })
           .then((res) => {
             //Perform Success Action
-            console.log("res", res.data);
+            //const result = checkEntity(res.data);
+            const result = res?.data?.Entity.map((entity) => checkEntity(entity));
+
+            if (result && !areAllObjectsEmpty(result)) {
+              this.errorType = 'WARNING';
+              this.color = 'bg-blue-500';
+              this.error = displayMessage(result)
+            } else {
+              this.errorType = 'SUCCESS';
+              this.color = 'bg-green-500';
+              this.error = "Operation Complete. All Entities, processing Channels, payments Methods have been correctly configured"
+            }
             /*this.isLoading = false;
             this.isLoading = true;
             this.getClientId();*/
           })
           .catch((error) => {
             console.log("error", error);
+            this.errorType = 'ERROR';
+            this.color = 'bg-red-500';
             this.error = error.message || 'Error occurred while fetching user info';
             this.isLoading = false;
           })
           .finally(() => {
             this.isLoading = false;
+            this.Entity = [];
+            this.InitalEntity = [];
+            this.newEntity = [];
             //Perform action in always
           });
         }
@@ -450,35 +491,37 @@ export default {
         )
       );
     },
-    toggleCheckbox(methodId, channelID) {
+    toggleCheckbox(methodId, eID, pID) {
+      
       if (!this.newEntity || !this.newEntity.length) {
         return;
       }
 
-      this.newEntity.forEach(entity => {
-        entity.Processing_channel.forEach(channel => {
-          if (channel.ProcessingChannelID === channelID) {
-            const index = channel.PaymentMethod.indexOf(methodId);
-            if (index === -1) {
-              channel.PaymentMethod.push(methodId);
-            } else {
-              channel.PaymentMethod.splice(index, 1);
-            }
-          }
-          console.log(entity.Processing_channel)
-        });
-      });
+      if(this.newEntity[eID] && this.newEntity[eID].Processing_channel[pID]) {
+        const index = this.newEntity[eID].Processing_channel[pID].PaymentMethod.indexOf(methodId);
+        if (index === -1) {
+          this.newEntity[eID].Processing_channel[pID].PaymentMethod.push(methodId);
+        } else {
+          this.newEntity[eID].Processing_channel[pID].PaymentMethod.splice(index, 1);
+        }
+      }
+      console.log(this.newEntity);
     },
     async getClientId() {
       
       this.error = '';
+      this.errorType = '';
 
       if (!(this.status === 'OK')) {
+        this.errorType = 'WARNING';
+        this.color = 'bg-blue-500';
         this.error = 'Please use a valid token';
         return;
       }
 
       if (!this.ClientId?.length > 0 ) {
+        this.errorType = 'WARNING';
+        this.color = 'bg-blue-500';
         this.error = 'Please indicate a Client ID';
         return;
       }
@@ -523,12 +566,16 @@ export default {
 
             this.isLoading = false;
           } else {
+            this.errorType = 'WARNING';
+            this.color = 'bg-blue-500';
             this.error = `No merchant found in sandbox with this ${this.ClientId}`;
             this.isLoading = false;
           }
         })
         .catch((error) => {
           this.Entity = []
+          this.errorType = 'ERROR';
+          this.color = 'bg-red-500';
           this.error = error.message || 'Error occurred while fetching user info';
           this.isLoading = false;
         })
@@ -556,7 +603,7 @@ async function validatePayload(data) {
 
     // Check if "EntityName" is empty
     if (!entity.EntityName.trim()) {
-      errors.push(`Entity at index ${i} has an empty EntityName.`);
+      errors.push(`Entity n°${i} has an empty EntityName.`);
     }
 
     // Check each processing channel
@@ -566,12 +613,118 @@ async function validatePayload(data) {
 
       // Check if "ProcessingChannelName" is empty
       if (!processingChannel.ProcessingChannelName.trim()) {
-        errors.push(`Processing channel at index ${j} for entity at index ${i} has an empty ProcessingChannelName.`);
+        errors.push(`In the entity [${entity.EntityName}], the processing channel n°${j} has an empty ProcessingChannelName.`);
       }
     }
   }
 
   return errors;
+}
+
+
+// Function to check if all required conditions are met at the Entity level
+function checkEntity(entity) {
+  console.log(entity)
+    //const status = entity.status;
+    let finalResult = {};
+
+     entity.Processing_Channel.map((channel) => {
+
+        const currencyAccountSetup = channel.CurrencyAccountSetup?.CURRENCY_ACCOUNT;
+        const paymentRoutingRulesSetup = channel.PaymentRoutingRulesSetup?.PAYMENT_ROUTING_RULES;
+        const createRoutingPayoutRules = channel.CreateRoutingPayoutRules?.PAYOUT_ROUTING_RULES;
+        const payoutScheduleSetup = channel.PayoutScheduleSetup?.PAYOUT_SCHEDULE;
+
+        let nonConfiguredProcessingChannel = {};
+
+        if (currencyAccountSetup && !isSetupConfigured(currencyAccountSetup))
+          nonConfiguredProcessingChannel = {...nonConfiguredProcessingChannel, currencyAccount: currencyAccountSetup}
+
+        if (paymentRoutingRulesSetup && !isSetupConfigured(paymentRoutingRulesSetup))
+          nonConfiguredProcessingChannel = {...nonConfiguredProcessingChannel, paymentRoutingRules: paymentRoutingRulesSetup}
+
+        if (createRoutingPayoutRules && !isSetupConfigured(createRoutingPayoutRules))
+          nonConfiguredProcessingChannel = {...nonConfiguredProcessingChannel, createRoutingPayoutRules: createRoutingPayoutRules}
+
+        if (payoutScheduleSetup && !isSetupConfigured(payoutScheduleSetup))
+          nonConfiguredProcessingChannel = {...nonConfiguredProcessingChannel, payoutSchedule: payoutScheduleSetup}
+
+        //return nonConfiguredProcessingChannel;
+        let nonConfiguredPaymentMethods = {};
+        const paymentMethod = channel.Payment_Method;
+        console.log('channel Payment Method: ', paymentMethod)
+        
+
+        if (paymentMethod?.CARTES_BANCAIRESSetup && !isPaymentMethodConfigured(paymentMethod?.CARTES_BANCAIRESSetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  CARTES_BANCAIRES: '('+ channel.Processing_Channel_ID +') ' + paymentMethod.CARTES_BANCAIRESSetup?.Status + ' ' + paymentMethod.CARTES_BANCAIRESSetup?.Processing_profile}
+        }
+        if (paymentMethod[0]?.MASTERCARDSetup && !isPaymentMethodConfigured(paymentMethod[0]?.MASTERCARDSetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  MASTERCARD: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].MASTERCARDSetup?.Status + ' ' + paymentMethod[0].MASTERCARDSetup?.Processing_profile}
+        }
+        if (paymentMethod[0]?.VISASetup && !isPaymentMethodConfigured(paymentMethod[0]?.VISASetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  VISA: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].VISASetup?.Status + ' ' + paymentMethod[0].VISASetup?.Processing_profile}
+        }
+        if (paymentMethod[0]?.IDEALSetup &&  !isPaymentMethodConfigured(paymentMethod[0]?.IDEALSetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  IDEAL: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].IDEALSetup?.Status + ' ' + paymentMethod[0].IDEALSetup?.Processing_profile}
+        }
+        if (paymentMethod[0]?.BANCONTACTSetup && !isPaymentMethodConfigured(paymentMethod[0]?.BANCONTACTSetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  BANCONTACT: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].BANCONTACTSetup?.Status + ' ' + paymentMethod[0].BANCONTACTSetup?.Processing_profile}
+        }
+        if (paymentMethod[0]?.SEPASetup && !isPaymentMethodConfigured(paymentMethod[0]?.SEPASetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  SEPA: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].SEPASetup?.Status + ' ' + paymentMethod[0].SEPASetup?.Processing_profile}
+        }
+
+        if(!isObjectEmpty(nonConfiguredProcessingChannel)){
+          finalResult = {...finalResult, nonConfiguredProcessingChannel}
+        }
+
+        if(!isObjectEmpty(nonConfiguredPaymentMethods)) {
+          finalResult = {...finalResult, nonConfiguredPaymentMethods}
+        }
+  })
+
+  return finalResult;
+}
+
+// Function to check if CARTES_BANCAIRESSetup or MASTERCARDSetup is configured
+function isPaymentMethodConfigured(paymentMethod) {
+    return paymentMethod === 'CONFIGURED';
+}
+
+// Function to check if CurrencyAccountSetup, PaymentRoutingRulesSetup, CreateRoutingPayoutRules, and PayoutScheduleSetup are configured
+function isSetupConfigured(setup) {
+    return setup === 'CONFIGURED';
+}
+
+function isObjectEmpty (objectName) {
+  if (objectName === null || objectName === undefined)
+    return true;
+  else 
+  if (Object.keys(objectName).length === 0) 
+    return true;
+  else
+    return false;
+}
+
+function areAllObjectsEmpty(array) {
+  for (let obj of array) {
+    if (Object.keys(obj).length !== 0) {
+      return false; // If any object is not empty, return false
+    }
+  }
+  return true; // All objects are empty
+}
+
+function displayMessage(message) {
+  let result = [];
+  message.forEach(item => {
+    Object.entries(item.nonConfiguredPaymentMethods).forEach(([key, value]) => {
+        result.push(`${key}: ${value}`);
+    });
+});
+
+const concatenatedString = 'Operation partially Complete. All was good and created excepted for that : \n'   + result.join('\n');
+return concatenatedString;
 }
 
 </script>
