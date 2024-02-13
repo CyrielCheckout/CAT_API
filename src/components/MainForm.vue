@@ -115,11 +115,12 @@ import Modal from './Modal.vue';
                 <div class=" ml-10">
                   <p>Payment Method : </p>
                   <div class="paymentMethods ml-10">
-                    <div v-for="method in paymentMethods" :key="method.id">
+                    <div v-for="method in paymentMethods" :key="method.id" style="display:flex">
                       <input type="checkbox" :checked="isChecked(method.id, channel.ProcessingChannelID)"
                         :disabled="isDisabled(method.id, channel.ProcessingChannelID)"
                         @change="toggleCheckbox(method.id, eID, pID)" :value="method.id" />
-                      <label>{{ ' ' + method.name }}</label>
+                      <!-- <label>{{ ' ' + method.name }}</label> -->
+                      <img class="pl-2" style="margin:auto;" :src="getImagePath(method.img)" alt="" height=35 width=50 />
                     </div>
                   </div>
                 </div>
@@ -254,28 +255,34 @@ export default {
       legalEntityList: ['cko-ltd-uk', 'cko-sas'],
       paymentMethods: [
         {
-          id: 'CARTES_BANCAIRES',
-          name: "Cartes Bancaires",
+          id: 'VISA',
+          name: "Visa",
+          img: "visa.png"
         },
         {
           id: 'MASTERCARD',
           name: "Mastercard",
+          img: "mastercard.png"
         },
         {
-          id: 'VISA',
-          name: "Visa",
+          id: 'CARTES_BANCAIRES',
+          name: "Cartes Bancaires",
+          img: "cb.png"
         },
         {
           id: 'IDEAL',
           name: "Ideal",
+          img: "ideal.png"
         },
         {
           id: 'BANCONTACT',
           name: "Bancontact",
+          img: "bancontact.png"
         },
         {
           id: 'SEPA',
           name: "Sepa",
+          img: "sepa.jpg"
         },
       ],
     };
@@ -474,6 +481,9 @@ export default {
           });
         }
     },
+    getImagePath(img) {
+      return import.meta.env.BASE_URL + `src/assets/${img}`;
+    },
     isDisabled(methodId, channelID) {
       // Check if the data is available before trying to access it
       if (!this.InitalEntity || !this.InitalEntity.length) {
@@ -612,7 +622,7 @@ async function validatePayload(data) {
 
     // Check if "EntityName" is empty
     if (!entity.EntityName.trim()) {
-      errors.push(`Entity n°${i} has an empty EntityName.`);
+      errors.push(`Entity '${i}' has an empty EntityName.`);
     }
 
     // Check each processing channel
@@ -622,7 +632,7 @@ async function validatePayload(data) {
 
       // Check if "ProcessingChannelName" is empty
       if (!processingChannel.ProcessingChannelName.trim()) {
-        errors.push(`In the entity [${entity.EntityName}], the processing channel n°${j} has an empty ProcessingChannelName.`);
+        errors.push(`In the entity '${entity.EntityName}', the processing channel '${j}' has an empty ProcessingChannelName.`);
       }
     }
   }
