@@ -24,12 +24,15 @@
     "express": "^4.18.2",
     "http-errors": "~1.6.3",
     "jwt-decode": "^4.0.0",
+    "logform": "^2.6.0",
     "morgan": "^1.10.0",
     "postcss": "^8.4.32",
     "primevue": "^3.46.0",
     "tailwindcss": "^3.3.6",
     "vue": "^3.3.4",
-    "vue-loading-overlay": "^6.0.3"
+    "vue-loading-overlay": "^6.0.3",
+    "winston": "^3.11.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",

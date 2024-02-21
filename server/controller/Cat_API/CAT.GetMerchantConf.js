@@ -35,6 +35,7 @@ async function GetConf(body) {
       for (let entNumb = 0; entNumb < MerchantConfFinal.Entity.length; entNumb++) {
         try {
           MerchantConfFinal.Entity[entNumb].Processing_channel = []
+          MerchantConfFinal.Entity[entNumb].Currency_Account = []
           proccessingchannel_list = await CATProcessingChannel.GetAllProcessingChannels(body.Bearer, MerchantConfFinal.Entity[entNumb].EntityID);
           for (let PCNumb = 0; PCNumb < proccessingchannel_list.data._embedded.processing_channels.length; PCNumb++) {
             console.log({ "ProcessingChannelName": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "ProcessingChannelID": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id })
@@ -49,6 +50,17 @@ async function GetConf(body) {
             catch (err) {
               MerchantConfFinal.Entity[entNumb].Processing_channel[PCNumb].PaymentMethod.push(err);
             }
+          }
+          //Get Currency Account List
+          try {
+            CurrencyAccountList = await CATEntity.GetCurrencyAccountList(body.Bearer, MerchantConfFinal.Entity[entNumb].EntityID);
+            for (let NBCA = 0; NBCA < CurrencyAccountList.data._embedded.currency_accounts.length; NBCA++) {
+              MerchantConfFinal.Entity[entNumb].Currency_Account.push({"Name": CurrencyAccountList.data._embedded.currency_accounts[NBCA].name, "ID": CurrencyAccountList.data._embedded.currency_accounts[NBCA].id })
+            }
+          }
+          catch (err) {
+            console.log(err)
+            MerchantConfFinal.Entity[entNumb].Currency_Account = "Error while get the list of Currency Account"
           }
         }
         catch (err) {
