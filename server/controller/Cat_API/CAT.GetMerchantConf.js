@@ -21,6 +21,7 @@ async function GetConf(body) {
           logger.log( 'info','GetMerchantConf for '+body.ClientId+', Result = '+{ "EntityName": GetAllEntity.body._embedded.entities[i].name, "EntityID": GetAllEntity.body._embedded.entities[i].id, "status": GetAllEntity.body._embedded.entities[i].status } ,"CAT_API");
           MerchantConfFinal.Entity.push({ "EntityName": GetAllEntity.body._embedded.entities[i].name, "EntityID": GetAllEntity.body._embedded.entities[i].id, "status": GetAllEntity.body._embedded.entities[i].status });
         }
+        logger.log( 'info','GetMerchantConf for '+body.ClientId+', Skip Value :'+skip,"CAT_API");
         skip = skip + 25;
       }
     }
@@ -41,7 +42,7 @@ async function GetConf(body) {
           MerchantConfFinal.Entity[entNumb].Currency_Account = []
           proccessingchannel_list = await CATProcessingChannel.GetAllProcessingChannels(body.Bearer, MerchantConfFinal.Entity[entNumb].EntityID);
           for (let PCNumb = 0; PCNumb < proccessingchannel_list.data._embedded.processing_channels.length; PCNumb++) {
-            console.log({ "ProcessingChannelName": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "ProcessingChannelID": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id })
+            logger.log (`info`,`GetMerchantConf for ${body.ClientId}, Entity :${ MerchantConfFinal.Entity[entNumb].EntityName} (${MerchantConfFinal.Entity[entNumb].EntityID}), processing channel : ${proccessingchannel_list.data._embedded.processing_channels[PCNumb].name} (${proccessingchannel_list.data._embedded.processing_channels[PCNumb].id}) ` ,`CAT_API`);
             MerchantConfFinal.Entity[entNumb].Processing_channel.push({ "ProcessingChannelName": proccessingchannel_list.data._embedded.processing_channels[PCNumb].name, "ProcessingChannelID": proccessingchannel_list.data._embedded.processing_channels[PCNumb].id, "business_model": proccessingchannel_list.data._embedded.processing_channels[PCNumb].business_model });
             MerchantConfFinal.Entity[entNumb].Processing_channel[PCNumb].PaymentMethod = [];
             try {
@@ -80,9 +81,9 @@ async function GetConf(body) {
       };
     }
     else {
-      logger.log( 'info','GetMerchantConf for '+body.ClientId+', Count mismatch ERROR' ,"CAT_API");
-      logger.log( 'info','GetMerchantConf for '+body.ClientId+', Result count ='+ MerchantConfFinal.Entity.length ,"CAT_API");
-      logger.log( 'info','GetMerchantConf for '+body.ClientId+', Initial count ='+ GetAllEntity.body.total_count ,"CAT_API");
+      logger.log (`info`,`GetMerchantConf for ${body.ClientId}, Count mismatch ERROR` ,`CAT_API`);
+      logger.log( 'info',`GetMerchantConf for ${body.ClientId}, Result count = ${MerchantConfFinal.Entity.length}` ,"CAT_API");
+      logger.log( 'info',`GetMerchantConf for ${body.ClientId}, Initial count =${GetAllEntity.body.total_count}`,"CAT_API");
     }
     MerchantConfFinal['status'] = 200;
     MerchantConfFinal['result'] = "merchant found";
