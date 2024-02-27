@@ -1371,9 +1371,71 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, Pr
     throw ErrorHandling.ErrorHandling(err);
   }
 }
+async function Get_Gateway_Processor_Details(bearer, ProcessingChannelId,ProcessorID) {
+  try {
+    Get_Gateway_Processor_Details_func = await axios({
+      method: 'get',
+      url: baseURL + 'api/processing-channels/'+ProcessingChannelId+'/processors/'+ProcessorID,
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      }
+    })
+      .then(function (response) {
+        return response
+      });
 
+    return Get_Gateway_Processor_Details_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
+}
+async function Update_Gateway_Processor(bearer, ProcessingChannelId,ProcessorID, Payload) {
+  try {
+    Update_Gateway_Processor_func = await axios({
+      method: 'put',
+      url: baseURL + 'api/processing-channels/'+ProcessingChannelId+'/processors/'+ProcessorID,
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data : Payload
+    })
+      .then(function (response) {
+        return response
+      });
+
+    return Update_Gateway_Processor_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
+}
 module.exports = {
   GetAllProcessingChannels,
+  Get_Gateway_Processor_Details,
+  Update_Gateway_Processor,
   GetProcessingChannelConf,
   CreateProcessingChannel,
   Create_Processing_profile_Bancontact,

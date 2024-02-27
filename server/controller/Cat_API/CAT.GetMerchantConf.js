@@ -4,6 +4,7 @@ const waitfor = require('../IdempotencyKey');
 
 async function GetConf(body) {
   MerchantConfFinal = { "Entity": [] };
+  //MerchantConfFinal.processorlist = []
   try {
     GetAllEntity = await CATEntity.GetAllEntity(body.Bearer, body.ClientId, 25);
     console.log("NB entity :", GetAllEntity.body.total_count);
@@ -45,6 +46,13 @@ async function GetConf(body) {
               ProcessingChannelConf = await CATProcessingChannel.GetProcessingChannelConf(body.Bearer, proccessingchannel_list.data._embedded.processing_channels[PCNumb].id);
               for (let ProcessorNumb = 0; ProcessorNumb < ProcessingChannelConf.data.processors.length; ProcessorNumb++) {
                 MerchantConfFinal.Entity[entNumb].Processing_channel[PCNumb].PaymentMethod.push(ProcessingChannelConf.data.processors[ProcessorNumb].scheme);
+                //Force activation of dynamic billing descriptor
+                /*ProcessorGatewayConf = await CATProcessingChannel.Get_Gateway_Processor_Details(body.Bearer, proccessingchannel_list.data._embedded.processing_channels[PCNumb].id,ProcessingChannelConf.data.processors[ProcessorNumb].id);
+                if(ProcessorGatewayConf.data.billing_information.has_dynamic_descriptor === false){
+                  MerchantConfFinal.processorlist.push(ProcessingChannelConf.data.processors[ProcessorNumb].id);
+                  ProcessorGatewayConf.data.billing_information.has_dynamic_descriptor = true;
+                  await CATProcessingChannel.Update_Gateway_Processor(body.Bearer, proccessingchannel_list.data._embedded.processing_channels[PCNumb].id,ProcessingChannelConf.data.processors[ProcessorNumb].id,ProcessorGatewayConf.data);
+                }*/
               }
             }
             catch (err) {
