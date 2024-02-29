@@ -23,6 +23,8 @@ Supported Payment methods :
 - Bancontact
 - Ideal
 - SEPA
+- Giropay
+- Amex
 
 # Install
 - Download the Github repo
