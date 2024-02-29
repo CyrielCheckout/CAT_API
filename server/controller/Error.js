@@ -1,13 +1,14 @@
-const logger = require('../Utils/logger').logger;
+const loggerInfo = require('../Utils/logger').loggerInfo;
+const loggerError = require('../Utils/logger').loggerError;
 function ErrorHandling(err) {
-    logger.error( err, 'CAT_API');
+    loggerError.error( err, 'CAT_API');
     if (err?.response) {
         if (err.response.status === 401) {
-            logger.error( 'HTTP code : '+err.response.status+' Bearer invalid or expired', 'CAT_API');
+            loggerError.error({"HTTP_Status_Code": err.response.status, "Message" : "Bearer invalid or expired"});
             return { "status": err.response.status, "Error_Message": "Bearer invalid or expired" }
         }
         else {
-            logger.error( 'HTTP code : '+err.response.status+' '+err.response.data, 'CAT_API');
+            loggerError.error( 'HTTP code : '+err.response.status+' '+JSON.stringify(err.response.data), 'CAT_API');
             return { "status": err.response.status, "Error_Message": err.response.data }
         }
     }

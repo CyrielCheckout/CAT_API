@@ -39,12 +39,24 @@ async function ConfPaymentMethod(PaymentMethodToConf, Bearer, EntityID, Processi
         PaymentMethodConf.CARTES_BANCAIRESSetup = CARTES_BANCAIRESCONF;
 
     }
+     //Configure AMEX
+     if (PaymentMethodToConf.includes('AMEX')) {
+        console.log("Create AMEX")
+        AMEXCONF = await CatConfigInt.CreateAmexPaymentMethod(Bearer, EntityID, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE);
+        PaymentMethodConf.AMEXSetup = AMEXCONF;
+    }
 
     //Configure SEPA
     if (PaymentMethodToConf.includes('SEPA')) {
         console.log("Create SEPA")
         SEPACONF = await CatConfigInt.CreateSepaPaymentMethod(Bearer, EntityID, ProcessingChannelID, ProcessingChannelName);
         PaymentMethodConf.SEPASetup = SEPACONF;
+    }
+    //Configure GIROPAY
+    if (PaymentMethodToConf.includes('GIROPAY')) {
+        console.log("Create GIROPAY")
+        GIROPAYCONF = await CatConfigInt.CreateGiroPayPaymentMethod(Bearer, EntityID, ProcessingChannelID, ProcessingChannelName,CKOTEMPLATE);
+        PaymentMethodConf.GIROPAYSetup = GIROPAYCONF;
     }
     return PaymentMethodConf
 }

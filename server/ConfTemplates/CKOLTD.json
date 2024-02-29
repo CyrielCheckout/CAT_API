@@ -9,5 +9,7 @@
     "country_code_iso2": "GB",
     "region_code": "GB",
     "phone": "4155552671",
-    "currency": "GBP"
+    "currency": "GBP",
+    "GiropayAcquirerKey":"giropay_apm_gb",
+    "Amex_acquirer_key" : "cko_amex_fr"
 }

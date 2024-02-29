@@ -5,6 +5,8 @@ const CatConfigInt = require('../Cat_API/CAT.ConfigInt');
 const CatPaymentMethodConfig = require('../Cat_API/CAT.PaymentMethodCONF');
 const CKOSASTEMPLATE = require('../../ConfTemplates/CKOSAS.json');
 const CKOLTDTEMPLATE = require('../../ConfTemplates/CKOLTD.json');
+const loggerInfo = require('../../Utils/logger').loggerInfo;
+const loggerError = require('../../Utils/logger').loggerError;
 
 async function Createconf(body) {
     console.log("Number of entity requested :", body.Entity.length)
@@ -16,6 +18,7 @@ async function Createconf(body) {
             if (body?.Entity[i]?.EntityID?.length > 0) {
                 //if yes, then entity already exist! 
                 console.log("Entity already created:", body.Entity[i].EntityID);
+                loggerInfo.log( 'MerchantConf',`Entity already created: ${body.Entity[i].EntityID}` ,"CAT_API");
                 try {
                     EntityResult = await CATEntity.GetEntityData(body.Bearer, body.Entity[i].EntityID);
                     console.log("CKO legal entity: ", EntityResult.data.cko_legal_entity);

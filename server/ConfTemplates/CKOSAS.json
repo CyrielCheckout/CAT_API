@@ -9,5 +9,7 @@
     "country_code_iso2": "FR",
     "region_code": "Paris",
     "phone": "0606060606",
-    "currency": "EUR"
+    "currency": "EUR",
+    "GiropayAcquirerKey" :"giropay_apm_fr",
+    "Amex_acquirer_key" : "cko_amex_fr"
 }

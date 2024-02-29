@@ -986,7 +986,7 @@ async function Create_Currency_Account(bearer, EntityId, ProcessingChannelName, 
     throw ErrorHandling.ErrorHandling(err);
   }
 }
-async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelId, CurrencyAccountID) {
+async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelId, CurrencyAccountID, DefaultRule) {
   try {
     Create_Routing_Rules_Payment_func = await axios({
       method: 'post',
@@ -1010,7 +1010,7 @@ async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelI
         "revenue_currency_account_id": CurrencyAccountID,
         "fees_currency_account_id": CurrencyAccountID,
         "processing_channel_id": ProcessingChannelId,
-        "allow_any_processing_channel": false,
+        "allow_any_processing_channel": DefaultRule,
         "merchant_category_codes": [],
         "allow_any_merchant_category_code": true,
         "processing_currencies": [],
@@ -1331,8 +1331,6 @@ async function Create_Session_processor_Mastercard(bearer, AvailableProcessingCh
 }
 async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, PrCb) {
   try {
-    console.log("PP receveid:", PPCb)
-    console.log("PR receveid:", PrCb)
     Create_Session_processor_CB_func = await axios({
       method: 'post',
       url: baseURL + 'api/session-processing-channels/' + ProcessingChannelId + '/session-profile-processors',
@@ -1371,11 +1369,11 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, Pr
     throw ErrorHandling.ErrorHandling(err);
   }
 }
-async function Get_Gateway_Processor_Details(bearer, ProcessingChannelId,ProcessorID) {
+async function Get_Gateway_Processor_Details(bearer, ProcessingChannelId, ProcessorID) {
   try {
     Get_Gateway_Processor_Details_func = await axios({
       method: 'get',
-      url: baseURL + 'api/processing-channels/'+ProcessingChannelId+'/processors/'+ProcessorID,
+      url: baseURL + 'api/processing-channels/' + ProcessingChannelId + '/processors/' + ProcessorID,
       headers: {
         'Authorization': bearer,
         'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
@@ -1401,11 +1399,11 @@ async function Get_Gateway_Processor_Details(bearer, ProcessingChannelId,Process
     throw ErrorHandling.ErrorHandling(err);
   }
 }
-async function Update_Gateway_Processor(bearer, ProcessingChannelId,ProcessorID, Payload) {
+async function Update_Gateway_Processor(bearer, ProcessingChannelId, ProcessorID, Payload) {
   try {
     Update_Gateway_Processor_func = await axios({
       method: 'put',
-      url: baseURL + 'api/processing-channels/'+ProcessingChannelId+'/processors/'+ProcessorID,
+      url: baseURL + 'api/processing-channels/' + ProcessingChannelId + '/processors/' + ProcessorID,
       headers: {
         'Authorization': bearer,
         'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
@@ -1420,7 +1418,7 @@ async function Update_Gateway_Processor(bearer, ProcessingChannelId,ProcessorID,
         "Sec-Fetch-Dest": "empty",
         "host": 'client-admin.cko-sbox.ckotech.co'
       },
-      data : Payload
+      data: Payload
     })
       .then(function (response) {
         return response
@@ -1432,8 +1430,370 @@ async function Update_Gateway_Processor(bearer, ProcessingChannelId,ProcessorID,
     throw ErrorHandling.ErrorHandling(err);
   }
 }
+async function Create_Processing_profile_Giropay(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
+  try {
+    Create_Processing_profile_Giropay_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/entities/' + EntityId + '/processing-profiles/v2',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "processor_key": "cko-apm",
+        "acquirer_key": CKOTEMPLATE.GiropayAcquirerKey,
+        "processing_type": "payin",
+        "processing_profile_name": ProcessingChannelName + "_Giropay",
+        "schemes": [
+          "giropay"
+        ],
+        "currencies": [
+          CKOTEMPLATE.currency
+        ],
+        "status": "Active",
+        "custom_settings": {
+          "giropay_merchant_id": "3619714",
+          "girosolution_merchant_id": "3619714",
+          "girosolution_project_id": "84483",
+          "girosolution_project_passphrase": "V3aye4SFHgm4",
+          "cts_bank": "ING",
+          "provider": "S-Public"
+        }
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+
+    return Create_Processing_profile_Giropay_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
+}
+async function Create_processing_processor_Giropay(bearer, ProcessingChannelId, ProcessingProfileId, CKOTEMPLATE) {
+  try {
+    Create_processing_processor_Giropay_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/processing-channels/' + ProcessingChannelId + '/processors',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "profile_id": ProcessingProfileId,
+        "processor_key": "cko-apm",
+        "name": "Giropay",
+        "acquirer_id": "giropay_apm_fr",
+        "scheme": "giropay",
+        "currencies": [
+          CKOTEMPLATE.currency
+        ],
+        "merchant_category_code": "",
+        "card_acceptor_identification_code": "",
+        "has_dynamic_descriptor": false,
+        "dynamic_descriptor_prefix": "",
+        "mode": "complete_processing"
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+
+    return Create_processing_processor_Giropay_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
+}
+async function Create_Processing_profile_Amex(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
+  try {
+    Create_Processing_profile_Amex_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/entities/' + EntityId + '/processing-profiles/v2',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "processor_key": "cko-amex",
+        "acquirer_key": CKOTEMPLATE.Amex_acquirer_key,
+        "processing_type": "payin",
+        "processing_profile_name": ProcessingChannelName+"_AMEX",
+        "acquiring_bin": "10000000232",
+        "schemes": [
+          "amex"
+        ],
+        "is_gateway_only": false,
+        "currencies": [
+          "AED",
+          "AUD",
+          "BGN",
+          "CAD",
+          "CHF",
+          "CLP",
+          "CNY",
+          "COP",
+          "CRC",
+          "DKK",
+          "EUR",
+          "EGP",
+          "GBP",
+          "GEL",
+          "HKD",
+          "KES",
+          "CZK",
+          "HUF",
+          "IDR",
+          "ILS",
+          "ISK",
+          "JOD",
+          "BHD",
+          "JPY",
+          "KRW",
+          "KWD",
+          "MAD",
+          "MXN",
+          "MYR",
+          "NOK",
+          "NZD",
+          "OMR",
+          "PEN",
+          "PHP",
+          "PLN",
+          "QAR",
+          "RON",
+          "SAR",
+          "SEK",
+          "SGD",
+          "THB",
+          "TWD",
+          "USD",
+          "VND",
+          "ZAR",
+          "TRY",
+          "INR",
+          "UAH"
+        ],
+        "business_model": "MoR",
+        "program_feature": "None",
+        "auto_generate_card_acceptor_identification_code": true,
+        "business_settings": [
+          {
+            "card_acceptor_identification_code": "",
+            "merchant_category_code": "0742",
+            "force_caid_generation": false
+          }
+        ],
+        "aggregator_name": "",
+        "card_acceptor_trade_name": ProcessingChannelName+"_AMEX",
+        "card_acceptor_legal_name": ProcessingChannelName+"_AMEX",
+        "card_acceptor_street": CKOTEMPLATE.address_line_1,
+        "card_acceptor_city": CKOTEMPLATE.city,
+        "card_acceptor_postal_code": CKOTEMPLATE.postal_code,
+        "card_acceptor_country_code": CKOTEMPLATE.country_code_iso3,
+        "card_acceptor_region_code": "75C",
+        "card_acceptor_url": "https://google.fr",
+        "card_acceptor_email": "checkout@checkout.com",
+        "card_acceptor_phone": CKOTEMPLATE.phone,
+        "status": "Active",
+        "custom_settings": {
+          "is_highrisk": false,
+          "allow_merchant_reference": false,
+          "SE_CCY": [
+            {
+              "currency": "EUR",
+              "service_establishment_number": "9493981617",
+              "processing_threshold": "0"
+            }
+          ],
+          "authorization_validity_period": "7"
+        },
+        "is_dynamic_acceptor": false
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+
+    return Create_Processing_profile_Amex_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
+}
+async function Create_processing_processor_Amex(bearer, ProcessingChannelId,ProcessingChannelName, ProcessingProfileId, CKOTEMPLATE) {
+  try {
+    Create_processing_processor_Amex_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/processing-channels/' + ProcessingChannelId + '/processors',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "profile_id": ProcessingProfileId,
+        "processor_key": "cko-amex",
+        "name": ProcessingChannelName+"_AMEX",
+        "acquirer_id": CKOTEMPLATE.Amex_acquirer_key,
+        "scheme": "amex",
+        "currencies": [
+            "EUR",
+            "USD",
+            "AUD",
+            "BHD",
+            "INR",
+            "NOK",
+            "BGN",
+            "CAD",
+            "CNY",
+            "COP",
+            "NZD",
+            "CRC",
+            "CZK",
+            "DKK",
+            "EGP",
+            "GEL",
+            "GBP",
+            "HKD",
+            "HUF",
+            "IDR",
+            "ILS",
+            "JOD",
+            "KES",
+            "KWD",
+            "ZAR",
+            "CHF",
+            "MYR",
+            "MXN",
+            "MAD",
+            "OMR",
+            "PEN",
+            "PHP",
+            "PLN",
+            "QAR",
+            "RON",
+            "SAR",
+            "SGD",
+            "SEK",
+            "TWD",
+            "THB",
+            "TRY",
+            "UAH",
+            "AED",
+            "CLP",
+            "VND",
+            "ISK",
+            "KRW",
+            "JPY"
+        ],
+        "merchant_category_code": "0742",
+        "card_acceptor_identification_code": "548465",
+        "acceptor_name": ProcessingChannelId+"_AMEX",
+        "acceptor_city": CKOTEMPLATE.city,
+        "acceptor_country_iso3_code": CKOTEMPLATE.country_code_iso3,
+        "has_dynamic_descriptor": false,
+        "dynamic_descriptor_prefix": "",
+        "mode": "complete_processing"
+    }
+    })
+      .then(function (response) {
+        return response
+      });
+
+    return Create_processing_processor_Amex_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
+}
+async function Create_Session_processor_Amex(bearer, ProcessingChannelId, ProcessingProfileId, ProccessingProcessorProfileId) {
+  try {
+    Create_Session_processor_Amex_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/session-processing-channels/' + ProcessingChannelId + '/session-profile-processors',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "createType": "existing",
+        "gateway_profile_processor_id": ProccessingProcessorProfileId,
+        "processing_profile_id": ProcessingProfileId,
+        "scheme": "AMEX",
+        "merchant_category_code": "0742",
+        "versions": [
+            "2"
+        ]
+    }
+    })
+      .then(function (response) {
+        return response
+      });
+
+    return Create_Session_processor_Amex_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err);
+  }
+}
 module.exports = {
   GetAllProcessingChannels,
+  Create_Session_processor_Amex,
+  Create_processing_processor_Giropay,
+  Create_processing_processor_Amex,
+  Create_Processing_profile_Amex,
+  Create_Processing_profile_Giropay,
   Get_Gateway_Processor_Details,
   Update_Gateway_Processor,
   GetProcessingChannelConf,
