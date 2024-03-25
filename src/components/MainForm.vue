@@ -6,10 +6,12 @@ import AppAccordion from "./AppAccordion.vue";
 import { jwtDecode } from "jwt-decode";
 import { format } from 'date-fns';
 import Modal from './Modal.vue';
+import authService from './authService';
 
 </script>
 
 <template>
+  <button @click="generateToken">Login</button>
   <div class="mt-3">
     <div class="font-semibold text-xl">Prerequisite</div>
     <p>Before starting, please make sure : </p>
@@ -242,7 +244,7 @@ export default {
       username: "",
       expiryTime: "",
       status: "",
-      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULmpGaXYtbHpWOEtpc1ZxMnlSSWZTM21SajlkcmxtV2dOUTBaZFRUUmtPblEiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzA3Mzg4ODIwLCJleHAiOjE3MDczOTI0MjAsImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsib3BlbmlkIiwiY2xpZW50YWRtaW4tdG9vbCIsInByb2ZpbGUiXSwiYXV0aF90aW1lIjoxNzA3Mzg4ODE3LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.dWekjJcQ8uk420Q3j6Ih3nZZJFDdc4XH5zSpyMrI1WjTq5FtfYslC-SKWxns7UuF9j9d2ERX7G81uqLlKlSONkV0QRZkIPxdF3Bgq_kJP1dEt_ma5rA6SbDoBU67WiqhRjv0OQ47BSbp12sOhJKWN-pbToAt9D_46RsFUoJba6gvnF4h8pJfarBicC9QyHo9FbpC87GAQNJoMjIrzeDKL9xMU7lGJ4DHoIwOIMT0TbFvPRzbFqUnh-NcpMslZ620xBY3yuaordpDFzXfczdQ2tbh96ZxxfehD9lMf2ZVb2gCYOahzHCBOjaRn-4VE3IFsrTB1-v06keoCUarpoxJ0A",
+      Bearer: "eyJraWQiOiJtTlpYdXhvUjVpTWN2OGVFdm1kUnlnd3JHSjIxVlJPb1BFUjhiREdidG4wIiwiYWxnIjoiUlMyNTYifQ.eyJ2ZXIiOjEsImp0aSI6IkFULkhqZXFqN0JRMUNESWJDRUtURFNwZ3VWb19ia1pwa1NIQXdCMlQ1MC0yN2MiLCJpc3MiOiJodHRwczovL2NoZWNrb3V0Lm9rdGFwcmV2aWV3LmNvbS9vYXV0aDIvYXVzc2t1ajN4YUNCN0ZUMmcwaDciLCJhdWQiOiJhcGk6Ly9kZWZhdWx0IiwiaWF0IjoxNzExMDk1MTg5LCJleHAiOjE3MTEwOTg3ODksImNpZCI6IjBvYXNrdHowMG5vTjVjQTV4MGg3IiwidWlkIjoiMDB1MWNmbHRvcHZ0c21xUDEwaDgiLCJzY3AiOlsiY2xpZW50YWRtaW4tdG9vbCIsIm9wZW5pZCIsInByb2ZpbGUiXSwiYXV0aF90aW1lIjoxNzExMDk0Nzg3LCJzdWIiOiJmcmFuY29pcy5mYWxjb25ldEBjaGVja291dC5jb20iLCJmdWxsX25hbWUiOiJGcmFuw6dvaXMgRmFsY29uZXQiLCJjYXQtZ3JvdXBzIjpbIkFwcC5BdGxhcy5DQVQuU2FuZGJveC5TdXBwb3J0Il19.GGrq8u4qaSXCTPi8g3URc4UftTNWyZmbWL6zHK1FZofx6b_AKa9TsGl3_U3N3wObGUmsIc0xYSDMnVageGyRYnP_Vh81vt56HKvqeab93dwFvaBP_SjWLFW5igC1elkh8YC-_zR5ehLaA80uqDUIFnnjo5HGCpl-8xy6V3FSPO7GwH9b-X4ooL5u1010_3WQ5vYSf6HZcABglv0-5N6WuBR8uWSULSoE2KHtCpLMFCf37JVYmEQlAvyPg0nNUEYYhbs6Cmvfhdd0_9s8cRHfPJaDN-hFUnmaQxOUxste_Tpl1Lpy-B0ziT1fwM1uBE7OPm4qXn4Dhf9AWRyrZZzFiQ",
       ClientId: "cli_lggnvyogtibehexpagb2ydx6k4",
       delay: "1000",
       Entity: [],
@@ -265,6 +267,11 @@ export default {
           img: "mastercard.png"
         },
         {
+          id: 'AMEX',
+          name: "Amex",
+          img: "amex.png"
+        },
+        {
           id: 'CARTES_BANCAIRES',
           name: "Cartes Bancaires",
           img: "cb.png"
@@ -284,11 +291,19 @@ export default {
           name: "Sepa",
           img: "sepa.jpg"
         },
+        {
+          id: 'GIROPAY',
+          name: "Giropay",
+          img: "giropay.png"
+        }
       ],
     };
   },
   mounted() {
-    this.decryptBearerToken()
+    //this.decryptBearerToken()
+    console.log('before authService.getAccessToken()')
+    this.Bearer = authService.getAccessToken();
+    console.log('After :  ', this.Bearer)
   },
   components: {
     Modal,
@@ -601,7 +616,15 @@ export default {
         .finally(() => {
           this.isLoading = false;
         });
-    }
+    },
+    async generateToken() {
+      try {
+        const token = authService.startOAuth();
+        console.log('Bearer Token:', token);
+      } catch (error) {
+        console.error('Login failed:', error);
+      }
+    },
   },
 };
 
@@ -683,6 +706,9 @@ function checkEntity(entity) {
         if (paymentMethod[0]?.VISASetup && !isPaymentMethodConfigured(paymentMethod[0]?.VISASetup?.Status)) {
           nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  VISA: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].VISASetup?.Status + ' ' + paymentMethod[0].VISASetup?.Processing_profile}
         }
+        if (paymentMethod[0]?.AMEXSetup && !isPaymentMethodConfigured(paymentMethod[0]?.AMEXSetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  AMEX: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].AMEXSetup?.Status + ' ' + paymentMethod[0].AMEXSetup?.Processing_profile}
+        }
         if (paymentMethod[0]?.IDEALSetup &&  !isPaymentMethodConfigured(paymentMethod[0]?.IDEALSetup?.Status)) {
           nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  IDEAL: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].IDEALSetup?.Status + ' ' + paymentMethod[0].IDEALSetup?.Processing_profile}
         }
@@ -691,6 +717,9 @@ function checkEntity(entity) {
         }
         if (paymentMethod[0]?.SEPASetup && !isPaymentMethodConfigured(paymentMethod[0]?.SEPASetup?.Status)) {
           nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  SEPA: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].SEPASetup?.Status + ' ' + paymentMethod[0].SEPASetup?.Processing_profile}
+        }
+        if (paymentMethod[0]?.GIROPAYSetup && !isPaymentMethodConfigured(paymentMethod[0]?.GIROPAYSetup?.Status)) {
+          nonConfiguredPaymentMethods = {...nonConfiguredPaymentMethods,  GIROPAY: '('+ channel.Processing_Channel_ID +') ' + paymentMethod[0].GIROPAYSetup?.Status + ' ' + paymentMethod[0].GIROPAYSetup?.Processing_profile}
         }
 
         if(!isObjectEmpty(nonConfiguredProcessingChannel)){
