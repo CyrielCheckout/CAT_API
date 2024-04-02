@@ -3,22 +3,28 @@ const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
 const waitfor = require('../IdempotencyKey');
 const loggerInfo = require('../../Utils/logger').loggerInfo;
 const loggerError = require('../../Utils/logger').loggerError;
-async function CreateVisaPaymentMethod(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE) {
+async function CreateVisaPaymentMethodOld(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE) {
     try {
-        //Create Manual processor
-        loggerInfo.log('info', `Create Visa Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
-        CreateProcessingProfile = await CATProcessingChannel.Create_Manual_processor_Visa(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE)
-        PPVisa = CreateProcessingProfile.data.id
         try {
-            //Create Session processor Profile
-            loggerInfo.log(`info`, `Create Session Visa Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
-            CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_Visa(Bearer, ProcessingChannelID, ProcessingChannelName, PPVisa, CKOTEMPLATE);
-            return { "Status": "CONFIGURED", "Processing_profile": PPVisa, "Session_Processor": CreateSessionProcessor.data.id };
+            //Create Manual processor
+            loggerInfo.log('info', `Create Visa Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+            CreateProcessingProfile = await CATProcessingChannel.Create_Manual_processor_Visa(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE)
+            PPVisa = CreateProcessingProfile.data.id
+            try {
+                //Create Session processor Profile
+                loggerInfo.log(`info`, `Create Session Visa Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+                CreateSessionProcessor = await CATProcessingChannel.Create_Session_processor_Visa(Bearer, ProcessingChannelID, ProcessingChannelName, PPVisa, CKOTEMPLATE);
+                return { "Status": "CONFIGURED", "Processing_profile": PPVisa, "Session_Processor": CreateSessionProcessor.data.id };
+            }
+            catch (err) {
+                logger.console.error(`Error while creating Session processor : ${err}`, `CAT_API`);
+                //console.log("Error while creating Session processor :", err)
+                return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPVisa, "Session_Processor": err }
+            }
         }
         catch (err) {
-            logger.console.error(`Error while creating Session processor : ${err}`, `CAT_API`);
-            //console.log("Error while creating Session processor :", err)
-            return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPVisa, "Session_Processor": err }
+            console.log("Error while creating Processing Profile :", err)
+            return { "Status": "NOT CONFIGURED", "Processing_profile": err };
         }
     }
     catch (err) {
@@ -26,7 +32,41 @@ async function CreateVisaPaymentMethod(Bearer, ProcessingChannelID, ProcessingCh
         return { "Status": "NOT CONFIGURED", "Processing_profile": err };
     }
 }
-async function CreateMastercardPaymentMethod(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE) {
+async function CreateVisaPaymentMethod(Bearer, EntityId, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE) {
+    try {
+        //Create Processing Profile 
+        loggerInfo.log('info', `Create Visa Processing Profile for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+        CreateProcessingProfile = await CATProcessingChannel.Create_Processing_profile_Visa(Bearer, EntityId, ProcessingChannelName, CKOTEMPLATE)
+        PPVisa = CreateProcessingProfile.data.id
+        try {
+            //Create Gateway Processor Profile
+            loggerInfo.log(`info`, `Create Visa Gateway Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+            CreateGatewayProcessor = await CATProcessingChannel.Create_GatewayProcessor_Visa(Bearer, ProcessingChannelID, ProcessingChannelName, PPVisa, CKOTEMPLATE);
+            GPPVisa = CreateGatewayProcessor.data.id;
+            try {
+                //Create Session Processor Profile
+                loggerInfo.log(`info`, `Create Visa Gateway Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+                CreateSessionProcessor = await CATProcessingChannel.Create_AuthenticationProcessor_Visa(Bearer, ProcessingChannelID, ProcessingChannelName, PPVisa, GPPVisa, CKOTEMPLATE);
+                return { "Status": "CONFIGURED", "Processing_profile": PPVisa, "Gateway_Processor": CreateGatewayProcessor.data.id, "Session_Processor": CreateSessionProcessor.data.id };
+            }
+            catch (err) {
+                loggerInfo.error(`Error while creating Session processor : ${err}`, `CAT_API`);
+                //console.log("Error while creating Session processor :", err)
+                return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPVisa, "Gateway_Processor": err }
+            }
+        }
+        catch (err) {
+            loggerInfo.error(`Error while creating Gateway processor : ${err}`, `CAT_API`);
+            //console.log("Error while creating Session processor :", err)
+            return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPVisa, "Gateway_Processor": err }
+        }
+    }
+    catch (err) {
+        console.log("Error while creating Processing Profile :", err)
+        return { "Status": "NOT CONFIGURED", "Processing_profile": err };
+    }
+}
+async function CreateMastercardPaymentMethodOld(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE) {
     try {
         loggerInfo.log(`info`, `Create Mastercard Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
         CreateProcessingProfile = await CATProcessingChannel.Create_Manual_processor_Mastercard(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE)
@@ -47,6 +87,41 @@ async function CreateMastercardPaymentMethod(Bearer, ProcessingChannelID, Proces
         return { "Status": "NOT CONFIGURED", "Processing_profile": err }
     }
 
+}
+async function CreateMastercardPaymentMethod(Bearer, EntityId, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE) {
+    try {
+        //Create Processing Profile 
+        loggerInfo.log('info', `Create Mastercard Processing Profile for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+        CreateProcessingProfile = await CATProcessingChannel.Create_Processing_profile_MC(Bearer, EntityId, ProcessingChannelName, CKOTEMPLATE)
+        PPMastercard = CreateProcessingProfile.data.id
+        try {
+            //Create Gateway Processor Profile
+            loggerInfo.log(`info`, `Create Mastercard Gateway Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+            CreateGatewayProcessor = await CATProcessingChannel.Create_GatewayProcessor_MC(Bearer, ProcessingChannelID, ProcessingChannelName, PPMastercard, CKOTEMPLATE);
+            GPPMastercard = CreateGatewayProcessor.data.id;
+            Console.log(CreateGatewayProcessor.data)
+            try {
+                //Create Session Processor Profile
+                loggerInfo.log(`info`, `Create Mastercard Session Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
+                CreateSessionProcessor = await CATProcessingChannel.Create_AuthenticationProcessor_MC(Bearer, ProcessingChannelID, ProcessingChannelName, PPMastercard, GPPMastercard, CKOTEMPLATE);
+                return { "Status": "CONFIGURED", "Processing_profile": PPMastercard, "Gateway_Processor": CreateGatewayProcessor.data.id, "Session_Processor": CreateSessionProcessor.data.id };
+            }
+            catch (err) {
+                loggerInfo.error(`Error while creating Session processor : ${err}`, `CAT_API`);
+                //console.log("Error while creating Session processor :", err)
+                return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPMastercard, "Gateway_Processor": err }
+            }
+        }
+        catch (err) {
+            loggerInfo.error(`Error while creating Gateway processor : ${err}`, `CAT_API`);
+            //console.log("Error while creating Session processor :", err)
+            return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPMastercard, "Gateway_Processor": err }
+        }
+    }
+    catch (err) {
+        console.log("Error while creating Processing Profile :", err)
+        return { "Status": "NOT CONFIGURED", "Processing_profile": err };
+    }
 }
 async function CreateBancontactPaymentMethod(Bearer, EntityID, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE) {
     try {
@@ -166,7 +241,7 @@ async function CreateAmexPaymentMethod(Bearer, EntityID, ProcessingChannelID, Pr
         try {
             //Create processor Profile
             loggerInfo.log(`info`, `Create Amex Processor Profile for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
-            CreateProcessor = await CATProcessingChannel.Create_processing_processor_Amex(Bearer, ProcessingChannelID,ProcessingChannelName, PPAmex, CKOTEMPLATE)
+            CreateProcessor = await CATProcessingChannel.Create_processing_processor_Amex(Bearer, ProcessingChannelID, ProcessingChannelName, PPAmex, CKOTEMPLATE)
             PrAmex = CreateProcessor.data.id
             loggerInfo.log(`info`, `Amex Processor Profile created ${PrAmex}`, `CAT_API`);
             try {
@@ -187,9 +262,9 @@ async function CreateAmexPaymentMethod(Bearer, EntityID, ProcessingChannelID, Pr
         }
     }
     catch (err) {
-    loggerError.error(`info`, `Amex Processing Profile not configured (${ProcessingChannelName}, ${ProcessingChannelID}, error : ${JSON.stringify(err)})`, `CAT_API`);
-    return { "Status": "NOT CONFIGURED", "Processing_profile": err }
-}
+        loggerError.error(`info`, `Amex Processing Profile not configured (${ProcessingChannelName}, ${ProcessingChannelID}, error : ${JSON.stringify(err)})`, `CAT_API`);
+        return { "Status": "NOT CONFIGURED", "Processing_profile": err }
+    }
 }
 async function CreateSepaPaymentMethod(Bearer, EntityID, ProcessingChannelID, ProcessingChannelName) {
     try {
@@ -280,15 +355,18 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
             console.log("Get Vault ID");
             GetVaultId = await CATEntity.GetVaultID(Bearer, ClientID);
             VaultID = GetVaultId.data.id;
-            console.log("Vault ID", VaultID);
+            console.log("Vault ID =", VaultID);
         }
-        catch (err) { console.log(err); return err }
+        catch (err) {
+            console.log(err);
+            return err
+        }
         ProcessingChannelResult = await CATProcessingChannel.CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingChannelName, VaultID)
         ProcessingChannelID = ProcessingChannelResult.data.id;
         console.log("Processing channel ID Created :", ProcessingChannelID)
-
         try {
             CreateSessionProcessingChannelResult = await CATProcessingChannel.Create_Session_Processing_Channels(Bearer, EntityID, ProcessingChannelID, VaultID);
+            console.log("Session Processing Channel created :",ProcessingChannelID)
             return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": ProcessingChannelID }
         }
         catch (err) {
@@ -303,6 +381,8 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
 
 }
 module.exports = {
+    CreateMastercardPaymentMethodOld,
+    CreateVisaPaymentMethodOld,
     CreateProcessingChannel,
     CreateVisaPaymentMethod,
     CreateAmexPaymentMethod,

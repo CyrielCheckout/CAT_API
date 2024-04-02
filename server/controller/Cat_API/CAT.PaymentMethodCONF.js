@@ -8,13 +8,13 @@ async function ConfPaymentMethod(PaymentMethodToConf, Bearer, EntityID, Processi
     //Configure Visa
     if (PaymentMethodToConf.includes('VISA')) {
         console.log("Create VISA")
-        VISACONF = await CatConfigInt.CreateVisaPaymentMethod(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE);
+        VISACONF = await CatConfigInt.CreateVisaPaymentMethod(Bearer, EntityID, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE);
         PaymentMethodConf.VISASetup = VISACONF;
     }
     //Configure Mastercard
     if (PaymentMethodToConf.includes('MASTERCARD')) {
         console.log("Create Mastercard")
-        MASTERCARDCONF = await CatConfigInt.CreateMastercardPaymentMethod(Bearer, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE);
+        MASTERCARDCONF = await CatConfigInt.CreateMastercardPaymentMethod(Bearer, EntityID, ProcessingChannelID, ProcessingChannelName, CKOTEMPLATE);
         PaymentMethodConf.MASTERCARDSetup = MASTERCARDCONF;
     }
     //Configure Bancontact

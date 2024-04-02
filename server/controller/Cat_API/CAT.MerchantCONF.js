@@ -18,7 +18,7 @@ async function Createconf(body) {
             if (body?.Entity[i]?.EntityID?.length > 0) {
                 //if yes, then entity already exist! 
                 console.log("Entity already created:", body.Entity[i].EntityID);
-                loggerInfo.log( 'MerchantConf',`Entity already created: ${body.Entity[i].EntityID}` ,"CAT_API");
+                loggerInfo.log( 'error',`Entity already created: ${body.Entity[i].EntityID}` ,"CAT_API");
                 try {
                     EntityResult = await CATEntity.GetEntityData(body.Bearer, body.Entity[i].EntityID);
                     console.log("CKO legal entity: ", EntityResult.data.cko_legal_entity);

@@ -28,7 +28,7 @@ async function GetAllProcessingChannels(bearer, EntityId) {
     return GetAllProcessingChannelsfunc;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetAllProcessingChannels");
   }
 }
 async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
@@ -57,7 +57,7 @@ async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
     return GetProcessingChannelConffunc;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetProcessingChannelConf");
   }
 }
 async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingChannelName, VaultID) {
@@ -103,7 +103,7 @@ async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingCha
     return CreateProcessingChannelfunc;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"CreateProcessingChannel");
   }
 }
 async function Create_Processing_profile_Bancontact(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -157,7 +157,7 @@ async function Create_Processing_profile_Bancontact(bearer, EntityId, Processing
     return Create_Processing_profile_Bancontact_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(er,"Create_Processing_profile_Bancontact");
   }
 }
 async function Create_Processing_profile_Ideal(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -205,7 +205,7 @@ async function Create_Processing_profile_Ideal(bearer, EntityId, ProcessingChann
     return Create_Processing_profile_Ideal_func
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Processing_profile_Ideal");
   }
 }
 async function Create_Processing_profile_Sepa(bearer, EntityId, ProcessingChannelName) {
@@ -251,7 +251,7 @@ async function Create_Processing_profile_Sepa(bearer, EntityId, ProcessingChanne
     return Create_Processing_profile_Sepa_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Processing_profile_Sepa");
   }
 }
 async function Create_Processing_profile_CB(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -334,7 +334,641 @@ async function Create_Processing_profile_CB(bearer, EntityId, ProcessingChannelN
     return Create_Processing_profile_CB_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Processing_profile_CB");
+  }
+
+}
+async function Create_Processing_profile_Visa(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
+  try {
+    Create_Processing_profile_Visa_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/entities/' + EntityId + '/processing-profiles/v2',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "processor_key": "cko-visa",
+        "acquirer_key": CKOTEMPLATE.Visa_Acquirer_Key,
+        "processing_type": "payin",
+        "processing_profile_name": ProcessingChannelName + "_Visa",
+        "acquiring_bin": "487113",
+        "schemes": [
+          "visa"
+        ],
+        "currencies": [
+          "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY", "COP", "CRC", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KRW", "KWD", "KYD", "KZT", "LAK", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RWF", "SAR", "SBD", "SCR", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STN", "SVC", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF", "YER", "ZAR", "ZMW", "ZWL"
+        ],
+        "business_model": "MoR",
+        "is_gateway_only": false,
+        "auto_generate_card_acceptor_identification_code": true,
+        "business_settings": [
+          {
+            "card_acceptor_identification_code": "",
+            "merchant_category_code": "0742",
+            "force_caid_generation": false
+          }
+        ],
+        "aggregator_name": "",
+        "payfac_settings": {
+          "payfac_id": ""
+        },
+        "card_acceptor_terminal_id": "CKO",
+        "card_acceptor_trade_name": ProcessingChannelName,
+        "card_acceptor_legal_name": ProcessingChannelName,
+        "custom_settings": {
+         // "card_acceptor_street_number": CKOTEMPLATE.address_line_1,
+          "is_highrisk": false,
+          "authorization_validity_period": "7"
+        },
+        "card_acceptor_street": CKOTEMPLATE.address_line_1,
+        "card_acceptor_city": CKOTEMPLATE.city,
+        "card_acceptor_postal_code": CKOTEMPLATE.postal_code,
+        "card_acceptor_country_code": CKOTEMPLATE.country_code_iso3,
+        //"card_acceptor_region_code": CKOTEMPLATE.region_code,
+        "card_acceptor_url": "",
+        "card_acceptor_email": "",
+        "card_acceptor_phone": CKOTEMPLATE.phone,
+        "is_dynamic_acceptor": false,
+        "status": "Active",
+        "sca_exemptions_settings": {
+          "enable_transaction_risk_analysis": true,
+          "enable_low_value": true,
+          "enable_secure_corporate_payment": false,
+          "enable_trusted_listing": false,
+          "enable_3ds_outage": false,
+          "enable_sca_delegation": false
+        }
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+    return Create_Processing_profile_Visa_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err,"Create_Processing_profile_Visa");
+  }
+
+}
+async function Create_Processing_profile_MC(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
+  try {
+    Create_Processing_profile_MC_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/entities/' + EntityId + '/processing-profiles/v2',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "processor_key": "cko-mc",
+        "acquirer_key": CKOTEMPLATE.MC_Acquirer_Key,
+        "processing_type": "payin",
+        "processing_profile_name": ProcessingChannelName + "Mastercard",
+        "acquiring_bin": "270049",
+        "schemes": [
+          "mastercard"
+        ],
+        "currencies": [
+          "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND", "BOB", "BRL", "BSD", "BTN", "BWP", "BYN", "BZD", "CAD", "CDF", "CHF", "CLP", "CNY", "COP", "CRC", "CVE", "CZK", "DJF", "DKK", "DOP", "DZD", "EGP", "ETB", "EUR", "FJD", "FKP", "GBP", "GEL", "GHS", "GIP", "GMD", "GNF", "GTQ", "GYD", "HKD", "HNL", "HTG", "HUF", "IDR", "ILS", "INR", "IQD", "ISK", "JMD", "JOD", "JPY", "KES", "KGS", "KHR", "KMF", "KRW", "KWD", "KYD", "KZT", "LAK", "LKR", "LRD", "LSL", "LYD", "MAD", "MDL", "MGA", "MKD", "MMK", "MNT", "MOP", "MRU", "MUR", "MVR", "MWK", "MXN", "MYR", "MZN", "NAD", "NGN", "NIO", "NOK", "NPR", "NZD", "OMR", "PAB", "PEN", "PGK", "PHP", "PKR", "PLN", "PYG", "QAR", "RON", "RSD", "RWF", "SAR", "SBD", "SCR", "SEK", "SGD", "SHP", "SLL", "SOS", "SRD", "SSP", "STN", "SVC", "SZL", "THB", "TJS", "TMT", "TND", "TOP", "TRY", "TTD", "TWD", "TZS", "UAH", "UGX", "USD", "UYU", "UZS", "VES", "VND", "VUV", "WST", "XAF", "XCD", "XOF", "XPF", "YER", "ZAR", "ZMW", "ZWL"
+        ],
+        "business_model": "MoR",
+        "is_gateway_only": false,
+        "auto_generate_card_acceptor_identification_code": true,
+        "business_settings": [
+          {
+            "card_acceptor_identification_code": "",
+            "merchant_category_code": "0742",
+            "force_caid_generation": false
+          }
+        ],
+        "aggregator_name": "",
+        "payfac_settings": {
+          "payfac_id": ""
+        },
+        "card_acceptor_terminal_id": "CKO",
+        "card_acceptor_trade_name": ProcessingChannelName,
+        "card_acceptor_legal_name": ProcessingChannelName,
+        "custom_settings": {
+          //"card_acceptor_street_number": CKOTEMPLATE.street_number,
+          "is_highrisk": false,
+          "authorization_validity_period": "7"
+        },
+        "card_acceptor_street": CKOTEMPLATE.address_line_1,
+        "card_acceptor_city": CKOTEMPLATE.city,
+        "card_acceptor_postal_code": CKOTEMPLATE.postal_code,
+        "card_acceptor_country_code": CKOTEMPLATE.country_code_iso3,
+        //"card_acceptor_region_code": CKOTEMPLATE.region_code,
+        "card_acceptor_url": "",
+        "card_acceptor_email": "",
+        "card_acceptor_phone": CKOTEMPLATE.phone,
+        "is_dynamic_acceptor": false,
+        "status": "Active",
+        "sca_exemptions_settings": {
+          "enable_transaction_risk_analysis": true,
+          "enable_low_value": true,
+          "enable_secure_corporate_payment": false,
+          "enable_trusted_listing": false,
+          "enable_3ds_outage": false,
+          "enable_sca_delegation": false
+        }
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+    return Create_Processing_profile_MC_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err,"Create_Processing_profile_MC");
+  }
+
+}
+async function Create_GatewayProcessor_Visa(bearer, ProcessingChannelId,ProcessingChannelName,PPVisa, CKOTEMPLATE) {
+  try {
+    Create_GatewayProcessor_Visa_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/processing-channels/' + ProcessingChannelId + '/processors',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "profile_id": PPVisa,
+        "processor_key": "cko-visa",
+        "name": ProcessingChannelName + "_Visa",
+        "acquirer_id": CKOTEMPLATE.Visa_Acquirer_Key,
+        "scheme": "visa",
+        "currencies": [
+          "AFN",
+          "EUR",
+          "ALL",
+          "DZD",
+          "USD",
+          "AOA",
+          "XCD",
+          "ARS",
+          "AMD",
+          "AWG",
+          "AUD",
+          "AZN",
+          "BSD",
+          "BHD",
+          "BDT",
+          "BBD",
+          "BYN",
+          "BZD",
+          "BMD",
+          "INR",
+          "BTN",
+          "BOB",
+          "BAM",
+          "BWP",
+          "NOK",
+          "BRL",
+          "BND",
+          "BGN",
+          "CVE",
+          "KHR",
+          "CAD",
+          "KYD",
+          "CNY",
+          "COP",
+          "CDF",
+          "NZD",
+          "CRC",
+          "ANG",
+          "CZK",
+          "DKK",
+          "DOP",
+          "EGP",
+          "SVC",
+          "SZL",
+          "ETB",
+          "FKP",
+          "FJD",
+          "GMD",
+          "GEL",
+          "GHS",
+          "GIP",
+          "GTQ",
+          "GBP",
+          "GYD",
+          "HTG",
+          "HNL",
+          "HKD",
+          "HUF",
+          "IDR",
+          "IQD",
+          "ILS",
+          "JMD",
+          "JOD",
+          "KZT",
+          "KES",
+          "KWD",
+          "KGS",
+          "LAK",
+          "LSL",
+          "ZAR",
+          "LRD",
+          "LYD",
+          "CHF",
+          "MOP",
+          "MKD",
+          "MGA",
+          "MWK",
+          "MYR",
+          "MVR",
+          "MRU",
+          "MUR",
+          "MXN",
+          "MDL",
+          "MNT",
+          "MAD",
+          "MZN",
+          "MMK",
+          "NAD",
+          "NPR",
+          "NIO",
+          "NGN",
+          "OMR",
+          "PKR",
+          "PAB",
+          "PGK",
+          "PEN",
+          "PHP",
+          "PLN",
+          "QAR",
+          "RON",
+          "SHP",
+          "WST",
+          "STN",
+          "SAR",
+          "RSD",
+          "SCR",
+          "SLL",
+          "SGD",
+          "SBD",
+          "SOS",
+          "SSP",
+          "LKR",
+          "SRD",
+          "SEK",
+          "TWD",
+          "TJS",
+          "TZS",
+          "THB",
+          "TOP",
+          "TTD",
+          "TND",
+          "TRY",
+          "TMT",
+          "UAH",
+          "AED",
+          "UYU",
+          "UZS",
+          "VES",
+          "YER",
+          "ZMW",
+          "ZWL",
+          "BIF",
+          "XOF",
+          "XAF",
+          "XPF",
+          "CLP",
+          "KMF",
+          "DJF",
+          "VND",
+          "PYG",
+          "GNF",
+          "ISK",
+          "RWF",
+          "UGX",
+          "VUV",
+          "KRW",
+          "JPY"
+        ],
+        "merchant_category_code": "0742",
+        "card_acceptor_identification_code": "548508",
+        "acceptor_name": ProcessingChannelName,
+        "acceptor_city": CKOTEMPLATE.city,
+        "acceptor_country_iso3_code": CKOTEMPLATE.country_code_iso3,
+        "has_dynamic_descriptor": true,
+        "dynamic_descriptor_prefix": "",
+        "mode": "complete_processing"
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+    return Create_GatewayProcessor_Visa_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err,"Create_GatewayProcessor_Visa");
+  }
+
+}
+async function Create_GatewayProcessor_MC(bearer, ProcessingChannelId,ProcessingChannelName,PPMastercard, CKOTEMPLATE) {
+  try {
+    Create_GatewayProcessor_Mastercard_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/processing-channels/' + ProcessingChannelId + '/processors',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "profile_id": PPMastercard,
+        "processor_key": "cko-mastercard",
+        "name": ProcessingChannelName + "_Mastercard",
+        "acquirer_id": CKOTEMPLATE.MC_Acquirer_Key,
+        "scheme": "mastercard",
+        "currencies": [
+          "AFN",
+          "EUR",
+          "ALL",
+          "DZD",
+          "USD",
+          "AOA",
+          "XCD",
+          "ARS",
+          "AMD",
+          "AWG",
+          "AUD",
+          "AZN",
+          "BSD",
+          "BHD",
+          "BDT",
+          "BBD",
+          "BYN",
+          "BZD",
+          "BMD",
+          "INR",
+          "BTN",
+          "BOB",
+          "BAM",
+          "BWP",
+          "NOK",
+          "BRL",
+          "BND",
+          "BGN",
+          "CVE",
+          "KHR",
+          "CAD",
+          "KYD",
+          "CNY",
+          "COP",
+          "CDF",
+          "NZD",
+          "CRC",
+          "ANG",
+          "CZK",
+          "DKK",
+          "DOP",
+          "EGP",
+          "SVC",
+          "SZL",
+          "ETB",
+          "FKP",
+          "FJD",
+          "GMD",
+          "GEL",
+          "GHS",
+          "GIP",
+          "GTQ",
+          "GBP",
+          "GYD",
+          "HTG",
+          "HNL",
+          "HKD",
+          "HUF",
+          "IDR",
+          "IQD",
+          "ILS",
+          "JMD",
+          "JOD",
+          "KZT",
+          "KES",
+          "KWD",
+          "KGS",
+          "LAK",
+          "LSL",
+          "ZAR",
+          "LRD",
+          "LYD",
+          "CHF",
+          "MOP",
+          "MKD",
+          "MGA",
+          "MWK",
+          "MYR",
+          "MVR",
+          "MRU",
+          "MUR",
+          "MXN",
+          "MDL",
+          "MNT",
+          "MAD",
+          "MZN",
+          "MMK",
+          "NAD",
+          "NPR",
+          "NIO",
+          "NGN",
+          "OMR",
+          "PKR",
+          "PAB",
+          "PGK",
+          "PEN",
+          "PHP",
+          "PLN",
+          "QAR",
+          "RON",
+          "SHP",
+          "WST",
+          "STN",
+          "SAR",
+          "RSD",
+          "SCR",
+          "SLL",
+          "SGD",
+          "SBD",
+          "SOS",
+          "SSP",
+          "LKR",
+          "SRD",
+          "SEK",
+          "TWD",
+          "TJS",
+          "TZS",
+          "THB",
+          "TOP",
+          "TTD",
+          "TND",
+          "TRY",
+          "TMT",
+          "UAH",
+          "AED",
+          "UYU",
+          "UZS",
+          "VES",
+          "YER",
+          "ZMW",
+          "ZWL",
+          "BIF",
+          "XOF",
+          "XAF",
+          "XPF",
+          "CLP",
+          "KMF",
+          "DJF",
+          "VND",
+          "PYG",
+          "GNF",
+          "ISK",
+          "RWF",
+          "UGX",
+          "VUV",
+          "KRW",
+          "JPY"
+        ],
+        "merchant_category_code": "0742",
+        "card_acceptor_identification_code": "548508",
+        "acceptor_name": ProcessingChannelName,
+        "acceptor_city": CKOTEMPLATE.city,
+        "acceptor_country_iso3_code": CKOTEMPLATE.country_code_iso3,
+        "has_dynamic_descriptor": true,
+        "dynamic_descriptor_prefix": "",
+        "mode": "complete_processing"
+      }
+    })
+      .then(function (response) {
+        return response
+      });
+    return Create_GatewayProcessor_Mastercard_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err,"Create_GatewayProcessor_MC");
+  }
+
+}
+async function Create_AuthenticationProcessor_Visa(bearer, ProcessingChannelId,ProcessingChannelName,PPVisa, GPPVisa,CKOTEMPLATE) {
+  try {
+    Create_GatewayProcessor_Mastercard_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/session-processing-channels/' + ProcessingChannelId + '/session-profile-processors',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "createType": "existing",
+        "gateway_profile_processor_id": GPPVisa,
+        "processing_profile_id": PPVisa,
+        "scheme": "visa",
+        "merchant_category_code": "0742",
+        "versions": [
+            "2"
+        ]
+    }
+    })
+      .then(function (response) {
+        return response
+      });
+    return Create_GatewayProcessor_Mastercard_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err,"Create_AuthenticationProcessor_Visa");
+  }
+
+}
+async function Create_AuthenticationProcessor_MC(bearer, ProcessingChannelId,PPMastercard, GPPMastercard,CKOTEMPLATE) {
+  try {
+    Create_GatewayProcessor_Mastercard_func = await axios({
+      method: 'post',
+      url: baseURL + 'api/session-processing-channels/' + ProcessingChannelId + '/session-profile-processors',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+      data: {
+        "createType": "nexistingew",
+        "gateway_profile_processor_id": GPPMastercard,
+        "processing_profile_id": PPMastercard,
+        "scheme": "mastercard",
+        "merchant_category_code": "0742",
+        "versions": [
+            "2"
+        ]
+    }
+    })
+      .then(function (response) {
+        return response
+      });
+    return Create_GatewayProcessor_Mastercard_func;
+  }
+  catch (err) {
+    throw ErrorHandling.ErrorHandling(err,"Create_AuthenticationProcessor_MC");
   }
 
 }
@@ -551,7 +1185,7 @@ async function Create_Manual_processor_Visa(bearer, ProcessingChannelId, Process
     return Create_Manual_processor_Visa_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Manual_processor_Visa");
   }
 }
 async function Create_Manual_processor_Mastercard(bearer, ProcessingChannelId, ProcessingChannelName, CKOTEMPLATE) {
@@ -767,7 +1401,7 @@ async function Create_Manual_processor_Mastercard(bearer, ProcessingChannelId, P
     return Create_Manual_processor_Mastercard_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Manual_processor_Mastercard");
   }
 }
 async function Create_processing_processor_Bancontact(bearer, ProcessingChannelId, PPBancontact, CKOTEMPLATE) {
@@ -812,7 +1446,7 @@ async function Create_processing_processor_Bancontact(bearer, ProcessingChannelI
     return Create_processing_processor_Bancontact_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_processing_processor_Bancontact");
   }
 }
 async function Create_processing_processor_Ideal(bearer, ProcessingChannelId, PPIdeal, CKOTEMPLATE) {
@@ -857,7 +1491,7 @@ async function Create_processing_processor_Ideal(bearer, ProcessingChannelId, PP
     return Create_processing_processor_Ideal_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_processing_processor_Ideal");
   }
 }
 async function Create_processing_processor_CB(bearer, ProcessingChannelId, PPCartes_Bancaires, CKOTEMPLATE) {
@@ -905,7 +1539,7 @@ async function Create_processing_processor_CB(bearer, ProcessingChannelId, PPCar
     return Create_processing_processor_CB_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_processing_processor_CB");
   }
 }
 async function Create_processing_processor_Sepa(bearer, ProcessingChannelId, PPSepa) {
@@ -949,7 +1583,7 @@ async function Create_processing_processor_Sepa(bearer, ProcessingChannelId, PPS
     return Create_processing_processor_Sepa_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_processing_processor_Sepa");
   }
 }
 async function Create_Currency_Account(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -983,7 +1617,7 @@ async function Create_Currency_Account(bearer, EntityId, ProcessingChannelName, 
     return Create_Currency_Account_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Currency_Account");
   }
 }
 async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelId, CurrencyAccountID, DefaultRule) {
@@ -1025,7 +1659,7 @@ async function Create_Routing_Rules_Payment(bearer, EntityId, ProcessingChannelI
     return Create_Routing_Rules_Payment_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Routing_Rules_Payment");
   }
 }
 async function Create_Routing_Rules_Payout(bearer, EntityId, CurrencyAccountID) {
@@ -1059,7 +1693,7 @@ async function Create_Routing_Rules_Payout(bearer, EntityId, CurrencyAccountID) 
     return Create_Routing_Rules_Payout_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Routing_Rules_Payout");
   }
 }
 async function Create_Payout_Schedules(bearer, EntityId, ProcessingChannelName, CurrencyAccountID, CKOTEMPLATE) {
@@ -1155,7 +1789,7 @@ async function Create_Payout_Schedules(bearer, EntityId, ProcessingChannelName, 
     return Create_Payout_Schedules_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Payout_Schedules");
   }
 }
 async function Get_Processing_channel_Session(bearer, EntityId) {
@@ -1185,7 +1819,7 @@ async function Get_Processing_channel_Session(bearer, EntityId) {
     return Get_Processing_channel_Session_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err, "Get_Processing_channel_Session");
   }
 }
 async function Create_Session_Processing_Channels(bearer, EntityId, AvailableProcessingChannels, vaultID) {
@@ -1224,7 +1858,7 @@ async function Create_Session_Processing_Channels(bearer, EntityId, AvailablePro
     return Create_Session_Processing_Channels_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Session_Processing_Channels");
   }
 }
 async function Create_Session_processor_Visa(bearer, AvailableProcessingChannels, ProcessingChannelName, PrVisa, CKOTEMPLATE) {
@@ -1275,7 +1909,7 @@ async function Create_Session_processor_Visa(bearer, AvailableProcessingChannels
     return Create_Session_processor_Visa_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Session_processor_Visa");
   }
 }
 async function Create_Session_processor_Mastercard(bearer, AvailableProcessingChannels, ProcessingChannelName, PrMC, CKOTEMPLATE) {
@@ -1326,7 +1960,7 @@ async function Create_Session_processor_Mastercard(bearer, AvailableProcessingCh
     return Create_Session_processor_Mastercard_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Session_processor_Mastercard");
   }
 }
 async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, PrCb) {
@@ -1366,7 +2000,7 @@ async function Create_Session_processor_CB(bearer, ProcessingChannelId, PPCb, Pr
     return Create_Session_processor_CB_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Session_processor_CB");
   }
 }
 async function Get_Gateway_Processor_Details(bearer, ProcessingChannelId, ProcessorID) {
@@ -1396,7 +2030,7 @@ async function Get_Gateway_Processor_Details(bearer, ProcessingChannelId, Proces
     return Get_Gateway_Processor_Details_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Get_Gateway_Processor_Details");
   }
 }
 async function Update_Gateway_Processor(bearer, ProcessingChannelId, ProcessorID, Payload) {
@@ -1427,7 +2061,7 @@ async function Update_Gateway_Processor(bearer, ProcessingChannelId, ProcessorID
     return Update_Gateway_Processor_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Update_Gateway_Processor");
   }
 }
 async function Create_Processing_profile_Giropay(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -1478,7 +2112,7 @@ async function Create_Processing_profile_Giropay(bearer, EntityId, ProcessingCha
     return Create_Processing_profile_Giropay_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Processing_profile_Giropay");
   }
 }
 async function Create_processing_processor_Giropay(bearer, ProcessingChannelId, ProcessingProfileId, CKOTEMPLATE) {
@@ -1523,7 +2157,7 @@ async function Create_processing_processor_Giropay(bearer, ProcessingChannelId, 
     return Create_processing_processor_Giropay_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_processing_processor_Giropay");
   }
 }
 async function Create_Processing_profile_Amex(bearer, EntityId, ProcessingChannelName, CKOTEMPLATE) {
@@ -1549,7 +2183,7 @@ async function Create_Processing_profile_Amex(bearer, EntityId, ProcessingChanne
         "processor_key": "cko-amex",
         "acquirer_key": CKOTEMPLATE.Amex_acquirer_key,
         "processing_type": "payin",
-        "processing_profile_name": ProcessingChannelName+"_AMEX",
+        "processing_profile_name": ProcessingChannelName + "_AMEX",
         "acquiring_bin": "10000000232",
         "schemes": [
           "amex"
@@ -1616,8 +2250,8 @@ async function Create_Processing_profile_Amex(bearer, EntityId, ProcessingChanne
           }
         ],
         "aggregator_name": "",
-        "card_acceptor_trade_name": ProcessingChannelName+"_AMEX",
-        "card_acceptor_legal_name": ProcessingChannelName+"_AMEX",
+        "card_acceptor_trade_name": ProcessingChannelName + "_AMEX",
+        "card_acceptor_legal_name": ProcessingChannelName + "_AMEX",
         "card_acceptor_street": CKOTEMPLATE.address_line_1,
         "card_acceptor_city": CKOTEMPLATE.city,
         "card_acceptor_postal_code": CKOTEMPLATE.postal_code,
@@ -1649,10 +2283,10 @@ async function Create_Processing_profile_Amex(bearer, EntityId, ProcessingChanne
     return Create_Processing_profile_Amex_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Processing_profile_Amex");
   }
 }
-async function Create_processing_processor_Amex(bearer, ProcessingChannelId,ProcessingChannelName, ProcessingProfileId, CKOTEMPLATE) {
+async function Create_processing_processor_Amex(bearer, ProcessingChannelId, ProcessingChannelName, ProcessingProfileId, CKOTEMPLATE) {
   try {
     Create_processing_processor_Amex_func = await axios({
       method: 'post',
@@ -1674,68 +2308,68 @@ async function Create_processing_processor_Amex(bearer, ProcessingChannelId,Proc
       data: {
         "profile_id": ProcessingProfileId,
         "processor_key": "cko-amex",
-        "name": ProcessingChannelName+"_AMEX",
+        "name": ProcessingChannelName + "_AMEX",
         "acquirer_id": CKOTEMPLATE.Amex_acquirer_key,
         "scheme": "amex",
         "currencies": [
-            "EUR",
-            "USD",
-            "AUD",
-            "BHD",
-            "INR",
-            "NOK",
-            "BGN",
-            "CAD",
-            "CNY",
-            "COP",
-            "NZD",
-            "CRC",
-            "CZK",
-            "DKK",
-            "EGP",
-            "GEL",
-            "GBP",
-            "HKD",
-            "HUF",
-            "IDR",
-            "ILS",
-            "JOD",
-            "KES",
-            "KWD",
-            "ZAR",
-            "CHF",
-            "MYR",
-            "MXN",
-            "MAD",
-            "OMR",
-            "PEN",
-            "PHP",
-            "PLN",
-            "QAR",
-            "RON",
-            "SAR",
-            "SGD",
-            "SEK",
-            "TWD",
-            "THB",
-            "TRY",
-            "UAH",
-            "AED",
-            "CLP",
-            "VND",
-            "ISK",
-            "KRW",
-            "JPY"
+          "EUR",
+          "USD",
+          "AUD",
+          "BHD",
+          "INR",
+          "NOK",
+          "BGN",
+          "CAD",
+          "CNY",
+          "COP",
+          "NZD",
+          "CRC",
+          "CZK",
+          "DKK",
+          "EGP",
+          "GEL",
+          "GBP",
+          "HKD",
+          "HUF",
+          "IDR",
+          "ILS",
+          "JOD",
+          "KES",
+          "KWD",
+          "ZAR",
+          "CHF",
+          "MYR",
+          "MXN",
+          "MAD",
+          "OMR",
+          "PEN",
+          "PHP",
+          "PLN",
+          "QAR",
+          "RON",
+          "SAR",
+          "SGD",
+          "SEK",
+          "TWD",
+          "THB",
+          "TRY",
+          "UAH",
+          "AED",
+          "CLP",
+          "VND",
+          "ISK",
+          "KRW",
+          "JPY"
         ],
         "merchant_category_code": "0742",
         "card_acceptor_identification_code": "548465",
-        "acceptor_name": ProcessingChannelId+"_AMEX",
+        "acceptor_name": ProcessingChannelId + "_AMEX",
         "acceptor_city": CKOTEMPLATE.city,
         "acceptor_country_iso3_code": CKOTEMPLATE.country_code_iso3,
         "has_dynamic_descriptor": false,
         "dynamic_descriptor_prefix": "",
         "mode": "complete_processing"
-    }
+      }
     })
       .then(function (response) {
         return response
@@ -1744,7 +2378,7 @@ async function Create_processing_processor_Amex(bearer, ProcessingChannelId,Proc
     return Create_processing_processor_Amex_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_processing_processor_Amex");
   }
 }
 async function Create_Session_processor_Amex(bearer, ProcessingChannelId, ProcessingProfileId, ProccessingProcessorProfileId) {
@@ -1773,9 +2407,9 @@ async function Create_Session_processor_Amex(bearer, ProcessingChannelId, Proces
         "scheme": "AMEX",
         "merchant_category_code": "0742",
         "versions": [
-            "2"
+          "2"
         ]
-    }
+      }
     })
       .then(function (response) {
         return response
@@ -1784,10 +2418,16 @@ async function Create_Session_processor_Amex(bearer, ProcessingChannelId, Proces
     return Create_Session_processor_Amex_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Session_processor_Amex");
   }
 }
 module.exports = {
+  Create_AuthenticationProcessor_MC,
+  Create_AuthenticationProcessor_Visa,
+  Create_GatewayProcessor_MC,
+  Create_GatewayProcessor_Visa,
+  Create_Processing_profile_Visa,
+  Create_Processing_profile_MC,
   GetAllProcessingChannels,
   Create_Session_processor_Amex,
   Create_processing_processor_Giropay,

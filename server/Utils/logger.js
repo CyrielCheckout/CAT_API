@@ -57,7 +57,7 @@ const loggerError = winston.createLogger({
     //
     fileRotateTransport,
     new winston.transports.File({ filename: 'logs/Backend_Errors.log', level: 'error' }),
-    new winston.transports.Console()
+    //new winston.transports.Console()
   ],
 });
 

@@ -11,5 +11,7 @@
     "phone": "4155552671",
     "currency": "GBP",
     "GiropayAcquirerKey":"giropay_apm_gb",
-    "Amex_acquirer_key" : "cko_amex_fr"
+    "Amex_acquirer_key" : "cko_amex_gb",
+    "Visa_Acquirer_Key" : "cko_visa_gb",
+    "MC_Acquirer_Key" : "cko_mc_gb"
 }
