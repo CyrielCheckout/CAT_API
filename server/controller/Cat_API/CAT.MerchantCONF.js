@@ -89,17 +89,17 @@ async function Createconf(body) {
                         //Get routing rules list 
                         RoutingPaymentRulesList = await CATEntity.GetPaymentRoutingRule(body.Bearer, body.Entity[i].EntityID);
                         if (RoutingPaymentRulesList.data.total_count > 0) {
-                            console.log(`Routing payment rules for ${EntityID} already exist`);
+                            console.log(`Routing payment rules for ${ body.Entity[i].EntityID} already exist`);
                         }
                         else {
                             console.log("Create Currency Account")
-                            CreateCurrencyAccount = await CATProcessingChannel.Create_Currency_Account(Bearer, EntityID, "Default_Currency_Account", CKOTEMPLATE)
+                            CreateCurrencyAccount = await CATProcessingChannel.Create_Currency_Account(Bearer,  body.Entity[i].EntityID, "Default_Currency_Account", CKOTEMPLATE)
                             CurrencyAccountID = CreateCurrencyAccount.data.id
                             console.log(`Currency account for default Routing Payment Rule : ${CreateCurrencyAccount.data.id}`)
                             //Configure Defaut Routing payment rules
-                            loggerInfo.log(`info`, `Create DEFAUT routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`, `CAT_API`);
-                            console.log(`Create DEFAUT routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`);
-                            CreateRoutingPaymentRules = await CATProcessingChannel.Create_Routing_Rules_Payment(Bearer, EntityID, null, CurrencyAccountID, true)
+                            loggerInfo.log(`info`, `Create DEFAUT routing payment rules for ${ body.Entity[i].EntityID} and CurrencyAccount : ${CurrencyAccountID}`, `CAT_API`);
+                            console.log(`Create DEFAUT routing payment rules for ${ body.Entity[i].EntityID} and CurrencyAccount : ${CurrencyAccountID}`);
+                            CreateRoutingPaymentRules = await CATProcessingChannel.Create_Routing_Rules_Payment(Bearer,  body.Entity[i].EntityID, null, CurrencyAccountID, true)
                             RoutingPaymentRulesID = CreateRoutingPaymentRules.data.id
                             ConfigureProcessingChannelResult.Payment_Routing_Rules_ID = RoutingPaymentRulesID;
                             waitfor.delay(delay);

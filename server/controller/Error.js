@@ -16,23 +16,19 @@ function ErrorHandling(err,source) {
     else if (err?.code) {
         if (err.code === "ENOMEM") {
             console.log("Warn error :", err.code, " source :",source)
-            finalresult = { "Error_type": "Connection Error", "status": 500, "Message": "Connection error, please check your internet connection / VPN connection" , "source":source}
-            return finalresult
+            return { "Error_type": "Connection Error", "status": 500, "Message": "Connection error, please check your internet connection / VPN connection" , "source":source}
         }
         else if (err.code === "ECONNABORTED") {
             console.log("Warn error :", err.code, " source :",source)
-            finalresult = { "Error_type": "Timeout", "status": 500, "Message": "Timeout, please check your internet connection / VPN connection", "source":source }
-            return finalresult
+            return { "Error_type": "Timeout", "status": 500, "Message": "Timeout, please check your internet connection / VPN connection", "source":source }
         }
         else if (err.code === "ECONNRESET") {
             console.log("Warn error :", err.code, " source :",source)
-            finalresult = { "Error_type": "ECONNRESET", "status": 500, "Message": "Network connection reset" , "source":source}
-            return finalresult
+            return { "Error_type": "ECONNRESET", "status": 500, "Message": "Network connection reset" , "source":source}
         }
         else if (err.code === "ERR_BAD_REQUEST") {
             console.log("Warn error :", err.code, " source :",source)
-            finalresult = { "Error_type": "ERR_BAD_REQUEST", "status": 500, "Message": err.data , "source":source}
-            return finalresult
+            return { "Error_type": "ERR_BAD_REQUEST", "status": 500, "Message": err.data , "source":source}
         }
         else {
             return err.code
