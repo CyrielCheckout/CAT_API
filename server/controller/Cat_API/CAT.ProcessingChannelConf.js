@@ -31,7 +31,7 @@ async function GetAllProcessingChannels(bearer, EntityId) {
     throw ErrorHandling.ErrorHandling(err,"GetAllProcessingChannels");
   }
 }
-async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
+async function GetProcessingChannelConf(bearer, ClientId, EntityId,ProcessingChannelId) {
   try {
     GetProcessingChannelConffunc = await axios({
       method: 'get',
@@ -39,7 +39,8 @@ async function GetProcessingChannelConf(bearer, ProcessingChannelId) {
       headers: {
         'Authorization': bearer,
         'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
-        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'Cko-Client-Id':ClientId,
+        'cko-entity-id': EntityId,
         'sec-ch-ua-mobile': '?0',
         'Content-Type': 'application/json',
         'Accept': "*/*",

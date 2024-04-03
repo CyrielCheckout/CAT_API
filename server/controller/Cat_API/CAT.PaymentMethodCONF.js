@@ -1,4 +1,4 @@
-const CATEntity = require('./CAT.EntityConf');
+const CATEntity = require('./CAT.Entity.CAT_API');
 const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
 const waitfor = require('../IdempotencyKey');
 const CatConfigInt = require('../Cat_API/CAT.ConfigInt');

@@ -1,4 +1,4 @@
-const CATEntity = require('./CAT.EntityConf');
+const CATEntity = require('./CAT.Entity.CAT_API');
 const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
 const waitfor = require('../IdempotencyKey');
 const loggerInfo = require('../../Utils/logger').loggerInfo;
@@ -299,19 +299,8 @@ async function ConfigureProcessingChannel(Bearer, EntityID, ProcessingChannelNam
         waitfor.delay(delay);
         try {
             //Configure Defaut Routing payment rules
-
-            loggerInfo.log(`info`, `Create DEFAUT routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`, `CAT_API`);
-            CreateRoutingPaymentRules = await CATProcessingChannel.Create_Routing_Rules_Payment(Bearer, EntityID, null, CurrencyAccountID, true)
-            RoutingPaymentRulesID = CreateRoutingPaymentRules.data.id
-            ConfigureProcessingChannelResult.Payment_Routing_Rules_ID = RoutingPaymentRulesID;
-            waitfor.delay(delay);
-        }
-        catch (err) {
-            return { "Payment_Routing_Rules_ID": err }
-        }
-        try {
-            //Configure Routing payment rules
-            loggerInfo.log(`info`, `Create routing payment rules for ${EntityID} CurrencyAccount : ${CurrencyAccountID}`, `CAT_API`);
+            loggerInfo.log(`info`, `Create routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`, `CAT_API`);
+            console.log(`Create routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID} and processing channel :${ProcessingChannelID}`);
             CreateRoutingPaymentRules = await CATProcessingChannel.Create_Routing_Rules_Payment(Bearer, EntityID, ProcessingChannelID, CurrencyAccountID, false)
             RoutingPaymentRulesID = CreateRoutingPaymentRules.data.id
             ConfigureProcessingChannelResult.Payment_Routing_Rules_ID = RoutingPaymentRulesID;
@@ -364,14 +353,27 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
         ProcessingChannelResult = await CATProcessingChannel.CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingChannelName, VaultID)
         ProcessingChannelID = ProcessingChannelResult.data.id;
         console.log("Processing channel ID Created :", ProcessingChannelID)
+        //console.log("Wait for 10000 MS")
+        //waitfor.delay(10000);
         try {
             CreateSessionProcessingChannelResult = await CATProcessingChannel.Create_Session_Processing_Channels(Bearer, EntityID, ProcessingChannelID, VaultID);
             console.log("Session Processing Channel created :",ProcessingChannelID)
             return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": ProcessingChannelID }
         }
         catch (err) {
-            console.log(err)
-            return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": err }
+            try {
+                console.log("RETRY")
+                console.log("Wait for 20000 MS")
+                waitfor.delay(20000);
+                CreateSessionProcessingChannelResult = await CATProcessingChannel.Create_Session_Processing_Channels(Bearer, EntityID, ProcessingChannelID, VaultID);
+                console.log("Session Processing Channel created :",ProcessingChannelID)
+                return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": ProcessingChannelID }
+            }
+            catch {
+                console.log(err)
+                return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": err }
+            }
+           
         }
     }
     catch (err) {

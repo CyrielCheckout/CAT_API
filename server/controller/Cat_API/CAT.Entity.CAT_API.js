@@ -3,7 +3,7 @@ const baseURL = "https://client-admin.cko-sbox.ckotech.co/";
 //templates for creation
 const fs = require('fs/promises')
 const path = require('path');
-const ErrorHandling = require('../../controller/Error');
+const ErrorHandling = require('../Error');
 const ckosasTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOSAS.json'));
 const ckoltdTemplate = path.resolve(path.join(__dirname, '../../ConfTemplates/CKOLTD.json'));
 
@@ -32,7 +32,7 @@ async function GetAllEntity(bearer, ClientId, skip) {
       });
     return GetAllEntityfunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetAllEntity");
   }
 }
 async function CreateEntity(bearer, ClientId, EntityName, CKOTEMPLATE) {
@@ -86,7 +86,7 @@ async function CreateEntity(bearer, ClientId, EntityName, CKOTEMPLATE) {
 
     return CreateEntityfunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"CreateEntity");
   }
 }
 async function GetEntityDetails(bearer, EntityId) {
@@ -114,7 +114,7 @@ async function GetEntityDetails(bearer, EntityId) {
       });
     return GetEntityDetailsfunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetEntityDetails");
   }
 }
 async function GetEntityData(bearer, EntityId) {
@@ -142,7 +142,7 @@ async function GetEntityData(bearer, EntityId) {
       });
     return GetEntityDetailsfunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetEntityData");
   }
 }
 async function Create_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE) {
@@ -363,7 +363,7 @@ async function Create_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE)
     return Create_Pricing_Profile_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_Pricing_Profile");
   }
 }
 async function GetPricingProfile(bearer, EntityId) {
@@ -391,7 +391,7 @@ async function GetPricingProfile(bearer, EntityId) {
       });
     return GetPricingProfilefunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetPricingProfile");
   }
 }
 async function GetVaultID(bearer, ClientID) {
@@ -419,7 +419,7 @@ async function GetVaultID(bearer, ClientID) {
       });
     return GetVaultIDfunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetVaultID");
   }
 }
 async function Create_AMP_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPLATE) {
@@ -614,7 +614,7 @@ async function Create_AMP_Pricing_Profile(bearer, EntityId, EntityName, CKOTEMPL
     return Create_AMP_Pricing_Profile_func;
   }
   catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"Create_AMP_Pricing_Profile");
   }
 }
 async function GetAPMPricingProfile(bearer, EntityId) {
@@ -642,10 +642,9 @@ async function GetAPMPricingProfile(bearer, EntityId) {
       });
     return GetAPMPricingProfilefunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetAPMPricingProfile");
   }
 }
-
 async function GetCurrencyAccountList(bearer, EntityId) {
   try {
     GetCurrencyAccountListfunc = await axios({
@@ -671,11 +670,40 @@ async function GetCurrencyAccountList(bearer, EntityId) {
       });
     return GetCurrencyAccountListfunc;
   } catch (err) {
-    throw ErrorHandling.ErrorHandling(err);
+    throw ErrorHandling.ErrorHandling(err,"GetCurrencyAccountListfunc");
+  }
+}
+async function GetPaymentRoutingRule(bearer, EntityId) {
+  try {
+    GetPaymentRoutingRulefunc = await axios({
+      method: 'get',
+      url: baseURL + 'api/entities/' + EntityId + '/payment-routing-rules?limit=25&skip=0',
+      headers: {
+        'Authorization': bearer,
+        'sec-ch-ua': '"Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"',
+        'cko-entity-id': 'cli_lkuch7kufapeloqe7aba4vferm',
+        'sec-ch-ua-mobile': '?0',
+        'Content-Type': 'application/json',
+        'Accept': "*/*",
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
+        'sec-ch-ua-platform': "macOS",
+        "Sec-Fetch-Site": 'same-origin',
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Dest": "empty",
+        "host": 'client-admin.cko-sbox.ckotech.co'
+      },
+    })
+      .then(function (response) {
+        return response
+      });
+    return GetPaymentRoutingRulefunc;
+  } catch (err) {
+    throw ErrorHandling.ErrorHandling(err,"GetPaymentRoutingRulefunc");
   }
 }
 module.exports = {
   GetAllEntity,
+  GetPaymentRoutingRule,
   CreateEntity,
   GetEntityData,
   GetEntityDetails,

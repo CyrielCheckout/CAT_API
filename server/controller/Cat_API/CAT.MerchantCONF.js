@@ -1,7 +1,8 @@
-const CATEntity = require('./CAT.EntityConf');
+const CATEntity = require('./CAT.Entity.CAT_API');
 const CATProcessingChannel = require('./CAT.ProcessingChannelConf');
 const waitfor = require('../IdempotencyKey');
 const CatConfigInt = require('../Cat_API/CAT.ConfigInt');
+const CATEntityConf = require('./CAT.Enity.Conf');
 const CatPaymentMethodConfig = require('../Cat_API/CAT.PaymentMethodCONF');
 const CKOSASTEMPLATE = require('../../ConfTemplates/CKOSAS.json');
 const CKOLTDTEMPLATE = require('../../ConfTemplates/CKOLTD.json');
@@ -18,7 +19,7 @@ async function Createconf(body) {
             if (body?.Entity[i]?.EntityID?.length > 0) {
                 //if yes, then entity already exist! 
                 console.log("Entity already created:", body.Entity[i].EntityID);
-                loggerInfo.log( 'error',`Entity already created: ${body.Entity[i].EntityID}` ,"CAT_API");
+                loggerInfo.log('error', `Entity already created: ${body.Entity[i].EntityID}`, "CAT_API");
                 try {
                     EntityResult = await CATEntity.GetEntityData(body.Bearer, body.Entity[i].EntityID);
                     console.log("CKO legal entity: ", EntityResult.data.cko_legal_entity);
@@ -83,6 +84,30 @@ async function Createconf(body) {
                         console.log("APM Pricing profile NOT created :", err)
                         finalresult.Entity[i].APM_Pricing_Profile_ID = err
                     }
+                    //check if a default routing rules for payment exist 
+                    try {
+                        //Get routing rules list 
+                        RoutingPaymentRulesList = await CATEntity.GetPaymentRoutingRule(body.Bearer, body.Entity[i].EntityID);
+                        if (RoutingPaymentRulesList.data.total_count > 0) {
+                            console.log(`Routing payment rules for ${EntityID} already exist`);
+                        }
+                        else {
+                            console.log("Create Currency Account")
+                            CreateCurrencyAccount = await CATProcessingChannel.Create_Currency_Account(Bearer, EntityID, "Default_Currency_Account", CKOTEMPLATE)
+                            CurrencyAccountID = CreateCurrencyAccount.data.id
+                            console.log(`Currency account for default Routing Payment Rule : ${CreateCurrencyAccount.data.id}`)
+                            //Configure Defaut Routing payment rules
+                            loggerInfo.log(`info`, `Create DEFAUT routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`, `CAT_API`);
+                            console.log(`Create DEFAUT routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`);
+                            CreateRoutingPaymentRules = await CATProcessingChannel.Create_Routing_Rules_Payment(Bearer, EntityID, null, CurrencyAccountID, true)
+                            RoutingPaymentRulesID = CreateRoutingPaymentRules.data.id
+                            ConfigureProcessingChannelResult.Payment_Routing_Rules_ID = RoutingPaymentRulesID;
+                            waitfor.delay(delay);
+                        }
+                    }
+                    catch (err) {
+                        return { "Payment_Routing_Rules_ID": err }
+                    }
                     //Processing Channel configuration 
                     finalresult.Entity[i].Processing_Channel = []
                     for (let ProcessingChannelNumber = 0; ProcessingChannelNumber < body.Entity[i].Processing_channel.length; ProcessingChannelNumber++) {
@@ -90,16 +115,18 @@ async function Createconf(body) {
                             //If processing channel exist, then get data
                             console.log("Processing Channel already created :", body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID);
                             try {
+                                //Get Vault ID of ClientID
                                 GetVaultId = await CATEntity.GetVaultID(body.Bearer, body.ClientId);
                                 VaultID = GetVaultId.data.id;
                                 finalresult.Entity[i].VaultID = VaultID;
+                                console.log(`Vault ID for ${body.ClientId} = ${VaultID}`);
                             }
                             catch (err) {
                                 console.log("Error while get vault ID :", err);
                                 finalresult.Entity[i].VaultID = err;
                             }
                             try {
-                                GetProcessingChannelData = await CATProcessingChannel.GetProcessingChannelConf(body.Bearer, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID);
+                                GetProcessingChannelData = await CATProcessingChannel.GetProcessingChannelConf(body.Bearer,body.ClientId, body.Entity[i].EntityID,body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID);
                                 finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelID, "Processing_Channel_Name": GetProcessingChannelData.data.name };
                                 //Check if Session Processing Channel Exist
                                 try {
@@ -162,7 +189,7 @@ async function Createconf(body) {
                         }
                     }
                 } catch (err) {
-                    finalresult.Entity.push({ "Entity_Name": body.Entity[i].EntityName, "EntityID": "ERROR", "status": err });
+                    finalresult.Entity.push({"Entity_Name": body.Entity[i].EntityName, "EntityID": body.Entity[i].EntityID, "status": err});
                 }
             }
             else {
@@ -185,6 +212,22 @@ async function Createconf(body) {
                     EntityID = EntityResult.data.id;
                     finalresult.Entity.push({ "Entity_Name": body.Entity[i].EntityName, "EntityID": EntityID, "status": EntityResult.status });
                     console.log("Entity :", body.Entity[i].EntityName, "was successfully created with the ID :", EntityID);
+                    //Create default currency account + routing payment rules
+                    try {
+                        console.log("Create Currency Account")
+                        CreateCurrencyAccount = await CATProcessingChannel.Create_Currency_Account(body.Bearer, EntityID, "Default_Currency_Account", CKOTEMPLATE)
+                        CurrencyAccountID = CreateCurrencyAccount.data.id
+                        console.log(`Currency account for default Routing Payment Rule : ${CreateCurrencyAccount.data.id}`)
+                        //Configure Defaut Routing payment rules
+                        loggerInfo.log(`info`, `Create DEFAUT routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`, `CAT_API`);
+                        console.log(`Create DEFAUT routing payment rules for ${EntityID} and CurrencyAccount : ${CurrencyAccountID}`);
+                        CreateRoutingPaymentRules = await CATProcessingChannel.Create_Routing_Rules_Payment(body.Bearer, EntityID, null, CurrencyAccountID, true)
+                        DefaultRoutingPaymentRulesID = CreateRoutingPaymentRules.data.id
+                        waitfor.delay(delay);
+                    }
+                    catch (err) {
+                        console.log(`Error while setup of default currency account + routing payment rules : ${err}`)
+                    }
                     //Create Pricing Profile
                     try {
                         console.log("Create Pricing Profile")
@@ -231,11 +274,11 @@ async function Createconf(body) {
                             PaymentMethodConfResult = await CatPaymentMethodConfig.ConfPaymentMethod(body.Entity[i].Processing_channel[ProcessingChannelNumber].PaymentMethod, body.Bearer, EntityID, PROCESSINGCHANNELCONF.Processing_Channel_ID, body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, CKOTEMPLATE);
                             finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber].Payment_Method = PaymentMethodConfResult;
                         }
-                        catch (err){
-                            console.log("ERROR while creating processing channel :",err);
-                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": "ERROR", "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, "status":err};
+                        catch (err) {
+                            console.log("ERROR while creating processing channel :", err);
+                            finalresult.Entity[i].Processing_Channel[ProcessingChannelNumber] = { "Processing_Channel_ID": "ERROR", "Processing_Channel_Name": body.Entity[i].Processing_channel[ProcessingChannelNumber].ProcessingChannelName, "status": err };
                         }
-                }
+                    }
                 }
                 catch (err) {
                     finalresult.Entity.push({ "Entity_Name": body.Entity[i].EntityName, "EntityID": "ERROR", "status": err });
