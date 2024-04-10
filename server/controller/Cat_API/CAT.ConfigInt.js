@@ -99,7 +99,6 @@ async function CreateMastercardPaymentMethod(Bearer, EntityId, ProcessingChannel
             loggerInfo.log(`info`, `Create Mastercard Gateway Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
             CreateGatewayProcessor = await CATProcessingChannel.Create_GatewayProcessor_MC(Bearer, ProcessingChannelID, ProcessingChannelName, PPMastercard, CKOTEMPLATE);
             GPPMastercard = CreateGatewayProcessor.data.id;
-            Console.log(CreateGatewayProcessor.data)
             try {
                 //Create Session Processor Profile
                 loggerInfo.log(`info`, `Create Mastercard Session Processor for ${ProcessingChannelName} (${ProcessingChannelID} with ${CKOTEMPLATE})`, `CAT_API`);
@@ -108,13 +107,13 @@ async function CreateMastercardPaymentMethod(Bearer, EntityId, ProcessingChannel
             }
             catch (err) {
                 loggerInfo.error(`Error while creating Session processor : ${err}`, `CAT_API`);
-                //console.log("Error while creating Session processor :", err)
-                return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPMastercard, "Gateway_Processor": err }
+                console.log("Error while creating Session processor :", err)
+                return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPMastercard, "Gateway_Processor": GPPMastercard, "Session_Processor": err }
             }
         }
         catch (err) {
             loggerInfo.error(`Error while creating Gateway processor : ${err}`, `CAT_API`);
-            //console.log("Error while creating Session processor :", err)
+            console.log("Error while creating Gateway processor :", err)
             return { "Status": "PARTIALLY CONFIGURED", "Processing_profile": PPMastercard, "Gateway_Processor": err }
         }
     }
@@ -345,19 +344,19 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
             GetVaultId = await CATEntity.GetVaultID(Bearer, ClientID);
             VaultID = GetVaultId.data.id;
             console.log("Vault ID =", VaultID);
+            ProcessingChannelResult = await CATProcessingChannel.CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingChannelName, VaultID)
+            ProcessingChannelID = ProcessingChannelResult.data.id;
+            console.log("Processing channel ID Created :", ProcessingChannelID)
+            //console.log("Wait for 10000 MS")
+            //waitfor.delay(10000);
         }
         catch (err) {
             console.log(err);
             return err
         }
-        ProcessingChannelResult = await CATProcessingChannel.CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingChannelName, VaultID)
-        ProcessingChannelID = ProcessingChannelResult.data.id;
-        console.log("Processing channel ID Created :", ProcessingChannelID)
-        //console.log("Wait for 10000 MS")
-        //waitfor.delay(10000);
         try {
             CreateSessionProcessingChannelResult = await CATProcessingChannel.Create_Session_Processing_Channels(Bearer, EntityID, ProcessingChannelID, VaultID);
-            console.log("Session Processing Channel created :",ProcessingChannelID)
+            console.log("Session Processing Channel created :", ProcessingChannelID)
             return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": ProcessingChannelID }
         }
         catch (err) {
@@ -366,14 +365,14 @@ async function CreateProcessingChannel(Bearer, ClientID, EntityID, ProcessingCha
                 console.log("Wait for 20000 MS")
                 waitfor.delay(20000);
                 CreateSessionProcessingChannelResult = await CATProcessingChannel.Create_Session_Processing_Channels(Bearer, EntityID, ProcessingChannelID, VaultID);
-                console.log("Session Processing Channel created :",ProcessingChannelID)
+                console.log("Session Processing Channel created :", ProcessingChannelID)
                 return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": ProcessingChannelID }
             }
             catch {
                 console.log(err)
                 return { "Processing_Channel_ID": ProcessingChannelID, "Session_Processing_Channel_ID": err }
             }
-           
+
         }
     }
     catch (err) {

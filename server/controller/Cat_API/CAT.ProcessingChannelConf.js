@@ -62,6 +62,7 @@ async function GetProcessingChannelConf(bearer, ClientId, EntityId,ProcessingCha
   }
 }
 async function CreateProcessingChannel(bearer, ClientId, EntityId, ProcessingChannelName, VaultID) {
+  console.log(`Create processing channel with values : ClientId = ${ClientId}, EntityId = ${EntityId}, ProcessingChannelName = ${ProcessingChannelName}, VaultID = ${VaultID}`)
   try {
     CreateProcessingChannelfunc = await axios({
       method: 'post',
@@ -933,7 +934,7 @@ async function Create_AuthenticationProcessor_Visa(bearer, ProcessingChannelId,P
   }
 
 }
-async function Create_AuthenticationProcessor_MC(bearer, ProcessingChannelId,PPMastercard, GPPMastercard,CKOTEMPLATE) {
+async function Create_AuthenticationProcessor_MC(bearer, ProcessingChannelId,ProcessingChannelName,PPMastercard, GPPMastercard,CKOTEMPLATE) {
   try {
     Create_GatewayProcessor_Mastercard_func = await axios({
       method: 'post',
@@ -953,10 +954,10 @@ async function Create_AuthenticationProcessor_MC(bearer, ProcessingChannelId,PPM
         "host": 'client-admin.cko-sbox.ckotech.co'
       },
       data: {
-        "createType": "nexistingew",
+        "createType": "existing",
         "gateway_profile_processor_id": GPPMastercard,
         "processing_profile_id": PPMastercard,
-        "scheme": "mastercard",
+        "scheme": "MASTERCARD",
         "merchant_category_code": "0742",
         "versions": [
             "2"
