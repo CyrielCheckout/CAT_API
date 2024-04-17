@@ -7,7 +7,8 @@ var path = require('path');
 var CatAPIRouter = require('./routes/CATAPI_Router');
 var morgan = require('morgan');
 var cors = require('cors');
-
+const loggerInfo = require('./Utils/logger').loggerInfo;
+const loggerError = require('./Utils/logger').loggerError;
 app.use(morgan('dev'));
 
 app.use(express.json());
@@ -40,6 +41,7 @@ app.use(function(err, req, res, next) {
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`);
+    loggerInfo.info(`Server running: ${PORT}`);
 });
 
 module.exports = app;
