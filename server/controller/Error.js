@@ -1,41 +1,51 @@
-const loggerInfo = require('../Utils/logger').loggerInfo;
-const loggerError = require('../Utils/logger').loggerError;
-function ErrorHandling(err,source) {
-    loggerError.error( err, 'CAT_API');
+const logger = require('../Utils/logger').logger;
+function ErrorHandling(err, source) {
     if (err?.response) {
         if (err.response.status === 401) {
-            loggerError.error({"HTTP_Status_Code": err.response.status, "Message" : "Bearer invalid or expired"});
-            return { "status": err.response.status, "Error_Message": "Bearer invalid or expired" , "source":source}
+            logger.error("Bearer invalid or expired", {Error_type:err.response.statusText, HTTP_Status_Code: err.response.status, source: source });
+            return { "Error_type":err.response.statusText, "status": err.response.status, "Error_Message": "Bearer invalid or expired", "source": source }
         }
         else {
-            //loggerError.error( 'HTTP code : '+err.response.status+' '+JSON.stringify(err.response.data), 'CAT_API');
-            console.log({ "status": err.response.status, "Error_Message": err.response.data , "source":source})
-            return { "status": err.response.status, "Error_Message": err.response.data }
+            logger.error(JSON.stringify(err.response.data), {Error_type:err.response.statusText, HTTP_Status_Code: err.response.status, source: source });
+            return {"Error_type":err.response.statusText, "status": err.response.status, "Error_Message": err.response.data, "source": source }
         }
     }
     else if (err?.code) {
         if (err.code === "ENOMEM") {
-            console.log("Warn error :", err.code, " source :",source)
-            return { "Error_type": "Connection Error", "status": 500, "Message": "Connection error, please check your internet connection / VPN connection" , "source":source}
+            logger.error("Connection Error - Connection error, please check your internet connection / VPN connection", { HTTP_Status_Code: err.code, source: source });
+            return { "Error_type": "FATAL_ERROR", "status": "Connection Error", "Message": "Connection error, please check your internet connection / VPN connection", "source": source }
         }
         else if (err.code === "ECONNABORTED") {
-            console.log("Warn error :", err.code, " source :",source)
-            return { "Error_type": "Timeout", "status": 500, "Message": "Timeout, please check your internet connection / VPN connection", "source":source }
+            logger.error("Timeout - Timeout, please check your internet connection / VPN connection", { HTTP_Status_Code: err.code, source: source });
+            return { "Error_type": "FATAL_ERROR", "status": "Timeout", "Message": "Timeout, please check your internet connection / VPN connection", "source": source }
         }
         else if (err.code === "ECONNRESET") {
-            console.log("Warn error :", err.code, " source :",source)
-            return { "Error_type": "ECONNRESET", "status": 500, "Message": "Network connection reset" , "source":source}
+            logger.error("ECONNRESET - Network connection reset", { HTTP_Status_Code: err.code, source: source });
+            return { "Error_type": "FATAL_ERROR", "status": "ECONNRESET", "Message": "Network connection reset", "source": source }
         }
         else if (err.code === "ERR_BAD_REQUEST") {
-            console.log("Warn error :", err.code, " source :",source)
-            return { "Error_type": "ERR_BAD_REQUEST", "status": 500, "Message": err.data , "source":source}
+            logger.error("ERR_BAD_REQUEST - ERR_BAD_REQUEST", { HTTP_Status_Code: err.code, source: source });
+            return { "Error_type": "FATAL_ERROR", "status": "ERR_BAD_REQUEST", "Message": err.data, "source": source }
         }
         else {
-            return err.code
+            logger.error("Unknown - " + err.data, { HTTP_Status_Code: err.code, source: source });
+            return { "Error_type": "Unknown", "status": err.code, "Message": err.data, "source": source }
         }
     }
     else {
-        return err
+        if (err.toString().includes("ReferenceError: ")) {
+            errString = err.toString().replace("ReferenceError: ", '');
+            logger.error(`${errString}`, { HTTP_Status_Code: errString.code || 500, source: source });
+            return { "Error_type": "ReferenceError", "status": 500, "Message": errString.data || errString, "source": source };
+        }
+        else if(err?.Error_type){
+            return err
+        }
+        else {
+            logger.error(`${err.data || err.Error_Message || err}`, { HTTP_Status_Code: err.code || err.status || 500, source: source });
+            //console.log(err)
+            return { "Error_type": err?.Error_Message?.error_type || "FATAL_ERROR", "status": err?.code || err?.status || 500, "Message": err?.data || err?.Error_Message || err, "source": source };
+        }
     }
 }
 module.exports = {

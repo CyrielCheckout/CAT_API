@@ -13,5 +13,6 @@
     "GiropayAcquirerKey" :"giropay_apm_fr",
     "Amex_acquirer_key" : "cko_amex_fr",
     "Visa_Acquirer_Key" : "cko_visa_fr",
-    "MC_Acquirer_Key" : "cko_mc_fr"
+    "MC_Acquirer_Key" : "cko_mc_fr",
+    "Acquirer_Key" : "fr"
 }

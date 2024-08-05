@@ -22,8 +22,7 @@ a,
   }
 
   #app {
-    display: grid;
-    
+    /*display: grid;*/
     padding: 0 2rem;
   }
 }

@@ -1,9 +1,41 @@
+<script setup>
+import axios from "axios";
+</script>
+
+
 <script>
   export default {
     name: 'Modal',
+    logs: [],
+    mounted() {
+       axios
+            .request({
+              method: "GET",
+              maxBodyLength: Infinity,
+              url: "https://cat-configuration-helper-bak-sbox.ckotech.co/CatAPI/GetLogs",
+              headers: {
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*",
+              },
+            })
+            .then((response) => {
+              this.logs = response.data; // Store the array of log file names
+
+            })
+            .catch((error) => {
+              console.error("Error fetching logs:", error);
+            })
+            .finally(() => {
+              
+            });
+    },
     methods: {
       close() {
         this.$emit('close');
+      },
+      // Create a method to generate the URL for each log file
+      getLogUrl(log) {
+        return `https://cat-configuration-helper-bak-sbox.ckotech.co/CatAPI/GetLogs/${encodeURIComponent(log)}`; // Adjust the URL as needed
       },
     },
   };
@@ -22,7 +54,7 @@
           id="modalTitle"
         >
           <slot name="header">
-            How to get a valid Bearer token ?
+            See what happened in the logs...
           </slot>
           <button
             type="button"
@@ -39,14 +71,17 @@
           id="modalDescription"
         >
           <slot name="body">
-            1 - Authenticate yourself on WARP/CloudFlare<br/>
-            2 - Open your browser and connect to Sandbox <a href="https://client-admin.cko-sbox.ckotech.co/web/nas/" target="_blank">Client Admin Tools</a><br/>
-            3 - Open the Network tab in your browser's developer tools.<br/>
-            4 - Go to the Network Tab<br/>
-            5 - Click on a request done by CAT and go to "header" tab<br/>
-            6 - Copy the bearer token (without Bearer).<br/>
+            To see  more details about an event, please find and click on the good log file.
             <br/>
-            <img src="../assets/CATAdminToolNotice.png" width="500px" >
+            <br/>
+            <ul>
+              <li v-for="log in logs" :key="log">
+                <u><i><a :href="getLogUrl(log)" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >{{ log }}</a></i></u>
+              </li>
+            </ul>
 
 
           </slot>
@@ -80,6 +115,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index:1;
   }
 
   .modal {

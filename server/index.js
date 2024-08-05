@@ -7,8 +7,8 @@ var path = require('path');
 var CatAPIRouter = require('./routes/CATAPI_Router');
 var morgan = require('morgan');
 var cors = require('cors');
-const loggerInfo = require('./Utils/logger').loggerInfo;
-const loggerError = require('./Utils/logger').loggerError;
+const logger = require('./Utils/logger').logger;
+const { Worker } = require("worker_threads");
 app.use(morgan('dev'));
 
 app.use(express.json());
@@ -39,9 +39,18 @@ app.use(function(err, req, res, next) {
 */
 // Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 4000;
+DecodedJWT = {
+    payload : {
+        full_name : "Server"
+    }
+};
+//baseURL = 'https://client-admin.cko-sbox.ckotech.co/';
+CATENV = "Sandbox"
+CorrelationID = "N/A";
+//Addresse_IP = "127.0.0.1";
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}...`);
-    loggerInfo.info(`Server running: ${PORT}`);
+    logger.info(`Server running on port ${PORT}`, {status:"Running", source:"IndexFile"});
 });
 
 module.exports = app;

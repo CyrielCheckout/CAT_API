@@ -1,7 +1,22 @@
 const winston = require('winston');
 const { format } = require('logform');
 require('winston-daily-rotate-file');
-const { combine, timestamp, label, printf, json, colorize, align, errors } = format;
+const { combine, timestamp, label, printf, json, colorize, align, errors, prettyPrint } = format;
+
+const customFormat = printf(({ timestamp, user, level, message, source, CorrelationID, PID, IPADD, ...metadata }) => {
+  return JSON.stringify({
+    timestamp,
+    level,
+    message,
+    source,
+    user,
+    CorrelationID,
+    PID,
+    IPADD,
+    CATENV,
+    ...metadata
+  });
+});
 
 const levels = {
   error: 0,
@@ -17,51 +32,73 @@ const fileRotateTransport = new winston.transports.DailyRotateFile({
   datePattern: 'YYYY-MM-DD',
   maxFiles: '14d',
 });
-const loggerInfo = winston.createLogger({
+const logger = winston.createLogger({
   level: 'info',
-  label: 'CAT_API',
-  levels :levels,
+  //label: 'CAT_API',
+  levels: levels,
   format: combine(
-    errors({ stack: true }),
-    timestamp({format: 'YYYY-MM-DD hh:mm:ss.SSS'}),
-    align(),
-    printf((info) => `[${info.timestamp} ${info.label}] ${info.level}: ${info.message}`),
-    json()
+    //errors({ stack: false }),
+    timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+    format((info) => {
+      info.source = info.source;
+      info.user = DecodedJWT.payload.full_name;
+      info.CorrelationID = CorrelationID;
+      info.PID = process.pid;
+      if (typeof Addresse_IP !== 'undefined' && Addresse_IP !== undefined) {
+        info.IPADD = Addresse_IP;
+      }
+      info.CATENV = CATENV
+      return info;
+    })(),
+    customFormat
+    //align(),
+    //format.printf((info) => `${info.timestamp} - ${DecodedJWT.payload.full_name} : ${info.level}: ${JSON.stringify(info.message)} - ${CorrelationID} - [${process.platform},${process.pid}]`),
+    //format.printf((info) => `{\"Timestamp\" : \"${info.timestamp}\", \"User\" : \"${DecodedJWT.payload.full_name}\", \"Level\" : \"${info.level}\",\"Data\" :${JSON.stringify(info.message)}, \"CorrelationID\": \"${CorrelationID}\", \"ProcessID\" : \"${process.pid}\"}`),
+    //printf((info) => `${info.timestamp}, ${info.User}, ${info.level}], ${info.message},${info.status}, ${info.source}`),
+    //json(),
+    //prettyPrint()
   ),
   //defaultMeta: { service: 'user-service' },
   transports: [
     //
-    // - Write all logs with importance level of `error` or less to `error.log`
-    // - Write all logs with importance level of `info` or less to `combined.log`
     //
     fileRotateTransport,
-    new winston.transports.File({ filename: 'logs/Backend_Info.log', level: 'info' }),
+    /*new winston.transports.Console({
+      format: combine(
+        //errors({ stack: false }),
+        timestamp({ format: 'YYYY-MM-DD hh:mm:ss.SSS' }),
+        format.printf((info) => `${info.timestamp} - ${DecodedJWT.payload.full_name} : ${info.level}: ${JSON.stringify(info.message)} - ${CorrelationID} - [${process.platform},${process.pid}]`),
+        prettyPrint(),
+        colorize({all:true})
+      )
+    })*/
+    //new winston.transports.File({ filename: 'logs/Backend_Info.log', level: 'info' }),
   ],
 });
-const loggerError = winston.createLogger({
+/*const loggerError = winston.createLogger({
   level: 'error',
-  label: 'CAT_API',
+ // label: 'CAT_API',
   levels :levels,
   format: combine(
-    errors({ stack: true }),
+    errors({ stack: false }),
     timestamp({format: 'YYYY-MM-DD hh:mm:ss.SSS'}),
     align(),
-    printf((error) => `[${error.timestamp} ${error.label}] ${error.level}: ${error.message}`),
-    json()
+    format.printf((error) => `${info.timestamp} ${info.level}: ${info.message}`),
+    printf((error) => `[${error.timestamp}, ${error.User}, ${error.level}], ${error.message},${error.HTTP_Status_Code},${error.status}, ${error.source}`),
+    json(),
+    //prettyPrint()
   ),
   //defaultMeta: { service: 'user-service' },
   transports: [
     //
-    // - Write all logs with importance level of `error` or less to `error.log`
-    // - Write all logs with importance level of `info` or less to `combined.log`
     //
     fileRotateTransport,
-    new winston.transports.File({ filename: 'logs/Backend_Errors.log', level: 'error' }),
+    //new winston.transports.File({ filename: 'logs/Backend_Errors.log', level: 'error' }),
     //new winston.transports.Console()
   ],
-});
+});*/
 
 module.exports = {
-  loggerInfo,
-  loggerError
+  logger,
+  //loggerError
 }

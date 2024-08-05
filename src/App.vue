@@ -1,22 +1,25 @@
 <script setup>
-import LeftPanel from './components/LeftPanel.vue'
-import MainForm from './components/MainForm.vue'
+import HeaderPanel from './components/HeaderPanel.vue'
+import { SANDBOX } from './constants';
 </script>
 
 <template>
-  <header>
-    <a href="/">
-      <img alt="Checkout.com" class="logo" src="./assets/Black-CKOSymbol-RGB.svg" width="90" height="90" />
-    </a>
-
-    <div class="wrapper">
-      <a href="/"><LeftPanel msg="Checkout.com" /></a>
-    </div>
-  </header>
-
-  <main>
-    <MainForm />
-  </main>
+  <div>
+    <header>
+      <a href="/">
+        <img alt="Checkout.com" class="logo" src="./assets/Black-CKOSymbol-RGB.svg" width="90" height="90" />
+      </a>
+  
+      <div class="wrapper">
+        <HeaderPanel msg="Checkout.com" :env=SANDBOX />
+      </div>
+    </header>
+    <nav>
+      <router-link to="/"></router-link>
+      <router-link to="/readme" target="_blank"></router-link>
+    </nav>
+    <router-view @update-env="updateEnv"></router-view> <!-- Listen for update-env event -->
+  </div>
 </template>
 
 <style scoped>
@@ -48,3 +51,21 @@ header {
   }
 }
 </style>
+
+<script>
+export default {
+  components: {
+    HeaderPanel
+  },
+  data() {
+    return {
+      env: SANDBOX
+    };
+  },
+  methods: {
+    updateEnv(newEnv) {
+      this.env = newEnv; // Update env when called from child components
+    }
+  }
+};
+</script>

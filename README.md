@@ -3,6 +3,7 @@ CAT API Tool is a tool for configuring sandbox merchants.
 The tool is not intended to replace CAT.
 Default configurations are therefore applied. If you need to make a specific configuration, you will have to use CAT.
 
+Backend : Cyriel GHENDRIH-FEILLANT / Front-end : François FALCONET
 # Features
 CAT API Tool lets you add entities to an existing merchant, add processing channels to an existing entity or add payment methods to a processing channel.
 
@@ -45,7 +46,7 @@ npm -i
 
 # Access with postman : 
 You can also directly access the back-end with postman for example. 
-The server run on http://127.0.0.1:4000.
+The server run on http://127.0.0.1:4000 locally or using the server URL : https://cat-configuration-helper-bak-sbox.ckotech.co
 There is 2 endpoints : 
 - http://127.0.0.1:4000/CatAPI/ConfigureMerchant/ --> Allow to add entity, processing channels and payment methods
 - http://127.0.0.1:4000/CatAPI/GetMerchantConf/ --> Allow to get the actual configuration
@@ -56,7 +57,8 @@ Payload example :
 {
     "Bearer": "Bearer token",
     "ClientId": "cli_d2s6xmrsuezerh3uvt2utdui24",
-    "delay":1
+    "delay":1,
+    "Env": "Prod" || "Sandbox"
 }
 ```
 - ConfigureMerchant : 
@@ -65,6 +67,7 @@ Payload example :
     "Bearer": "Bearer token",
     "ClientId": "cli_d2s6xmrsuezerh3uvt2utdui24",
     "delay": 1,
+    "Env": "Prod" || "Sandbox",
     "Entity": [
         {
             "EntityName": "{{$randomJobTitle}}",
